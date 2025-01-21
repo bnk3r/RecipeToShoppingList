@@ -2,11 +2,12 @@ package yb.kompose.recipetoshoppinglist.features.core.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import yb.kompose.recipetoshoppinglist.features.cooking.data.db.dao.RecipeDAO
-import yb.kompose.recipetoshoppinglist.features.cooking.data.db.models.Area
-import yb.kompose.recipetoshoppinglist.features.cooking.data.db.models.Category
-import yb.kompose.recipetoshoppinglist.features.cooking.data.db.models.Ingredient
-import yb.kompose.recipetoshoppinglist.features.cooking.data.db.models.Recipe
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Area
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
 
 @Database(
     entities = [
@@ -15,9 +16,10 @@ import yb.kompose.recipetoshoppinglist.features.cooking.data.db.models.Recipe
         Category::class,
         Area::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class RecipeToShoppingListDB : RoomDatabase() {
     abstract fun recipeDAO(): RecipeDAO
+    abstract fun categoryDAO(): CategoryDAO
 }

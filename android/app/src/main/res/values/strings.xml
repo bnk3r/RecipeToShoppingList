@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RecipeToShoppingList</string>
+    <string name="search">Search</string>
+    <string name="search_placeholder">ie. My query here.</string>
+    <string name="search_recipe_label">Search recipes</string>
+    <string name="section_categories_title">Categories</string>
+    <string name="section_search_recipe_title">Got a tasty dish in mind?</string>
 </resources>

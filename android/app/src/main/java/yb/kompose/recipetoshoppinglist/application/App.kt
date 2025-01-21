@@ -4,8 +4,11 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import yb.kompose.recipetoshoppinglist.features.cooking.di.mealDBApiModule
+import yb.kompose.recipetoshoppinglist.features.core.di.mealDBApiModule
 import yb.kompose.recipetoshoppinglist.features.core.di.databaseModule
+import yb.kompose.recipetoshoppinglist.features.core.di.repositoryModule
+import yb.kompose.recipetoshoppinglist.features.core.di.useCaseModule
+import yb.kompose.recipetoshoppinglist.features.core.di.viewModelModule
 
 class App : Application() {
 
@@ -17,7 +20,10 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 databaseModule,
-                mealDBApiModule
+                mealDBApiModule,
+                repositoryModule,
+                useCaseModule,
+                viewModelModule,
             )
         }
     }

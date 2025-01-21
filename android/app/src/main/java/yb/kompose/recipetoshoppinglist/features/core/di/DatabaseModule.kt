@@ -16,6 +16,9 @@ fun providesRecipeToShoppingDB(
     .fallbackToDestructiveMigration()
     .build()
 
+fun providesCategoryDAO(db: RecipeToShoppingListDB) = db.categoryDAO()
+
 val databaseModule = module {
     single { providesRecipeToShoppingDB(get()) }
+    single { providesCategoryDAO(get()) }
 }
