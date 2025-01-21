@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
 
 @Dao
 interface CategoryDAO {
@@ -15,4 +16,8 @@ interface CategoryDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addCategory(category: Category): Long
+
+    @Query("SELECT * FROM recipes WHERE categoryName = :name")
+    fun getRecipesForCategory(name: String): Flow<List<Recipe>>
+
 }

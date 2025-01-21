@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipesDestination
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.RecipesScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
 
 @Composable
 fun NavComponent(

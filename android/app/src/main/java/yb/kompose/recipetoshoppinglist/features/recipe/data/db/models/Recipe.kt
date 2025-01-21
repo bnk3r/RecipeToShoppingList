@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class Recipe(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name: String,
-    val categoryId: Long,
-    val areaId: Long,
+    val categoryName: String?,
+    val areaName: String?,
     val instructions: String?,
     val imageUrl: String?,
     val thumbnailUrl: String?,
