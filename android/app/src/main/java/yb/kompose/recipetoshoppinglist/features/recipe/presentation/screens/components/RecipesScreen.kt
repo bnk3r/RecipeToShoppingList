@@ -1,13 +1,16 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -44,14 +48,17 @@ fun RecipesScreen(
     var selectedCategory by remember(categories) { mutableStateOf(categories.firstOrNull()) }
 
     var recipesForCategory by remember { mutableStateOf(listOf<UiRecipe>()) }
+    var recipesForCategoryLoading by remember { mutableStateOf(false) }
 
     val configuration = LocalConfiguration.current
     val recipeItemSize = configuration.screenWidthDp.dp / 3
 
     LaunchedEffect(selectedCategory) {
         selectedCategory?.let { category ->
+            recipesForCategoryLoading = true
             recipeViewModel.getRecipesForCategory(category.name).collect { recipes ->
                 recipesForCategory = recipes
+                recipesForCategoryLoading = false
             }
         }
     }
@@ -73,7 +80,7 @@ fun RecipesScreen(
                 RecipeSearchBarSection(
                     query = queryRecipe,
                     onQueryChange = { queryRecipe = it },
-                    onSearch = {/* TODO */ },
+                    onSearch = { },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
@@ -87,7 +94,10 @@ fun RecipesScreen(
                     RowCategoriesSection(
                         categories = categories,
                         selectedCategory = selected,
-                        onCategorySelected = { selectedCategory = it },
+                        onCategorySelected = {
+                            selectedCategory = it
+                            recipesForCategory = emptyList()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 32.dp)
@@ -95,17 +105,35 @@ fun RecipesScreen(
                 }
             }
 
-            items(recipesForCategory) { recipe ->
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(recipe.imgUrl)
-                        .memoryCachePolicy(CachePolicy.ENABLED)
-                        .build(),
-                    contentDescription = recipe.title,
-                    placeholder = painterResource(R.drawable.loading),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(recipeItemSize)
-                )
+            if (recipesForCategory.isNotEmpty()) {
+                items(recipesForCategory) { recipe ->
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(recipe.imgUrl)
+                            .memoryCachePolicy(CachePolicy.ENABLED)
+                            .build(),
+                        contentDescription = recipe.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(recipeItemSize)
+                            .padding(16.dp)
+                    )
+                }
+            }
+
+            if (recipesForCategoryLoading) {
+                item(
+                    span = { GridItemSpan(3) }
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
 
         }
