@@ -100,9 +100,7 @@ class RecipeRepository(
             response.body()?.meals?.let { responseRecipes ->
                  val convertedRecipes = responseRecipes.map { recipe ->
                     val detailedResponse = remoteDataSource.getMealById(recipe.idMeal)
-                    if (!detailedResponse.isSuccessful) {
-                        throw IllegalArgumentException("Failed to fetch recipe details")
-                    }
+                    if (!detailedResponse.isSuccessful) return
                     detailedResponse.body()?.meals?.getOrNull(0)?.let { detailedRecipe ->
                         Recipe(
                             id = detailedRecipe.idMeal.toLong(),

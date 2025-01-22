@@ -31,6 +31,7 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
@@ -55,19 +56,22 @@ fun RecipesScreen(
 
     var recipesForCategory by remember { mutableStateOf(listOf<UiRecipe>()) }
     var recipesForCategoryLoading by remember { mutableStateOf(false) }
+    var recipesForCategoryJob by remember { mutableStateOf<Job?>(null) }
 
     val configuration = LocalConfiguration.current
     val recipeItemSize = configuration.screenWidthDp.dp / 3
 
     var recipesByQuery by remember { mutableStateOf(listOf<UiRecipe>()) }
     var recipesByQueryLoading by remember { mutableStateOf(false) }
+    var recipesByQueryJob by remember { mutableStateOf<Job?>(null) }
 
     LaunchedEffect(selectedCategory) {
         selectedCategory?.let { category ->
+            recipesForCategoryJob?.cancel()
             recipesForCategory = emptyList()
             recipesByQuery = emptyList()
             recipesForCategoryLoading = true
-            coroutineScope.launch(Dispatchers.Default) {
+            recipesForCategoryJob = coroutineScope.launch(Dispatchers.Default) {
                 recipeViewModel.getRecipesForCategory(category.name).collect { recipes ->
                     withContext(Dispatchers.Main) {
                         recipesForCategory = recipes
@@ -80,11 +84,12 @@ fun RecipesScreen(
 
     fun searchByQuery() {
         if (queryRecipe.isBlank()) return
+        recipesByQueryJob?.cancel()
         selectedCategory = null
         recipesForCategory = emptyList()
         recipesByQuery = emptyList()
         recipesByQueryLoading = true
-        coroutineScope.launch(Dispatchers.Default) {
+        recipesByQueryJob = coroutineScope.launch(Dispatchers.Default) {
             recipeViewModel.getRecipesByQuery(queryRecipe).collect { recipes ->
                 withContext(Dispatchers.Main) {
                     recipesByQuery = recipes
