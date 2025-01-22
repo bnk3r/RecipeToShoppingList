@@ -22,7 +22,20 @@ class GetRecipesForCategoryUseCase(
                         id = recipe.id.toInt(),
                         title = recipe.name,
                         instructions = recipe.instructions,
-                        ingredients = recipe.extractIngredients(),
+                        ingredients = recipe.ingredients
+                            ?.split(",")
+                            ?.filter { it.isNotEmpty() }
+                            ?.filter { it.split(":").size == 2 }
+                            ?.map { part ->
+                                val splits = part.split(":")
+                                UiIngredient(
+                                    name = splits[0],
+                                    amount = splits[1],
+                                    imgUrl = null,
+                                    thumbnailUrl = null
+                                )
+                            }
+                            ?: emptyList(),
                         imgUrl = recipe.imageUrl,
                         thumbnailUrl = recipe.thumbnailUrl,
                         recipeUrl = recipe.articleUrl,
@@ -32,21 +45,4 @@ class GetRecipesForCategoryUseCase(
                 }
             }
         }
-}
-
-fun Recipe.extractIngredients(): List<UiIngredient> {
-    return ingredients
-        ?.split(",")
-        ?.filter { it.isNotEmpty() }
-        ?.filter { it.split(":").size == 2 }
-        ?.map { part ->
-            val splits = part.split(":")
-            UiIngredient(
-                name = splits[0],
-                amount = splits[1],
-                imgUrl = null,
-                thumbnailUrl = null
-            )
-        }
-        ?: emptyList()
 }

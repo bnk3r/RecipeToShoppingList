@@ -20,7 +20,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 @Composable
 fun RowCategoriesSection(
     categories: List<UiCategory>,
-    selectedCategory: UiCategory,
+    selectedCategory: UiCategory?,
     onCategorySelected: (UiCategory) -> Unit,
     modifier: Modifier = Modifier
 ) {

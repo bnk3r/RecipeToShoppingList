@@ -25,6 +25,45 @@ class RecipeRepository(
         return recipeDao.getRecipesByCategory(categoryName)
     }
 
+    suspend fun getRecipesByQuery(query: String): Flow<List<Recipe>> {
+        fetchAndSaveRecipesByQuery(query)
+        return recipeDao.getRecipesByName(query)
+    }
+
+    private suspend fun fetchAndSaveRecipesByQuery(query: String) {
+        val response = remoteDataSource.getMealByName(query)
+        if (response.isSuccessful) {
+            response.body()?.meals?.let { responseRecipes ->
+                val convertedRecipes = responseRecipes.map { recipe ->
+                    val detailedResponse = remoteDataSource.getMealById(recipe.idMeal)
+                    if (!detailedResponse.isSuccessful) {
+                        throw IllegalArgumentException("Failed to fetch recipe details")
+                    }
+                    detailedResponse.body()?.meals?.getOrNull(0)?.let { detailedRecipe ->
+                        Recipe(
+                            id = detailedRecipe.idMeal.toLong(),
+                            name = detailedRecipe.strMeal
+                                ?: throw IllegalArgumentException("Recipe name cannot be null"),
+                            categoryName = detailedRecipe.strCategory,
+                            areaName = detailedRecipe.strArea,
+                            instructions = detailedRecipe.strInstructions,
+                            imageUrl = detailedRecipe.strMealThumb,
+                            thumbnailUrl = "${detailedRecipe.strMealThumb}/preview",
+                            tags = detailedRecipe.strTags,
+                            youtubeVideoUrl = detailedRecipe.strYoutube,
+                            ingredients = detailedRecipe.constructIngredients(),
+                            articleUrl = detailedRecipe.strSource
+                        )
+                    } ?: throw IllegalArgumentException("Recipe details cannot be null")
+                }
+                convertedRecipes.forEach { recipe ->
+                    val id = recipeDao.addRecipe(recipe)
+                    Log.d("RecipeRepository", "Save recipe : id=$id")
+                }
+            }
+        }
+    }
+
     private suspend fun fetchAndSaveRecipesForCategory(categoryName: String) {
         val response = remoteDataSource.getMealsByCategoryFilter(categoryName)
         if (response.isSuccessful) {

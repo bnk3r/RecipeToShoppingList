@@ -28,7 +28,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 @Composable
 fun RowCategory(
     category: UiCategory,
-    selected: Boolean,
+    selected: Boolean?,
     iconSize: Dp = 56.dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -52,11 +52,11 @@ fun RowCategory(
                 .border(
                     width = when (selected) {
                         true -> 2.dp
-                        false -> 0.dp
+                        else -> 0.dp
                     },
                     color = when (selected) {
                         true -> MaterialTheme.colorScheme.primary
-                        false -> Color.Transparent
+                        else -> Color.Transparent
                     },
                     shape = RoundedCornerShape(8.dp)
                 )
@@ -66,7 +66,7 @@ fun RowCategory(
             textAlign = TextAlign.Center,
             color = when (selected) {
                 true -> MaterialTheme.colorScheme.primary
-                false -> MaterialTheme.colorScheme.onSurface
+                else -> MaterialTheme.colorScheme.onSurface
             },
             modifier = Modifier.padding(top = 4.dp)
         )
