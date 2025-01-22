@@ -17,7 +17,4 @@ interface CategoryDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addCategory(category: Category): Long
 
-    @Query("SELECT * FROM recipes WHERE categoryName = :name")
-    fun getRecipesForCategory(name: String): Flow<List<Recipe>>
-
 }

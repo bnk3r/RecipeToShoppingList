@@ -5,29 +5,31 @@ import kotlinx.coroutines.flow.Flow
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.Meal
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealDBService
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
 
 class RecipeRepository(
     private val remoteDataSource: TheMealDBService,
-    private val localDataSource: CategoryDAO
+    private val categoryDao: CategoryDAO,
+    private val recipeDao: RecipeDAO
 ) {
 
     suspend fun getCategories(): Flow<List<Category>> {
         fetchAndSaveCategories()
-        return localDataSource.getAllCategories()
+        return categoryDao.getAllCategories()
     }
 
     suspend fun getRecipesForCategory(categoryName: String): Flow<List<Recipe>> {
         fetchAndSaveRecipesForCategory(categoryName)
-        return localDataSource.getRecipesForCategory(categoryName)
+        return recipeDao.getRecipesByCategory(categoryName)
     }
 
     private suspend fun fetchAndSaveRecipesForCategory(categoryName: String) {
         val response = remoteDataSource.getMealsByCategoryFilter(categoryName)
         if (response.isSuccessful) {
             response.body()?.meals?.let { responseRecipes ->
-                responseRecipes.map { recipe ->
+                 val convertedRecipes = responseRecipes.map { recipe ->
                     val detailedResponse = remoteDataSource.getMealById(recipe.idMeal)
                     if (!detailedResponse.isSuccessful) {
                         throw IllegalArgumentException("Failed to fetch recipe details")
@@ -49,6 +51,10 @@ class RecipeRepository(
                         )
                     } ?: throw IllegalArgumentException("Recipe details cannot be null")
                 }
+                convertedRecipes.forEach { recipe ->
+                    val id = recipeDao.addRecipe(recipe)
+                    Log.d("RecipeRepository", "Save recipe : id=$id")
+                }
             }
         }
     }
@@ -69,7 +75,7 @@ class RecipeRepository(
                         )
                     }
                     .forEach { category ->
-                        localDataSource.addCategory(category)
+                        categoryDao.addCategory(category)
                     }
             }
         } else {

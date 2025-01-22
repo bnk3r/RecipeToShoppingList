@@ -10,10 +10,12 @@ import org.koin.android.ext.android.inject
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.NavComponent
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RecipeToShoppingListTheme
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.vimos.RecipeViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val categoryViewModel: CategoryViewModel by inject()
+    private val recipeViewModel: RecipeViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity() {
             RecipeToShoppingListTheme {
                 NavComponent(
                     categoryViewModel = categoryViewModel,
+                    recipeViewModel = recipeViewModel,
                     modifier = Modifier.fillMaxSize()
                 )
             }

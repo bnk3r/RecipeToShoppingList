@@ -2,6 +2,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -19,11 +20,11 @@ interface RecipeDAO {
     @Query("SELECT * FROM recipes WHERE name LIKE '%' || :name || '%'")
     fun getRecipesByName(name: String): Flow<List<Recipe>>
 
-    @Query("SELECT * FROM recipes WHERE categoryId IS :categoryId")
-    fun getRecipesByCategory(categoryId: Long): Flow<List<Recipe>>
+    @Query("SELECT * FROM recipes WHERE categoryName IS :categoryName")
+    fun getRecipesByCategory(categoryName: String): Flow<List<Recipe>>
 
-    @Query("SELECT * FROM recipes WHERE areaId IS :areaId")
-    fun getRecipesByArea(areaId: Long): Flow<List<Recipe>>
+    @Query("SELECT * FROM recipes WHERE areaName IS :areaName")
+    fun getRecipesByArea(areaName: String): Flow<List<Recipe>>
 
     @Query("SELECT * FROM recipes WHERE ingredients <> ''")
     fun getRecipesWithIngredients() : Flow<List<Recipe>>
@@ -34,7 +35,7 @@ interface RecipeDAO {
     @Query("SELECT * FROM recipes WHERE youtubeVideoUrl <> ''")
     fun getRecipesWithYoutubeVideoURL() : Flow<List<Recipe>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addRecipe(recipe: Recipe) : Long
 
     @Update

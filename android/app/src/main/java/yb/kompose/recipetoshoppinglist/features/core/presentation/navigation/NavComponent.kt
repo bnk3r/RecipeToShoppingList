@@ -7,11 +7,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipesDestination
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
 
 @Composable
 fun NavComponent(
     categoryViewModel: CategoryViewModel,
+    recipeViewModel: RecipeViewModel,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
@@ -23,7 +25,8 @@ fun NavComponent(
     ) {
         composable<RecipesDestination> {
             RecipesScreen(
-                categoryViewModel = categoryViewModel
+                categoryViewModel = categoryViewModel,
+                recipeViewModel = recipeViewModel
             )
         }
     }

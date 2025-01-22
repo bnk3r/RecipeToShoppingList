@@ -16,7 +16,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
         Category::class,
         Area::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 abstract class RecipeToShoppingListDB : RoomDatabase() {

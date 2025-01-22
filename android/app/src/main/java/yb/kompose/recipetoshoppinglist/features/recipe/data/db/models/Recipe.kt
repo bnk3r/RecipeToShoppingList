@@ -15,7 +15,7 @@ data class Recipe(
     val tags: String?,
     val youtubeVideoUrl: String?,
     val ingredients: String?,
-    // ie. "365:2 medium,221:2 tbs chopped"
-    // where 365 and 221 are ingredients ids and measures are placed after semicolons
+    // ie. "Fennel:2 medium,Parsley:2 tbs chopped,..."
+    // where Fennel and Parsley are ingredient names and measures are placed after semicolons
     val articleUrl: String?
 )
