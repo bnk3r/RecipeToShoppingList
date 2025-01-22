@@ -1,5 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.compo
 fun RecipesScreen(
     categoryViewModel: CategoryViewModel,
     recipeViewModel: RecipeViewModel,
+    showRecipeDetails: (id: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -145,6 +147,9 @@ fun RecipesScreen(
                         modifier = Modifier
                             .size(recipeItemSize)
                             .padding(16.dp)
+                            .clickable {
+                                showRecipeDetails(recipe.id)
+                            }
                     )
                 }
             }
@@ -161,6 +166,9 @@ fun RecipesScreen(
                         modifier = Modifier
                             .size(recipeItemSize)
                             .padding(16.dp)
+                            .clickable {
+                                showRecipeDetails(recipe.id)
+                            }
                     )
                 }
             }

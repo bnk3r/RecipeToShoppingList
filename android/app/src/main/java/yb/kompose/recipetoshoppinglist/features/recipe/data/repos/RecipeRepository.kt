@@ -30,6 +30,36 @@ class RecipeRepository(
         return recipeDao.getRecipesByName(query)
     }
 
+    suspend fun getRecipeDetailed(id: Int): Flow<Recipe?> {
+        fetchAndSaveRecipeById(id)
+        return recipeDao.getRecipeById(id.toLong())
+    }
+
+    private suspend fun fetchAndSaveRecipeById(id: Int) {
+        val response = remoteDataSource.getMealById(id.toString())
+        if  (response.isSuccessful) {
+            val convertedRecipe = response.body()?.meals?.getOrNull(0)?.let { detailedRecipe ->
+                Recipe(
+                    id = detailedRecipe.idMeal.toLong(),
+                    name = detailedRecipe.strMeal
+                        ?: throw IllegalArgumentException("Recipe name cannot be null"),
+                    categoryName = detailedRecipe.strCategory,
+                    areaName = detailedRecipe.strArea,
+                    instructions = detailedRecipe.strInstructions,
+                    imageUrl = detailedRecipe.strMealThumb,
+                    thumbnailUrl = "${detailedRecipe.strMealThumb}/preview",
+                    tags = detailedRecipe.strTags,
+                    youtubeVideoUrl = detailedRecipe.strYoutube,
+                    ingredients = detailedRecipe.constructIngredients(),
+                    articleUrl = detailedRecipe.strSource
+                )
+            }
+            convertedRecipe?.let { recipe ->
+                recipeDao.addRecipe(recipe)
+            }
+        }
+    }
+
     private suspend fun fetchAndSaveRecipesByQuery(query: String) {
         val response = remoteDataSource.getMealByName(query)
         if (response.isSuccessful) {
