@@ -5,4 +5,5 @@
     <string name="search_recipe_label">Search recipes</string>
     <string name="section_categories_title">Categories</string>
     <string name="section_search_recipe_title">Got a tasty dish in mind?</string>
+    <string name="ingredients">Ingredients</string>
 </resources>
