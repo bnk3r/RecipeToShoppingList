@@ -2,9 +2,9 @@ package yb.kompose.recipetoshoppinglist.features.recipe.data.repos
 
 import androidx.compose.ui.util.fastJoinToString
 import kotlinx.coroutines.flow.Flow
-import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.CategoryDetailed
-import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.Meal
-import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.Meal.Companion.MEAL_DB_API_INGREDIENTS_COUNT
+import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.category.CategoryDetailed
+import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed
+import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed.Companion.MEAL_DB_API_INGREDIENTS_COUNT
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealDBService
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
@@ -38,7 +38,7 @@ class RecipeRepository(
     }
 
     private suspend fun fetchAndSaveRecipeById(id: Int) {
-        remoteDataSource.getMealById(id.toString()).body()?.meals?.getOrNull(0)
+        remoteDataSource.getMealsById(id.toString()).body()?.meals?.getOrNull(0)
             ?.toDBEntity()
             ?.let { recipeDao.addRecipe(it) }
     }
@@ -47,7 +47,7 @@ class RecipeRepository(
         remoteDataSource.getMealsByName(query).body()?.meals
             ?.forEach { meal ->
                 // Fetch details for each meal
-                remoteDataSource.getMealById(meal.idMeal).body()?.meals?.getOrNull(0)
+                remoteDataSource.getMealsById(meal.idMeal).body()?.meals?.getOrNull(0)
                     ?.toDBEntity()
                     ?.let { recipeDao.addRecipe(it) }
             }
@@ -55,10 +55,10 @@ class RecipeRepository(
 
 
     private suspend fun fetchAndSaveRecipesForCategory(categoryName: String) {
-        remoteDataSource.getMealsByCategoryFilter(categoryName).body()?.meals
+        remoteDataSource.getMealsByCategory(categoryName).body()?.meals
             ?.forEach { meal ->
                 // Fetch details for each meal
-                remoteDataSource.getMealById(meal.idMeal).body()?.meals?.getOrNull(0)
+                remoteDataSource.getMealsById(meal.idMeal).body()?.meals?.getOrNull(0)
                     ?.toDBEntity()
                     ?.let { recipeDao.addRecipe(it) }
             }
@@ -66,7 +66,7 @@ class RecipeRepository(
 
 
     private suspend fun fetchAndSaveCategories() {
-        remoteDataSource.getMealCategoriesDetailed().body()?.categories
+        remoteDataSource.getCategoriesDetailed().body()?.categories
             ?.forEach { categoryDao.addCategory(it.toDBEntity()) }
     }
 
@@ -79,7 +79,7 @@ class RecipeRepository(
         displayOrderNumber = idCategory.toInt()
     )
 
-    private fun Meal.toDBEntity() = Recipe(
+    private fun MealDetailed.toDBEntity() = Recipe(
         id = idMeal.toLong(),
         name = strMeal ?: throw IllegalArgumentException("Recipe name cannot be null"),
         categoryName = strCategory,
@@ -96,7 +96,7 @@ class RecipeRepository(
     /**
      * From Class fields (strIngredientX, strMeasureX) to formatted string (Name:Measure,...)
      */
-    private fun Meal.ingredientsToFormatedString() = (1..MEAL_DB_API_INGREDIENTS_COUNT)
+    private fun MealDetailed.ingredientsToFormatedString() = (1..MEAL_DB_API_INGREDIENTS_COUNT)
         .mapIndexed { i, _ ->
             try {
                 // Search for fields strIngredient$i & strMeasure$i ($i -> 1 to 20 (inclusive))
