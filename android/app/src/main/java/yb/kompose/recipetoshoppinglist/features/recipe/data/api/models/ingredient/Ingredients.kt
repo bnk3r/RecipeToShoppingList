@@ -1,6 +1,6 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.ingredient
 
-data class GetIngredients(
+data class Ingredients(
     val meals: List<Ingredient>
 )
 

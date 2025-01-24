@@ -1,6 +1,6 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.category
 
-data class GetMealCategoriesDetailed(
+data class CategoriesDetailed(
     val categories: List<CategoryDetailed>
 )
 

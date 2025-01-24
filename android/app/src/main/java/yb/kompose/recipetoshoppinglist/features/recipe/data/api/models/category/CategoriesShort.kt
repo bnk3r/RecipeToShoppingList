@@ -1,6 +1,6 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.category
 
-data class GetCategories(
-    val meals: List<Category>
+data class CategoriesShort(
+    val meals: List<CategoryShort>
 )
 

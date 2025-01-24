@@ -1,5 +1,5 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal
 
-data class GetMealsByFirstLetter(
-    val meals: List<Meal>
+data class MealsDetailed(
+    val meals: List<MealDetailed>
 )

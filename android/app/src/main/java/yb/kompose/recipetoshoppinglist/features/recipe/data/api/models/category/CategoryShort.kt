@@ -1,5 +1,5 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.category
 
-data class Category(
+data class CategoryShort(
     val strCategory: String?
 )
