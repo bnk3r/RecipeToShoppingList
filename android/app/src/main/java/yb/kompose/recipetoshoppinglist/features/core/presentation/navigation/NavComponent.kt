@@ -10,9 +10,9 @@ import androidx.navigation.toRoute
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipeDestination
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipesDestination
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 
 @Composable
 fun NavComponent(

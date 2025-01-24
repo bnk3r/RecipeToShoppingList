@@ -16,6 +16,9 @@ serializationJson = "1.6.3"
 coil = "3.0.4"
 room = "2.6.1"
 icons = "1.7.6"
+mlkit = "17.0.3"
+playServicesMlkitTextRecognitionCommon = "19.1.0"
+playServicesMlkitTextRecognition = "19.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +47,9 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons" }
+mlkit-translate = { group = "com.google.mlkit", name = "translate", version.ref = "mlkit" }
+play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
+play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "playServicesMlkitTextRecognition" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

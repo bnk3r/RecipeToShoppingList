@@ -3,13 +3,12 @@ package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.com
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,9 +31,11 @@ import coil3.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.R
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedText
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedTitle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.vimos.RecipeViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 
 @Composable
 fun RecipeScreen(
@@ -50,9 +51,7 @@ fun RecipeScreen(
 
     LaunchedEffect(recipeId) {
         coroutineScope.launch(Dispatchers.Default) {
-            recipeViewModel.getRecipeDetailed(recipeId).collect { r ->
-                recipe = r
-            }
+            recipeViewModel.getRecipeDetailed(recipeId).collect { recipe = it }
         }
     }
 
@@ -79,25 +78,25 @@ fun RecipeScreen(
                     )
                 }
                 item {
-                    SectionTitle(
+                    FrenchTranslatedTitle(
                         title = r.title,
+                        textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 32.dp),
-                        textAlign = TextAlign.Center
+                            .padding(vertical = 32.dp)
                     )
                 }
-                r.instructions?.let { instructions ->
-                    item {
-                        Text(
-                            text = instructions,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .padding(bottom = 32.dp)
-                        )
-                    }
+                item {
+                    val instructions = r.instructions ?: return@item
+                    FrenchTranslatedText(
+                        text = instructions,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 32.dp)
+                    )
+
                 }
                 if (r.ingredients.isNotEmpty()) {
                     item {
@@ -111,21 +110,28 @@ fun RecipeScreen(
                                 .fillMaxWidth()
                                 .padding(16.dp),
                         ) {
-                            r.ingredients.forEach { ingredient ->
-                                Row(
+                            r.ingredients.forEachIndexed { i, ingredient ->
+                                Column(
                                     modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Text(
-                                        text = ingredient.name
-                                    )
-                                    Spacer(
-                                        modifier = Modifier.width(16.dp)
-                                    )
-                                    Text(
-                                        text = ingredient.amount
-                                    )
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        FrenchTranslatedText(
+                                            text = "${ingredient.name} - ${ingredient.amount}"
+                                        )
+                                    }
+                                    if (i < r.ingredients.lastIndex) {
+                                        HorizontalDivider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(vertical = 4.dp)
+                                        )
+                                    }
+
                                 }
                             }
                         }
