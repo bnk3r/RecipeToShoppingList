@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.RecipeRepository
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.util.toUiModel
 
 class GetRecipeCategoriesUseCase(
     private val recipeRepository: RecipeRepository,
@@ -15,12 +16,7 @@ class GetRecipeCategoriesUseCase(
 
     suspend operator fun invoke(): Flow<List<UiCategory>> = withContext(defaultDispatcher) {
         recipeRepository.getCategories().map { categories ->
-            categories.map { category ->
-                UiCategory(
-                    name = category.name,
-                    imageUrl = category.imageUrl
-                )
-            }
+            categories.map { it.toUiModel() }
         }
     }
 
