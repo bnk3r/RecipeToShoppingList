@@ -1,10 +1,10 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.domain.models.util
 
-import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.Meal
+import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 
-fun Meal.toUiModel() = UiRecipe(
+fun MealDetailed.toUiModel() = UiRecipe(
     id = idMeal.toInt(),
     title = strMeal ?: "",
     instructions = strInstructions ?: "",
@@ -16,7 +16,7 @@ fun Meal.toUiModel() = UiRecipe(
     area = strArea ?: ""
 )
 
-fun Meal.extractIngredients(): List<UiIngredient> {
+fun MealDetailed.extractIngredients(): List<UiIngredient> {
     val ingredients = mutableListOf<UiIngredient>()
 
     if (!strIngredient1.isNullOrBlank()) {

@@ -1,6 +1,6 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models
+package yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal
 
-data class Meal(
+data class MealDetailed(
     val idMeal: String,
     val dateModified: String?,
     val strArea: String?,
@@ -13,6 +13,7 @@ data class Meal(
     val strSource: String?,
     val strTags: String?,
     val strYoutube: String?,
+    val strInstructions: String?,
     val strIngredient1: String?,
     val strIngredient2: String?,
     val strIngredient3: String?,
@@ -33,7 +34,6 @@ data class Meal(
     val strIngredient18: String?,
     val strIngredient19: String?,
     val strIngredient20: String?,
-    val strInstructions: String?,
     val strMeasure1: String?,
     val strMeasure2: String?,
     val strMeasure3: String?,
@@ -54,4 +54,8 @@ data class Meal(
     val strMeasure18: String?,
     val strMeasure19: String?,
     val strMeasure20: String?
-)
+) {
+    companion object {
+        const val MEAL_DB_API_INGREDIENTS_COUNT = 20
+    }
+}
