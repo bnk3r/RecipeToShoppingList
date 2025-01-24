@@ -18,7 +18,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.GetRandom
 interface TheMealDBService {
 
     @GET("search.php")
-    suspend fun getMealByName(@Query("s") name: String): Response<GetMealByName>
+    suspend fun getMealsByName(@Query("s") name: String): Response<GetMealByName>
 
     @GET("search.php")
     suspend fun getMealsByFirstLetter(@Query("f") letter: String): Response<GetMealsByFirstLetter>
