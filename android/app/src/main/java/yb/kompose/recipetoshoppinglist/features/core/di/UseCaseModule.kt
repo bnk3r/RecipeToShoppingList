@@ -8,6 +8,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecip
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
@@ -43,6 +44,10 @@ fun provideUpdateShoppingListUseCase(
     shoppingRepository: ShoppingRepository
 ) = UpdateShoppingListUseCase(shoppingRepository)
 
+fun provideDeleteShoppingListIngredientUseCase(
+    shoppingRepository: ShoppingRepository
+) = DeleteShoppingListIngredientUseCase(shoppingRepository)
+
 val useCaseModule = module {
     factory { provideGetRecipeCategoriesUseCase(get()) }
     factory { provideGetRecipesForCategoryUseCase(get()) }
@@ -54,4 +59,5 @@ val useCaseModule = module {
     factory { provideGetShoppingListUseCase(get()) }
     factory { provideDeleteShoppingListUseCase(get()) }
     factory { provideUpdateShoppingListUseCase(get()) }
+    factory { provideDeleteShoppingListIngredientUseCase(get()) }
 }

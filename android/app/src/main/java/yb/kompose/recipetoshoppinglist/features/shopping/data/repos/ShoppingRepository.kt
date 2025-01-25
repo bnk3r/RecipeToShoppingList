@@ -3,7 +3,7 @@ package yb.kompose.recipetoshoppinglist.features.shopping.data.repos
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
-import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingList
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListWithIngredients
 
 class ShoppingRepository(
@@ -42,6 +42,11 @@ class ShoppingRepository(
             shoppingList.ingredients.forEach { ingredient ->
                 shoppingDao.deleteShoppingListIngredient(ingredient)
             }
+        }
+
+    suspend fun deleteShoppingListIngredient(ingredient: ShoppingListIngredient) =
+        withContext(Dispatchers.IO) {
+            shoppingDao.deleteShoppingListIngredient(ingredient)
         }
 
 }

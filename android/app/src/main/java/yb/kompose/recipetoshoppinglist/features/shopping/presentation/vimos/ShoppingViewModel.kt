@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
@@ -21,11 +23,15 @@ class ShoppingViewModel(
     private val getShoppingListUseCase: GetShoppingListUseCase,
     private val addShoppingListUseCase: AddShoppingListUseCase,
     private val updateShoppingListUseCase: UpdateShoppingListUseCase,
-    private val deleteShoppingListUseCase: DeleteShoppingListUseCase
+    private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
+    private val deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase
 ) : ViewModel() {
 
     private var _shoppingLists = MutableStateFlow(emptyList<UiShoppingList>())
     val shoppingLists = _shoppingLists.asStateFlow()
+
+    private var _currentShoppingList = MutableStateFlow<UiShoppingList?>(null)
+    val currentShoppingList = _currentShoppingList.asStateFlow()
 
     init {
         // Expose shopping lists immediately
@@ -36,23 +42,52 @@ class ShoppingViewModel(
         }
     }
 
-    fun addNewShoppingList() = viewModelScope.launch(Dispatchers.IO) {
-        addShoppingListUseCase(emptyShoppingList())
-    }
+    fun addNewShoppingList() =
+        viewModelScope.launch(Dispatchers.IO) {
+            addShoppingListUseCase(emptyShoppingList())
+        }
 
-    suspend fun getShoppingListById(id: Long) : Flow<UiShoppingList?> = withContext(Dispatchers.IO) {
-        getShoppingListUseCase(id)
-    }
+    suspend fun getShoppingListById(id: Long): Flow<UiShoppingList?> =
+        withContext(Dispatchers.IO) {
+            getShoppingListUseCase(id)
+        }
 
-    fun updateShoppingList(shoppingList: UiShoppingList) = viewModelScope.launch(Dispatchers.IO) {
-        updateShoppingListUseCase(shoppingList)
-    }
+    fun updateShoppingList(shoppingList: UiShoppingList) =
+        viewModelScope.launch(Dispatchers.IO) {
+            updateShoppingListUseCase(shoppingList)
+        }
 
     fun deleteShoppingList(shoppingList: UiShoppingList) = viewModelScope.launch(Dispatchers.IO) {
         deleteShoppingListUseCase(shoppingList)
     }
 
+    fun setCurrentShoppingList(shoppingList: UiShoppingList) {
+        _currentShoppingList.value = shoppingList
+    }
 
+    fun addIngredientToCurrentList(ingredient: UiShoppingListIngredient) =
+        viewModelScope.launch(Dispatchers.Default) {
+            val currentList = _currentShoppingList.value ?: return@launch
+            val ingredients = currentList.ingredients.toMutableList()
+            ingredients.add(ingredient.copy(shoppingListId = currentList.id))
+            updateShoppingListUseCase(currentList.copy(ingredients = ingredients))
+        }
+
+    fun updateIngredientInCurrentList(updatedIngredient: UiShoppingListIngredient) =
+        viewModelScope.launch(Dispatchers.Default) {
+            val currentList = _currentShoppingList.value ?: return@launch
+            val index = currentList.ingredients.indexOfFirst { it.id == updatedIngredient.id }
+            if (index == -1) return@launch
+            val ingredients = currentList.ingredients.toMutableList()
+            ingredients[index] = updatedIngredient
+            updateShoppingListUseCase(currentList.copy(ingredients = ingredients))
+        }
+
+    fun removeIngredientFromCurrentList(ingredient: UiShoppingListIngredient) =
+        viewModelScope.launch(Dispatchers.Default) {
+            val currentList = _currentShoppingList.value ?: return@launch
+            deleteShoppingListIngredientUseCase(currentList, ingredient)
+        }
 
     private fun emptyShoppingList(): UiShoppingList =
         UiShoppingList(
