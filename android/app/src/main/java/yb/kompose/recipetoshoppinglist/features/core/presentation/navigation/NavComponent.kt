@@ -9,22 +9,26 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipeDestination
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.RecipesDestination
+import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.ShoppingDestination
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingScreen
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
 @Composable
 fun NavComponent(
     categoryViewModel: CategoryViewModel,
     recipeViewModel: RecipeViewModel,
+    shoppingViewModel: ShoppingViewModel,
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = RecipesDestination,
+        startDestination = ShoppingDestination,
         modifier = modifier
     ) {
         composable<RecipesDestination> {
@@ -46,6 +50,13 @@ fun NavComponent(
                 addToShoppingList = { ingredient ->
                     // TODO shoppingListViewModel and consort -> edit or create current shopping list (DB)
                 },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        composable<ShoppingDestination> {
+            ShoppingScreen(
+                shoppingViewModel = shoppingViewModel,
                 modifier = Modifier.fillMaxSize()
             )
         }

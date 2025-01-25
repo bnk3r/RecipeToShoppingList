@@ -12,6 +12,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.LocalDateTypeConverters
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnitTypeConverters
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 
 @Database(
@@ -20,6 +21,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.Shopping
         Ingredient::class,
         Category::class,
         Area::class,
+        ShoppingList::class,
         ShoppingListIngredient::class
     ],
     version = 2,

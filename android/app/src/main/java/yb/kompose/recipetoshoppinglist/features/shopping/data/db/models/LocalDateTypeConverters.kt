@@ -1,7 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.data.db.models
 
 import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -13,11 +12,11 @@ class LocalDateTypeConverters {
     }
 
     @TypeConverter
-    fun from(date: LocalDate): String =
-        date.format(DateTimeFormatter.ofPattern(DB_DATE_FORMAT_PATTERN))
+    fun from(date: LocalDate?): String? =
+        date?.format(DateTimeFormatter.ofPattern(DB_DATE_FORMAT_PATTERN))
 
-    @TypeConverters
-    fun to(s: String): LocalDate =
+    @TypeConverter
+    fun to(s: String?): LocalDate? =
         LocalDate.parse(s, DateTimeFormatter.ofPattern(DB_DATE_FORMAT_PATTERN))
 
 }
