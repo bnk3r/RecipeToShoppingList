@@ -43,6 +43,9 @@ fun NavComponent(
             RecipeScreen(
                 recipeId = args.id,
                 recipeViewModel = recipeViewModel,
+                addToShoppingList = { ingredient ->
+                    // TODO shoppingListViewModel and consort -> edit or create current shopping list (DB)
+                },
                 modifier = Modifier.fillMaxSize()
             )
         }

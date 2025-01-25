@@ -1,5 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +38,7 @@ import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedTitle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SectionTitle
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 
@@ -41,6 +46,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.Recipe
 fun RecipeScreen(
     recipeId: Int,
     recipeViewModel: RecipeViewModel,
+    addToShoppingList: (UiIngredient) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -122,6 +128,13 @@ fun RecipeScreen(
                                     ) {
                                         FrenchTranslatedText(
                                             text = "${ingredient.name} - ${ingredient.amount}"
+                                        )
+                                        Icon(
+                                            imageVector = Icons.Default.ShoppingBasket,
+                                            contentDescription = stringResource(R.string.add_to_shopping_list),
+                                            modifier = Modifier.clickable {
+                                                addToShoppingList(ingredient)
+                                            }
                                         )
                                     }
                                     if (i < r.ingredients.lastIndex) {
