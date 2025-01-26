@@ -2,7 +2,6 @@ package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.com
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,8 +35,8 @@ import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.RowCategoriesSection
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.components.RecipeSearchBarSection
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 
 @Composable
 fun RecipesScreen(
@@ -99,100 +97,91 @@ fun RecipesScreen(
         }
     }
 
-    Scaffold(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
         modifier = modifier
-    ) { innerPadding ->
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+    ) {
+        item(
+            span = { GridItemSpan(3) }
         ) {
+            RecipeSearchBarSection(
+                query = queryRecipe,
+                onQueryChange = { queryRecipe = it },
+                onSearch = {
+                    searchByQuery()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
 
+        item(
+            span = { GridItemSpan(3) }
+        ) {
+            RowCategoriesSection(
+                categories = categories,
+                selectedCategory = selectedCategory,
+                onCategorySelected = {
+                    selectedCategory = it
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp)
+            )
+        }
+
+        if (recipesForCategory.isNotEmpty() && recipesByQuery.isEmpty()) {
+            items(recipesForCategory) { recipe ->
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(recipe.imgUrl)
+                        .memoryCachePolicy(CachePolicy.ENABLED)
+                        .build(),
+                    contentDescription = recipe.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(recipeItemSize)
+                        .padding(16.dp)
+                        .clickable {
+                            showRecipeDetails(recipe.id)
+                        }
+                )
+            }
+        }
+
+        if (recipesByQuery.isNotEmpty()) {
+            items(recipesByQuery) { recipe ->
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(recipe.imgUrl)
+                        .memoryCachePolicy(CachePolicy.ENABLED)
+                        .build(),
+                    contentDescription = recipe.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(recipeItemSize)
+                        .padding(16.dp)
+                        .clickable {
+                            showRecipeDetails(recipe.id)
+                        }
+                )
+            }
+        }
+
+        if (recipesForCategoryLoading || recipesByQueryLoading) {
             item(
                 span = { GridItemSpan(3) }
             ) {
-                RecipeSearchBarSection(
-                    query = queryRecipe,
-                    onQueryChange = { queryRecipe = it },
-                    onSearch = {
-                        searchByQuery()
-                    },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
-            }
-
-            item(
-                span = { GridItemSpan(3) }
-            ) {
-                RowCategoriesSection(
-                    categories = categories,
-                    selectedCategory = selectedCategory,
-                    onCategorySelected = {
-                        selectedCategory = it
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 32.dp)
-                )
-            }
-
-            if (recipesForCategory.isNotEmpty() && recipesByQuery.isEmpty()) {
-                items(recipesForCategory) { recipe ->
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(recipe.imgUrl)
-                            .memoryCachePolicy(CachePolicy.ENABLED)
-                            .build(),
-                        contentDescription = recipe.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(recipeItemSize)
-                            .padding(16.dp)
-                            .clickable {
-                                showRecipeDetails(recipe.id)
-                            }
-                    )
-                }
-            }
-
-            if (recipesByQuery.isNotEmpty()) {
-                items(recipesByQuery) { recipe ->
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(recipe.imgUrl)
-                            .memoryCachePolicy(CachePolicy.ENABLED)
-                            .build(),
-                        contentDescription = recipe.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(recipeItemSize)
-                            .padding(16.dp)
-                            .clickable {
-                                showRecipeDetails(recipe.id)
-                            }
-                    )
-                }
-            }
-
-            if (recipesForCategoryLoading || recipesByQueryLoading) {
-                item(
-                    span = { GridItemSpan(3) }
+                        .height(300.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
+                    CircularProgressIndicator()
                 }
             }
-
         }
 
     }

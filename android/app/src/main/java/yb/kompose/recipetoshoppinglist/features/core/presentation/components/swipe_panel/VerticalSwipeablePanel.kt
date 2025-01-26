@@ -184,28 +184,23 @@ fun VerticalSwipeablePanel(
                             enter = fadeIn(),
                             exit = fadeOut()
                         ) {
-                            Box(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(collapsePanelHeight),
-                                contentAlignment = Alignment.Center
+                                    .height(collapsePanelHeight)
+                                    .clip(CircleShape)
+                                    .clickable {
+                                        animatePanelTo(0)
+                                    }
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.End,
+                                verticalArrangement = Arrangement.Bottom
                             ) {
-                                Column(
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .clickable {
-                                            animatePanelTo(0)
-                                        }
-                                        .padding(16.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Bottom
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(30.dp),
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = null,
-                                    )
-                                }
+                                Icon(
+                                    modifier = Modifier.size(30.dp),
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = null,
+                                )
                             }
                         }
                     }
