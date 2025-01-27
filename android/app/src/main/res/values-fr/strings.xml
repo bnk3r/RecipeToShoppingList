@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Recipe To Shopping List</string>
+    <string name="search">Rechercher</string>
+    <string name="search_placeholder">ex. Ma recherche ici.</string>
+    <string name="search_recipe_label">Rechercher  des recettes</string>
+    <string name="section_categories_title">Catégories</string>
+    <string name="section_search_recipe_title">Une envie particulière?</string>
+    <string name="ingredients">Ingrédients</string>
+    <string name="add_to_shopping_list">Ajouter à la liste de course</string>
+</resources>
