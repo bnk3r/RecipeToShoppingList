@@ -9,3 +9,6 @@ object RecipesDestination
 data class RecipeDestination(
     val id: Int
 )
+
+@Serializable
+object ShoppingDestination

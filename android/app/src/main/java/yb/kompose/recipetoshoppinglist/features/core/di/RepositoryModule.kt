@@ -5,6 +5,8 @@ import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealD
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.RecipeRepository
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
+import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
 
 fun provideRecipeRepository(
     remoteDataSource: TheMealDBService,
@@ -12,6 +14,11 @@ fun provideRecipeRepository(
     recipeDAO: RecipeDAO
 ) = RecipeRepository(remoteDataSource, categoryDAO, recipeDAO)
 
+fun provideShoppingRepository(
+    shoppingDao: ShoppingDao
+) = ShoppingRepository(shoppingDao)
+
 val repositoryModule = module {
     single { provideRecipeRepository(get(), get(), get()) }
+    single { provideShoppingRepository(get()) }
 }

@@ -20,8 +20,11 @@ fun providesCategoryDAO(db: RecipeToShoppingListDB) = db.categoryDAO()
 
 fun provideRecipeDAO(db: RecipeToShoppingListDB) = db.recipeDAO()
 
+fun provideShoppingDAO(db: RecipeToShoppingListDB) = db.shoppingDAO()
+
 val databaseModule = module {
     single { providesRecipeToShoppingDB(get()) }
     single { providesCategoryDAO(get()) }
     single { provideRecipeDAO(get()) }
+    single { provideShoppingDAO(get()) }
 }

@@ -11,11 +11,13 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.Nav
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RecipeToShoppingListTheme
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val categoryViewModel: CategoryViewModel by inject()
     private val recipeViewModel: RecipeViewModel by inject()
+    private val shoppingViewModel: ShoppingViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,7 @@ class MainActivity : ComponentActivity() {
                 NavComponent(
                     categoryViewModel = categoryViewModel,
                     recipeViewModel = recipeViewModel,
+                    shoppingViewModel = shoppingViewModel,
                     modifier = Modifier.fillMaxSize()
                 )
             }
