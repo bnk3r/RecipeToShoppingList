@@ -33,7 +33,9 @@ import kotlin.math.roundToInt
 fun VerticalSwipeablePanel(
     modifier: Modifier = Modifier,
     behindColor: Color = MaterialTheme.colorScheme.surface,
+    behindContentColor: Color = MaterialTheme.colorScheme.onSurface,
     panelColor: Color = MaterialTheme.colorScheme.primary,
+    panelContentColor: Color = MaterialTheme.colorScheme.onPrimary,
     collapsePanelHeight: Dp = 120.dp,
     contentBehind: @Composable BoxScope.() -> Unit,
     panelBody: @Composable BoxScope.() -> Unit
@@ -62,13 +64,8 @@ fun VerticalSwipeablePanel(
                 SWIPEABLE_PANEL_MAX_CORNER_ANGLE.dp
             }
 
-            in Int.MIN_VALUE until 1 -> {
-                0.dp
-            }
-
-            else -> {
-                angle.dp
-            }
+            in 0 until SWIPEABLE_PANEL_MAX_CORNER_ANGLE -> angle.dp
+            else -> 0.dp
         }
     }
 
