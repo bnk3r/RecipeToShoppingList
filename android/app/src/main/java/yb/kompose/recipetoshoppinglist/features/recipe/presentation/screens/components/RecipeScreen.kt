@@ -1,5 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ fun RecipeScreen(
     recipeId: Int,
     recipeViewModel: RecipeViewModel,
     addToShoppingList: (UiIngredient) -> Unit,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -61,101 +63,97 @@ fun RecipeScreen(
         }
     }
 
-    Scaffold(
-        modifier = modifier
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            recipe?.let { r ->
-                item {
-                    AsyncImage(
-                        model = ImageRequest.Builder(context)
-                            .data(r.imgUrl)
-                            .memoryCachePolicy(CachePolicy.ENABLED)
-                            .build(),
-                        contentDescription = r.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16f / 9f)
-                    )
-                }
-                item {
-                    FrenchTranslatedTitle(
-                        title = r.title,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 32.dp)
-                    )
-                }
-                item {
-                    val instructions = r.instructions ?: return@item
-                    FrenchTranslatedText(
-                        text = instructions,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 32.dp)
-                    )
+    LazyColumn(modifier = modifier.fillMaxSize()) {
+        recipe?.let { r ->
+            item {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(r.imgUrl)
+                        .memoryCachePolicy(CachePolicy.ENABLED)
+                        .build(),
+                    contentDescription = r.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16f / 9f)
+                )
+            }
+            item {
+                FrenchTranslatedTitle(
+                    title = r.title,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp)
+                )
+            }
+            item {
+                val instructions = r.instructions ?: return@item
+                FrenchTranslatedText(
+                    text = instructions,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 32.dp)
+                )
 
-                }
-                if (r.ingredients.isNotEmpty()) {
-                    item {
-                        SectionTitle(
-                            title = stringResource(R.string.ingredients),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                        ) {
-                            r.ingredients.forEachIndexed { i, ingredient ->
-                                Column(
+            }
+            if (r.ingredients.isNotEmpty()) {
+                item {
+                    SectionTitle(
+                        title = stringResource(R.string.ingredients),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    ) {
+                        r.ingredients.forEachIndexed { i, ingredient ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Row(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        FrenchTranslatedText(
-                                            text = "${ingredient.name} - ${ingredient.amount}"
-                                        )
-                                        Icon(
-                                            imageVector = Icons.Default.ShoppingBasket,
-                                            contentDescription = stringResource(R.string.add_to_shopping_list),
-                                            modifier = Modifier.clickable {
-                                                addToShoppingList(ingredient)
-                                            }
-                                        )
-                                    }
-                                    if (i < r.ingredients.lastIndex) {
-                                        HorizontalDivider(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(vertical = 4.dp)
-                                        )
-                                    }
-
+                                    FrenchTranslatedText(
+                                        text = "${ingredient.name} - ${ingredient.amount}"
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.ShoppingBasket,
+                                        contentDescription = stringResource(R.string.add_to_shopping_list),
+                                        modifier = Modifier.clickable {
+                                            addToShoppingList(ingredient)
+                                        }
+                                    )
                                 }
+                                if (i < r.ingredients.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp)
+                                    )
+                                }
+
                             }
                         }
                     }
                 }
-            } ?: item {
-                Text(
-                    text = "No Recipe found with id $recipeId"
-                )
             }
+        } ?: item {
+            Text(
+                text = "No Recipe found with id $recipeId"
+            )
         }
+    }
+
+    BackHandler {
+        onBackPressed()
     }
 
 }

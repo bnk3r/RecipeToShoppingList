@@ -31,9 +31,6 @@ fun NavComponent(
                 shoppingViewModel = shoppingViewModel,
                 categoryViewModel = categoryViewModel,
                 recipeViewModel = recipeViewModel,
-                showRecipeDetails = {
-
-                },
                 modifier = Modifier.fillMaxSize()
             )
         }

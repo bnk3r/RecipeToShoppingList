@@ -1,5 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -106,6 +107,12 @@ fun VerticalSwipeablePanel(
                 panelBody()
             }
         }
+    }
+
+    BackHandler(
+        enabled = swipeableState.currentValue == 1
+    ) {
+        animatePanelTo(0)
     }
 }
 
