@@ -2,23 +2,11 @@ package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.co
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
@@ -40,10 +28,10 @@ fun ShoppingScreen(
 
     VerticalSwipeablePanel(
         modifier = modifier,
-        collapsePanelHeight = 120.dp,
-        panelColor = MaterialTheme.colorScheme.primary,
         contentBehind = {
-            CurrentShoppingList()
+            CurrentShoppingList(
+                modifier = Modifier.fillMaxSize()
+            )
         },
         panelBody = {
             RecipesScreen(
@@ -54,7 +42,9 @@ fun ShoppingScreen(
                     .fillMaxSize()
                     .padding(top = 120.dp)
             )
-        }
+        },
+        behindColor = MaterialTheme.colorScheme.primary,
+        panelColor = MaterialTheme.colorScheme.surface
     )
 
 }
@@ -63,12 +53,10 @@ fun ShoppingScreen(
 fun CurrentShoppingList(
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
+    Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(50) {
-            Text("Hello")
-        }
+        // TODO UI
     }
 }

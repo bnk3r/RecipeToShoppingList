@@ -1,38 +1,21 @@
 package yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.ShoppingBasket
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,17 +32,19 @@ import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.dpToPx
 import kotlin.math.roundToInt
 
+const val SWIPEABLE_PANEL_MAX_CORNER_ANGLE = 50
+
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
 fun VerticalSwipeablePanel(
     modifier: Modifier = Modifier,
+    behindColor: Color = MaterialTheme.colorScheme.surface,
     panelColor: Color = MaterialTheme.colorScheme.primary,
-    collapsePanelHeight: Dp = 96.dp,
+    collapsePanelHeight: Dp = 120.dp,
     contentBehind: @Composable BoxScope.() -> Unit,
     panelBody: @Composable BoxScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-
     val swipeableState = rememberSwipeableState(0)
 
     var extendedHeightPx by remember { mutableFloatStateOf(0f) }
@@ -68,42 +53,37 @@ fun VerticalSwipeablePanel(
 
     var anchors by remember { mutableStateOf(mapOf(0f to 0)) }
 
-    val maxCornerAngle = 50
+    var cornerAngle: Dp by remember { mutableStateOf(SWIPEABLE_PANEL_MAX_CORNER_ANGLE.dp) }
 
-    val cornerAngle: Dp by remember(extendedHeightPx, swipeableState.offset) {
-        derivedStateOf {
-            if (extendedHeightPx == 0f) return@derivedStateOf 0.dp
-            val offset = swipeableState.offset.value
-            when (val angle =
-                ((offset * maxCornerAngle) / (extendedHeightPx * 0.9f)).roundToInt()) {
-                in maxCornerAngle..Int.MAX_VALUE -> maxCornerAngle.dp
-                in Int.MIN_VALUE until 0 -> 0.dp
-                else -> angle.dp
+    var headerCollapseVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(swipeableState.offset.value) {
+        val offset = swipeableState.offset.value
+        val angle = ((offset * SWIPEABLE_PANEL_MAX_CORNER_ANGLE) / (extendedHeightPx * 0.9f)).roundToInt()
+        if (offset == 0f && angle == 0) return@LaunchedEffect
+        cornerAngle = when (angle) {
+            in SWIPEABLE_PANEL_MAX_CORNER_ANGLE..Int.MAX_VALUE -> {
+                SWIPEABLE_PANEL_MAX_CORNER_ANGLE.dp
+            }
+            in Int.MIN_VALUE until 1 -> {
+                0.dp
+            }
+            else -> {
+                angle.dp
             }
         }
     }
 
     LaunchedEffect(extendedHeightPx) {
-        if (extendedHeightPx != 0f) {
-            anchors = mapOf(
-                extendedHeightPx - collapseHeightPx to 0, // First anchor 90% height from top
-                0f to 1 // Second anchor top offset 0
-            )
-        }
-    }
-
-    var panelHeaderVisible by remember { mutableStateOf(true) }
-
-    val panelHeaderCloseVisible by remember(panelHeaderVisible) {
-        derivedStateOf {
-            !panelHeaderVisible
-        }
+        if (extendedHeightPx == 0f) return@LaunchedEffect
+        anchors = mapOf(extendedHeightPx - collapseHeightPx to 0, 0f to 1)
+        // First anchor = Collapsed panel, Second = Extended panel
     }
 
     LaunchedEffect(swipeableState.currentValue) {
         when (swipeableState.currentValue) {
-            0 -> panelHeaderVisible = true
-            1 -> panelHeaderVisible = false
+            0 -> headerCollapseVisible = true
+            1 -> headerCollapseVisible = false
         }
     }
 
@@ -113,22 +93,22 @@ fun VerticalSwipeablePanel(
 
     Box(
         modifier = modifier
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.5f) },
-                orientation = Orientation.Vertical
-            )
-            .onGloballyPositioned { configuration ->
-                extendedHeightPx = configuration.size.height.toFloat()
-            }
+            .onGloballyPositioned { extendedHeightPx = it.size.height.toFloat() }
             .clip(RectangleShape)
+            .background(behindColor)
     ) {
         contentBehind()
         if (anchors.size > 1) {
             Box(
                 modifier = Modifier
                     .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
+                    // modifiers must be placed after .offset !!
+                    .swipeable(
+                        state = swipeableState,
+                        anchors = anchors,
+                        thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                        orientation = Orientation.Vertical
+                    )
                     .clip(
                         RoundedCornerShape(
                             topStart = cornerAngle,
@@ -141,68 +121,25 @@ fun VerticalSwipeablePanel(
             ) {
                 when (swipeableState.currentValue) {
                     0 -> {
-                        AnimatedVisibility(
-                            panelHeaderVisible,
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(collapsePanelHeight),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .clickable {
-                                            animatePanelTo(1)
-                                        }
-                                        .padding(16.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Top
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.KeyboardArrowUp,
-                                        contentDescription = null,
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Default.ShoppingBasket,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(30.dp)
-                                    )
-                                }
-
+                        VerticalSwipeablePanelCollapsedHeader(
+                            visible = headerCollapseVisible,
+                            height = collapsePanelHeight,
+                            onClick = {
+                                animatePanelTo(1)
+                                headerCollapseVisible = !headerCollapseVisible
                             }
-
-                        }
+                        )
                     }
 
                     1 -> {
-                        AnimatedVisibility(
-                            panelHeaderCloseVisible,
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(collapsePanelHeight)
-                                    .clip(CircleShape)
-                                    .clickable {
-                                        animatePanelTo(0)
-                                    }
-                                    .padding(16.dp),
-                                horizontalAlignment = Alignment.End,
-                                verticalArrangement = Arrangement.Bottom
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(30.dp),
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = null,
-                                )
-                            }
-                        }
+                        VerticalSwipeablePanelExtendedHeader(
+                            height = collapsePanelHeight,
+                            onClick = {
+                                animatePanelTo(0)
+                                headerCollapseVisible = !headerCollapseVisible
+                            },
+                            visible = !headerCollapseVisible
+                        )
                     }
 
                 }
@@ -212,3 +149,4 @@ fun VerticalSwipeablePanel(
         }
     }
 }
+
