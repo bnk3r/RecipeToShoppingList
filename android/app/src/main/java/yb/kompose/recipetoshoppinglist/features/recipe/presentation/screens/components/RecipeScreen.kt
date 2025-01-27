@@ -145,10 +145,6 @@ fun RecipeScreen(
                     }
                 }
             }
-        } ?: item {
-            Text(
-                text = "No Recipe found with id $recipeId"
-            )
         }
     }
 
