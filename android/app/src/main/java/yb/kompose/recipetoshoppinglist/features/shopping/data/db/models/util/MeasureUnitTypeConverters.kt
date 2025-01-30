@@ -1,6 +1,7 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.data.db.models
+package yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.util
 
 import androidx.room.TypeConverter
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 
 class MeasureUnitTypeConverters {
     @TypeConverter

@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.core.presentation.components
+package yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation
 
 import android.util.Log
 import androidx.compose.material3.LocalTextStyle

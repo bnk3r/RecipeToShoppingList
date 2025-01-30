@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.core.presentation.components
+package yb.kompose.recipetoshoppinglist.features.core.presentation.components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

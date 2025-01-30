@@ -6,7 +6,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecip
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase

@@ -14,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,9 +34,9 @@ import coil3.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.R
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedText
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedTitle
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SectionTitle
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedTitle
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel

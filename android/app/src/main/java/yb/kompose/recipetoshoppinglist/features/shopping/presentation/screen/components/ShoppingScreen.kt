@@ -20,13 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.dpToPx
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel

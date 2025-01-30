@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.data.db.models
+package yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.util
 
 import androidx.room.TypeConverter
 import java.time.LocalDate

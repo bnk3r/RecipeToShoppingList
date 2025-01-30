@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.core.presentation.components
+package yb.kompose.recipetoshoppinglist.features.core.presentation.components.search
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardActions

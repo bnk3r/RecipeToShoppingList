@@ -28,7 +28,7 @@ fun Recipe.extractIngredients() = ingredients
             name = splits[0],
             amount = splits[1],
             imgUrl = "https://www.themealdb.com/images/ingredients/${splits[0]}.png",
-            thumbnailUrl = "www.themealdb.com/images/ingredients/${splits[0]}-Small.png"
+            thumbnailUrl = "https://www.themealdb.com/images/ingredients/${splits[0]}-Small.png"
         )
     }
     ?: emptyList()

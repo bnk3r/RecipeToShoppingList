@@ -11,5 +11,5 @@ fun Ingredient.toShoppingIngredient() =
         name = name,
         amount = 0.0,
         unit = MeasureUnit.BLANK,
-        imageUrl = "www.themealdb.com/images/ingredients/${name}.png"
+        imageUrl = "https://www.themealdb.com/images/ingredients/${name}.png"
     )

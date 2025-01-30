@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.FrenchTranslatedText
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 
 @Composable
