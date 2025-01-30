@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
 
 @Dao
@@ -40,4 +41,11 @@ interface RecipeDAO {
 
     @Update
     fun updateRecipe(recipe: Recipe)
+
+    @Query("SELECT * FROM ingredients")
+    fun getIngredients(): Flow<List<Ingredient>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addIngredient(ingredient: Ingredient)
+
 }

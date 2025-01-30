@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListWithIngredients
@@ -40,6 +41,9 @@ interface ShoppingDao {
 
     @Delete
     fun deleteShoppingListIngredient(ingredient: ShoppingListIngredient)
+
+    @Query("SELECT * FROM ingredients")
+    fun getIngredients() : Flow<List<Ingredient>>
 
 }
 

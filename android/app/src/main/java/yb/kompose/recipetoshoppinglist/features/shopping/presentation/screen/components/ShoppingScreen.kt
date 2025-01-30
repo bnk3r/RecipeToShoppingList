@@ -5,10 +5,14 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,6 +30,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.v
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.components.ShoppingListComponent
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 import kotlin.math.roundToInt
 
@@ -35,8 +41,8 @@ fun ShoppingScreen(
     recipeViewModel: RecipeViewModel,
     modifier: Modifier = Modifier
 ) {
-
     val shoppingLists = shoppingViewModel.shoppingLists.collectAsStateWithLifecycle()
+    val ingredients = shoppingViewModel.ingredients.collectAsStateWithLifecycle()
 
     val configuration = LocalConfiguration.current
     val widthPx = configuration.screenWidthDp.dp.dpToPx().roundToInt()
@@ -55,9 +61,33 @@ fun ShoppingScreen(
         VerticalSwipeablePanel(
             modifier = Modifier.fillMaxSize(),
             contentBehind = {
-                CurrentShoppingList(
-                    modifier = Modifier.fillMaxSize()
-                )
+                when (shoppingLists.value?.size) {
+                    in 1..Int.MAX_VALUE -> {
+                        ShoppingListComponent(
+                            shoppingList = shoppingLists.value!!.first(),
+                            ingredients = ingredients.value,
+                            onDelete = {
+                                shoppingViewModel.removeIngredientFromCurrentList(it)
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    null -> {
+                        ShoppingListLoadingComponent(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    else -> {
+                        CreateNewShoppingListComponent(
+                            onClickCreate = {
+                                shoppingViewModel.addNewShoppingList()
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
             },
             panelBody = {
                 RecipesScreen(
@@ -70,7 +100,7 @@ fun ShoppingScreen(
                 )
             },
             behindColor = MaterialTheme.colorScheme.primary,
-            panelColor = MaterialTheme.colorScheme.surface
+            panelColor = FloatingActionButtonDefaults.containerColor
         )
         AnimatedVisibility(
             visible = recipeDetailsVisible,
@@ -95,13 +125,38 @@ fun ShoppingScreen(
 }
 
 @Composable
-fun CurrentShoppingList(
+fun ShoppingListLoadingComponent(
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Box(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
-        // TODO UI
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.tertiary
+        )
+    }
+}
+
+@Composable
+fun CreateNewShoppingListComponent(
+    modifier: Modifier = Modifier,
+    onClickCreate: () -> Unit
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Button(
+            onClick = onClickCreate,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                contentColor = MaterialTheme.colorScheme.onTertiary
+            )
+        ) {
+            Text(
+                text = "Create List"
+            )
+        }
     }
 }

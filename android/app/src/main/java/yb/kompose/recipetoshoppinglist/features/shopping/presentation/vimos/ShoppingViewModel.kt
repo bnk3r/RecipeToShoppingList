@@ -13,6 +13,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
@@ -24,20 +25,29 @@ class ShoppingViewModel(
     private val addShoppingListUseCase: AddShoppingListUseCase,
     private val updateShoppingListUseCase: UpdateShoppingListUseCase,
     private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
-    private val deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase
+    private val deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase,
+    private val getIngredientsUseCase: GetIngredientsUseCase
 ) : ViewModel() {
 
-    private var _shoppingLists = MutableStateFlow(emptyList<UiShoppingList>())
+    private var _shoppingLists = MutableStateFlow<List<UiShoppingList>?>(null)
     val shoppingLists = _shoppingLists.asStateFlow()
 
     private var _currentShoppingList = MutableStateFlow<UiShoppingList?>(null)
     val currentShoppingList = _currentShoppingList.asStateFlow()
+
+    private var _ingredients = MutableStateFlow<List<UiShoppingListIngredient>?>(null)
+    val ingredients = _ingredients.asStateFlow()
 
     init {
         // Expose shopping lists immediately
         viewModelScope.launch {
             getShoppingListsUseCase().collect {
                 _shoppingLists.emit(it)
+            }
+        }
+        viewModelScope.launch {
+            getIngredientsUseCase().collect {
+                _ingredients.emit(it)
             }
         }
     }

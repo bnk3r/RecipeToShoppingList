@@ -1,13 +1,19 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.data.repos
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.RecipeRepository
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListWithIngredients
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.util.toShoppingIngredient
 
 class ShoppingRepository(
-    private val shoppingDao: ShoppingDao
+    private val shoppingDao: ShoppingDao,
+    private val recipeRepository: RecipeRepository
 ) {
 
     suspend fun getShoppingLists() = withContext(Dispatchers.IO) {
@@ -47,6 +53,15 @@ class ShoppingRepository(
     suspend fun deleteShoppingListIngredient(ingredient: ShoppingListIngredient) =
         withContext(Dispatchers.IO) {
             shoppingDao.deleteShoppingListIngredient(ingredient)
+        }
+
+    suspend fun getIngredients(): Flow<List<ShoppingListIngredient>> =
+        withContext(Dispatchers.IO) {
+            recipeRepository.getIngredients().map { ingredients ->
+                ingredients.map { ingredient ->
+                    ingredient.toShoppingIngredient()
+                }
+            }
         }
 
 }
