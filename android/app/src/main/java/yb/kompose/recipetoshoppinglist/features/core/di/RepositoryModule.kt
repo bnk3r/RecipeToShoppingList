@@ -15,11 +15,10 @@ fun provideRecipeRepository(
 ) = RecipeRepository(remoteDataSource, categoryDAO, recipeDAO)
 
 fun provideShoppingRepository(
-    shoppingDao: ShoppingDao,
-    recipeRepository: RecipeRepository
-) = ShoppingRepository(shoppingDao, recipeRepository)
+    shoppingDao: ShoppingDao
+) = ShoppingRepository(shoppingDao)
 
 val repositoryModule = module {
     single { provideRecipeRepository(get(), get(), get()) }
-    single { provideShoppingRepository(get(), get()) }
+    single { provideShoppingRepository(get()) }
 }

@@ -41,6 +41,7 @@ fun ShoppingScreen(
     modifier: Modifier = Modifier
 ) {
     val shoppingLists = shoppingViewModel.shoppingLists.collectAsStateWithLifecycle()
+    val currentShoppingList = shoppingViewModel.currentShoppingList.collectAsStateWithLifecycle()
     val ingredients = shoppingViewModel.ingredients.collectAsStateWithLifecycle()
 
     val configuration = LocalConfiguration.current
@@ -60,33 +61,24 @@ fun ShoppingScreen(
         VerticalSwipeablePanel(
             modifier = Modifier.fillMaxSize(),
             contentBehind = {
-                when (shoppingLists.value?.size) {
-                    in 1..Int.MAX_VALUE -> {
-                        ShoppingListComponent(
-                            shoppingList = shoppingLists.value!!.first(),
-                            ingredients = ingredients.value,
-                            onDelete = {
-                                shoppingViewModel.removeIngredientFromCurrentList(it)
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    null -> {
-                        ShoppingListLoadingComponent(
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    else -> {
-                        CreateNewShoppingListComponent(
-                            onClickCreate = {
-                                shoppingViewModel.addNewShoppingList()
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
+                currentShoppingList.value?.let { currentList ->
+                    ShoppingListComponent(
+                        shoppingList = currentList,
+                        ingredients = ingredients.value,
+                        onAdd = { ingredient ->
+                            shoppingViewModel.addIngredientToCurrentList(ingredient)
+                        },
+                        onDelete = {
+                            shoppingViewModel.removeIngredientFromCurrentList(it)
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } ?: CreateNewShoppingListComponent(
+                    onClickCreate = {
+                        shoppingViewModel.addNewShoppingList(true)
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
             },
             panelBody = {
                 RecipesScreen(

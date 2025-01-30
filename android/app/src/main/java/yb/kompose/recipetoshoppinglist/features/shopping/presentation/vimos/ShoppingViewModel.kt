@@ -8,14 +8,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetIngredientsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
 import java.time.LocalDate
 
@@ -26,7 +30,10 @@ class ShoppingViewModel(
     private val updateShoppingListUseCase: UpdateShoppingListUseCase,
     private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
     private val deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase,
-    private val getIngredientsUseCase: GetIngredientsUseCase
+    private val getIngredientsUseCase: GetIngredientsUseCase,
+    private val getCurrentShoppingListUseCase: GetCurrentShoppingListUseCase,
+    private val addIngredientToShoppingListUseCase: AddIngredientToShoppingListUseCase,
+    private val updateShoppingListIngredientUseCase: UpdateShoppingListIngredientUseCase
 ) : ViewModel() {
 
     private var _shoppingLists = MutableStateFlow<List<UiShoppingList>?>(null)
@@ -35,7 +42,7 @@ class ShoppingViewModel(
     private var _currentShoppingList = MutableStateFlow<UiShoppingList?>(null)
     val currentShoppingList = _currentShoppingList.asStateFlow()
 
-    private var _ingredients = MutableStateFlow<List<UiShoppingListIngredient>?>(null)
+    private var _ingredients = MutableStateFlow<List<UiIngredient>?>(null)
     val ingredients = _ingredients.asStateFlow()
 
     init {
@@ -50,11 +57,16 @@ class ShoppingViewModel(
                 _ingredients.emit(it)
             }
         }
+        viewModelScope.launch {
+            getCurrentShoppingListUseCase().collect {
+                _currentShoppingList.emit(it)
+            }
+        }
     }
 
-    fun addNewShoppingList() =
+    fun addNewShoppingList(setAsCurrent: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
-            addShoppingListUseCase(emptyShoppingList())
+            addShoppingListUseCase(emptyShoppingList(setAsCurrent))
         }
 
     suspend fun getShoppingListById(id: Long): Flow<UiShoppingList?> =
@@ -71,16 +83,10 @@ class ShoppingViewModel(
         deleteShoppingListUseCase(shoppingList)
     }
 
-    fun setCurrentShoppingList(shoppingList: UiShoppingList) {
-        _currentShoppingList.value = shoppingList
-    }
-
-    fun addIngredientToCurrentList(ingredient: UiShoppingListIngredient) =
+    fun addIngredientToCurrentList(ingredient: UiIngredient) =
         viewModelScope.launch(Dispatchers.Default) {
             val currentList = _currentShoppingList.value ?: return@launch
-            val ingredients = currentList.ingredients.toMutableList()
-            ingredients.add(ingredient.copy(shoppingListId = currentList.id))
-            updateShoppingListUseCase(currentList.copy(ingredients = ingredients))
+            addIngredientToShoppingListUseCase(currentList, ingredient)
         }
 
     fun updateIngredientInCurrentList(updatedIngredient: UiShoppingListIngredient) =
@@ -88,9 +94,7 @@ class ShoppingViewModel(
             val currentList = _currentShoppingList.value ?: return@launch
             val index = currentList.ingredients.indexOfFirst { it.id == updatedIngredient.id }
             if (index == -1) return@launch
-            val ingredients = currentList.ingredients.toMutableList()
-            ingredients[index] = updatedIngredient
-            updateShoppingListUseCase(currentList.copy(ingredients = ingredients))
+            updateShoppingListIngredientUseCase(updatedIngredient)
         }
 
     fun removeIngredientFromCurrentList(ingredient: UiShoppingListIngredient) =
@@ -99,11 +103,12 @@ class ShoppingViewModel(
             deleteShoppingListIngredientUseCase(currentList, ingredient)
         }
 
-    private fun emptyShoppingList(): UiShoppingList =
+    private fun emptyShoppingList(setAsCurrent: Boolean = false): UiShoppingList =
         UiShoppingList(
             id = 0,
             updatedDate = LocalDate.now(),
-            ingredients = emptyList()
+            ingredients = emptyList(),
+            current = setAsCurrent
         )
 
 }

@@ -1,5 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.domain.models.util
 
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListWithIngredients
@@ -11,7 +13,8 @@ fun UiShoppingList.toEntity(): ShoppingListWithIngredients =
     ShoppingListWithIngredients(
         shoppingList = ShoppingList(
             id = id,
-            updated = updatedDate
+            updated = updatedDate,
+            current = current
         ),
         ingredients = ingredients.toEntity()
     )
@@ -42,7 +45,8 @@ fun ShoppingListWithIngredients.toUiModel(): UiShoppingList =
     UiShoppingList(
         id = shoppingList.id,
         updatedDate = shoppingList.updated,
-        ingredients = ingredients.toUiModel()
+        ingredients = ingredients.toUiModel(),
+        current = shoppingList.current
     )
 
 fun List<ShoppingListIngredient>.toUiModel(): List<UiShoppingListIngredient> =
@@ -56,3 +60,23 @@ fun List<ShoppingListIngredient>.toUiModel(): List<UiShoppingListIngredient> =
             imageUrl = ingredient.imageUrl
         )
     }
+
+fun UiIngredient.toShoppingIngredient() =
+    UiShoppingListIngredient(
+        id = 0,
+        shoppingListId = -1,
+        name = name,
+        amount = 0.0,
+        unit = MeasureUnit.BLANK,
+        imageUrl = imgUrl
+    )
+
+fun ShoppingListIngredient.toUiModel() =
+    UiShoppingListIngredient(
+        id = id,
+        shoppingListId = shoppingListId,
+        name = name,
+        amount = amount,
+        unit = unit,
+        imageUrl = imageUrl
+    )

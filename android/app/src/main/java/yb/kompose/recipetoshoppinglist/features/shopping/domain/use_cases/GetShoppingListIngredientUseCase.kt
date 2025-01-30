@@ -1,6 +1,5 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -9,15 +8,14 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepo
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.util.toUiModel
 
-class GetIngredientsUseCase(
-    private val shoppingRepository: ShoppingRepository,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
+class GetShoppingListIngredientUseCase(
+    private val shoppingRepository: ShoppingRepository
 ) {
 
-    suspend operator fun invoke(): Flow<List<UiShoppingListIngredient>> =
-        withContext(defaultDispatcher) {
-            shoppingRepository.getIngredients().map { ingredient ->
-                ingredient.toUiModel()
+    suspend operator fun invoke(id: Long) : Flow<UiShoppingListIngredient?> =
+        withContext(Dispatchers.IO) {
+            shoppingRepository.getShoppingListIngredient(id).map { ingredient ->
+                ingredient?.toUiModel()
             }
         }
 

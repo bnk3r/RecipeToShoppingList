@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
+import androidx.wear.compose.material.SwipeableState
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.Red
@@ -33,7 +34,7 @@ fun HorizontalSwipeablePanel(
     modifier: Modifier = Modifier,
     height: Dp = 120.dp,
     frontContent: @Composable () -> Unit,
-    backContent: @Composable () -> Unit,
+    backContent: @Composable (SwipeableState<Int>) -> Unit,
 ) {
     val swipeableState = rememberSwipeableState(initialValue = 0)
     val backContainerWidth = LocalConfiguration.current.screenWidthDp.dp.dpToPx() / 5f
@@ -61,7 +62,7 @@ fun HorizontalSwipeablePanel(
                     .width(backContainerWidth.roundToInt().pxToDp())
                     .background(Red)
             ) {
-                backContent()
+                backContent(swipeableState)
             }
         }
         // FRONT

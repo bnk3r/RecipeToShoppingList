@@ -11,9 +11,12 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.Recipe
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetIngredientsUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
@@ -37,7 +40,10 @@ fun provideShoppingViewModel(
     updateShoppingListUseCase: UpdateShoppingListUseCase,
     deleteShoppingListUseCase: DeleteShoppingListUseCase,
     deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase,
-    getIngredientsUseCase: GetIngredientsUseCase
+    getIngredientsUseCase: GetIngredientsUseCase,
+    getCurrentShoppingListUseCase: GetCurrentShoppingListUseCase,
+    addIngredientToShoppingListUseCase: AddIngredientToShoppingListUseCase,
+    updateShoppingListIngredientUseCase: UpdateShoppingListIngredientUseCase
 ) = ShoppingViewModel(
     getShoppingListsUseCase,
     getShoppingListUseCase,
@@ -45,11 +51,27 @@ fun provideShoppingViewModel(
     updateShoppingListUseCase,
     deleteShoppingListUseCase,
     deleteShoppingListIngredientUseCase,
-    getIngredientsUseCase
+    getIngredientsUseCase,
+    getCurrentShoppingListUseCase,
+    addIngredientToShoppingListUseCase,
+    updateShoppingListIngredientUseCase
 )
 
 val viewModelModule = module {
     viewModel { provideCategoryViewModel(get()) }
     viewModel { provideRecipeViewModel(get(), get(), get()) }
-    viewModel { provideShoppingViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel {
+        provideShoppingViewModel(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }

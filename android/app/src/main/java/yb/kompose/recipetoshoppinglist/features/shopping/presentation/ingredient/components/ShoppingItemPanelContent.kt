@@ -1,6 +1,5 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
@@ -54,7 +52,6 @@ fun ShoppingItemPanelContent(
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .background(Color.Gray)
             )
             Column(
                 modifier = Modifier.padding(start = 16.dp)
@@ -63,23 +60,13 @@ fun ShoppingItemPanelContent(
                     text = ingredient.name,
                     style = MaterialTheme.typography.titleMedium
                 )
-                Text(
-                    text = "$7/kg"
-                )
-                Text(
-                    text = "~$3.50",
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
             }
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "500g"
+                text = "${ingredient.amount}${ingredient.unit.value}"
             )
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,

@@ -8,4 +8,8 @@
     <string name="section_search_recipe_title">Une envie particulière?</string>
     <string name="ingredients">Ingrédients</string>
     <string name="add_to_shopping_list">Ajouter à la liste de course</string>
+    <string name="confirm">Confirmer</string>
+    <string name="dismiss">Annuler</string>
+    <string name="add_ingredient_title">Choisir un ingrédient</string>
+    <string name="no_selection">Pas de sélection</string>
 </resources>
