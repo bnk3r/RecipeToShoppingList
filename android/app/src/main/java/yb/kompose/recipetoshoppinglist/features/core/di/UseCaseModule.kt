@@ -1,7 +1,11 @@
 package yb.kompose.recipetoshoppinglist.features.core.di
 
 import org.koin.dsl.module
+import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.CategoriesRepository
+import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.IngredientsRepository
 import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.RecipeRepository
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.FetchAndSaveCategoriesUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.FetchAndSaveIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
@@ -21,8 +25,8 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.Reduce
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
 
-fun provideGetRecipeCategoriesUseCase(recipeRepository: RecipeRepository) =
-    GetRecipeCategoriesUseCase(recipeRepository)
+fun provideGetRecipeCategoriesUseCase(categoriesRepository: CategoriesRepository) =
+    GetRecipeCategoriesUseCase(categoriesRepository)
 
 fun provideGetRecipesForCategoryUseCase(recipeRepository: RecipeRepository) =
     GetRecipesForCategoryUseCase(recipeRepository)
@@ -33,9 +37,17 @@ fun provideGetRecipesByQueryUseCase(recipeRepository: RecipeRepository) =
 fun provideGetRecipeDetailedUseCase(recipeRepository: RecipeRepository) =
     GetRecipeDetailedUseCase(recipeRepository)
 
+fun provideFetchCategoriesUseCase(
+    categoriesRepository: CategoriesRepository
+) = FetchAndSaveCategoriesUseCase(categoriesRepository)
+
 fun provideGetIngredientsUseCase(
     recipeRepository: RecipeRepository
 ) = GetIngredientsUseCase(recipeRepository)
+
+fun provideFetchIngredientsUseCase(
+    ingredientsRepository: IngredientsRepository
+) = FetchAndSaveIngredientsUseCase(ingredientsRepository)
 
 fun provideGetShoppingListsUseCase(shoppingRepository: ShoppingRepository) =
     GetShoppingListsUseCase(shoppingRepository)
@@ -90,8 +102,12 @@ val useCaseModule = module {
     factory { provideGetRecipesByQueryUseCase(get()) }
     factory { provideGetRecipeDetailedUseCase(get()) }
 
+    // RECIPE CATEGORIES
+    factory { provideFetchCategoriesUseCase(get()) }
+
     // RECIPE INGREDIENTS
     factory { provideGetIngredientsUseCase(get()) }
+    factory { provideFetchIngredientsUseCase(get()) }
 
     // SHOPPING LISTS
     factory { provideGetShoppingListsUseCase(get()) }

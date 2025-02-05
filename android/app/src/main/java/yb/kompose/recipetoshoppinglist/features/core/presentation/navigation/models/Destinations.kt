@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.core.domain.models.nav
+package yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models
 
 import kotlinx.serialization.Serializable
 

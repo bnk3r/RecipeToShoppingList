@@ -2,6 +2,8 @@ package yb.kompose.recipetoshoppinglist.features.core.di
 
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.FetchAndSaveCategoriesUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.FetchAndSaveIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
@@ -12,6 +14,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddSho
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.IngredientsViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
@@ -21,8 +24,10 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.Update
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
-fun provideCategoryViewModel(getRecipeCategoriesUseCase: GetRecipeCategoriesUseCase) =
-    CategoryViewModel(getRecipeCategoriesUseCase)
+fun provideCategoryViewModel(
+    getRecipeCategoriesUseCase: GetRecipeCategoriesUseCase,
+    fetchAndSaveCategoriesUseCase: FetchAndSaveCategoriesUseCase
+) = CategoryViewModel(getRecipeCategoriesUseCase, fetchAndSaveCategoriesUseCase)
 
 fun provideRecipeViewModel(
     getRecipesForCategoryUseCase: GetRecipesForCategoryUseCase,
@@ -33,6 +38,10 @@ fun provideRecipeViewModel(
     getRecipesByQueryUseCase,
     getRecipeDetailedUseCase
 )
+
+fun provideIngredientsViewModel(
+    fetchAndSaveIngredientsUseCase: FetchAndSaveIngredientsUseCase
+) = IngredientsViewModel(fetchAndSaveIngredientsUseCase)
 
 fun provideShoppingViewModel(
     getShoppingListsUseCase: GetShoppingListsUseCase,
@@ -61,8 +70,9 @@ fun provideShoppingViewModel(
 fun provideAddIngredientViewModel() = AddIngredientViewModel()
 
 val viewModelModule = module {
-    viewModel { provideCategoryViewModel(get()) }
+    viewModel { provideCategoryViewModel(get(), get()) }
     viewModel { provideRecipeViewModel(get(), get(), get()) }
+    viewModel { provideIngredientsViewModel(get()) }
     viewModel {
         provideShoppingViewModel(
             get(),

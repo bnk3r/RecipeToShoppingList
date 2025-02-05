@@ -45,7 +45,4 @@ interface RecipeDAO {
     @Query("SELECT * FROM ingredients")
     fun getIngredients(): Flow<List<Ingredient>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addIngredient(ingredient: Ingredient)
-
 }

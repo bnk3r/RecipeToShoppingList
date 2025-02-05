@@ -1,7 +1,9 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase

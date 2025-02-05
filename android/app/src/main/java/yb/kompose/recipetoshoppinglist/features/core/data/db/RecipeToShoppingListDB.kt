@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.IngredientsDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Area
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
@@ -36,5 +37,6 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.Shopping
 abstract class RecipeToShoppingListDB : RoomDatabase() {
     abstract fun recipeDAO(): RecipeDAO
     abstract fun categoryDAO(): CategoryDAO
+    abstract fun ingredientsDAO(): IngredientsDAO
     abstract fun shoppingDAO(): ShoppingDao
 }

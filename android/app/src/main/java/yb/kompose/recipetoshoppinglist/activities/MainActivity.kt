@@ -10,6 +10,7 @@ import org.koin.android.ext.android.inject
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.NavComponent
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RecipeToShoppingListTheme
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.IngredientsViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
 
     private val categoryViewModel: CategoryViewModel by inject()
     private val recipeViewModel: RecipeViewModel by inject()
+    private val ingredientsViewModel: IngredientsViewModel by inject()
     private val shoppingViewModel: ShoppingViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,5 +34,12 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+        fetchInitialData()
     }
+
+    private fun fetchInitialData() {
+        categoryViewModel.fetchAndSaveCategories()
+        ingredientsViewModel.fetchAndSaveIngredients()
+    }
+
 }
