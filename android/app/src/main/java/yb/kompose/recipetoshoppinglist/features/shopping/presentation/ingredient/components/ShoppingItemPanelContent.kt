@@ -1,30 +1,27 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.button.RoundedIconButton
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 
 @Composable
@@ -66,35 +63,25 @@ fun ShoppingItemPanelContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${ingredient.amount}${ingredient.unit.value}"
+                text = "${ingredient.amount}${ingredient.unit}"
             )
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp)
             ) {
-                IconButton(
+                RoundedIconButton(
+                    icon = Icons.Default.Remove,
+                    contentDescription = "",
                     onClick = {},
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .border(1.dp, Color.Black, CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Remove,
-                        contentDescription = null
-                    )
-                }
-                IconButton(
+                    modifier = Modifier.size(48.dp).padding(4.dp)
+                )
+                RoundedIconButton(
+                    icon = Icons.Default.Add,
+                    contentDescription = "",
                     onClick = {},
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .border(1.dp, Color.Black, CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null
-                    )
-                }
+                    modifier = Modifier.size(48.dp).padding(4.dp)
+                )
             }
         }
     }

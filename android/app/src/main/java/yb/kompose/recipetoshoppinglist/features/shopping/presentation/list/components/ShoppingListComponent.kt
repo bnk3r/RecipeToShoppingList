@@ -35,7 +35,7 @@ import java.time.format.DateTimeFormatter
 fun ShoppingListComponent(
     shoppingList: UiShoppingList,
     ingredients: List<UiIngredient>?,
-    onAdd: (UiIngredient) -> Unit,
+    onAdd: (UiShoppingListIngredient) -> Unit,
     onDelete: (UiShoppingListIngredient) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -98,6 +98,7 @@ fun ShoppingListComponent(
                 exit = fadeOut()
             ) {
                 AddShoppingItemDialog(
+                    shoppingListId = shoppingList.id,
                     ingredients = it,
                     onDismissRequest = {
                         addIngredientDialogVisible = false

@@ -5,6 +5,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureU
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListWithIngredients
+import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.util.MeasureUnitTypeConverters
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 
@@ -25,7 +26,7 @@ fun UiShoppingListIngredient.toEntity(): ShoppingListIngredient =
         shoppingListId = shoppingListId,
         name = name,
         amount = amount,
-        unit = unit,
+        unit = MeasureUnitTypeConverters().to(unit) ?: MeasureUnit.NONE,
         imageUrl = imageUrl
     )
 
@@ -36,7 +37,7 @@ fun List<UiShoppingListIngredient>.toEntity(): List<ShoppingListIngredient> =
             shoppingListId = uiIngredient.shoppingListId,
             name = uiIngredient.name,
             amount = uiIngredient.amount,
-            unit = uiIngredient.unit,
+            unit = MeasureUnitTypeConverters().to(uiIngredient.unit) ?: MeasureUnit.NONE,
             imageUrl = uiIngredient.imageUrl
         )
     }
@@ -56,7 +57,7 @@ fun List<ShoppingListIngredient>.toUiModel(): List<UiShoppingListIngredient> =
             shoppingListId = ingredient.shoppingListId,
             name = ingredient.name,
             amount = ingredient.amount,
-            unit = ingredient.unit,
+            unit = ingredient.unit.displayName,
             imageUrl = ingredient.imageUrl
         )
     }
@@ -66,8 +67,8 @@ fun UiIngredient.toShoppingIngredient() =
         id = 0,
         shoppingListId = -1,
         name = name,
-        amount = 0.0,
-        unit = MeasureUnit.BLANK,
+        amount = 0,
+        unit = MeasureUnit.NONE.displayName,
         imageUrl = imgUrl
     )
 
@@ -77,6 +78,6 @@ fun ShoppingListIngredient.toUiModel() =
         shoppingListId = shoppingListId,
         name = name,
         amount = amount,
-        unit = unit,
+        unit = unit.displayName,
         imageUrl = imageUrl
     )

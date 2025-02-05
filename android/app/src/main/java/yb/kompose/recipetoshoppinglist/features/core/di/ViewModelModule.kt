@@ -18,6 +18,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetSho
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
 fun provideCategoryViewModel(getRecipeCategoriesUseCase: GetRecipeCategoriesUseCase) =
@@ -57,6 +58,8 @@ fun provideShoppingViewModel(
     updateShoppingListIngredientUseCase
 )
 
+fun provideAddIngredientViewModel() = AddIngredientViewModel()
+
 val viewModelModule = module {
     viewModel { provideCategoryViewModel(get()) }
     viewModel { provideRecipeViewModel(get(), get(), get()) }
@@ -74,4 +77,5 @@ val viewModelModule = module {
             get()
         )
     }
+    viewModel { provideAddIngredientViewModel() }
 }

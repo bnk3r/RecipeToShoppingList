@@ -8,7 +8,7 @@ data class ShoppingListIngredient(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val shoppingListId: Long,
     val name: String,
-    val amount: Double,
+    val amount: Int,
     val unit: MeasureUnit,
     val imageUrl: String?
 )

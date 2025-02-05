@@ -83,10 +83,11 @@ class ShoppingViewModel(
         deleteShoppingListUseCase(shoppingList)
     }
 
-    fun addIngredientToCurrentList(ingredient: UiIngredient) =
+    fun addIngredientToCurrentList(ingredient: UiShoppingListIngredient) =
         viewModelScope.launch(Dispatchers.Default) {
             val currentList = _currentShoppingList.value ?: return@launch
-            addIngredientToShoppingListUseCase(currentList, ingredient)
+            if (currentList.id != ingredient.shoppingListId) return@launch
+            addIngredientToShoppingListUseCase(ingredient)
         }
 
     fun updateIngredientInCurrentList(updatedIngredient: UiShoppingListIngredient) =

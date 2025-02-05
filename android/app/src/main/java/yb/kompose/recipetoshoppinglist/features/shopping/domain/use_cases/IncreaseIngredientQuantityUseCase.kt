@@ -6,16 +6,16 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepo
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.util.toEntity
 
-class AddIngredientToShoppingListUseCase(
+class IncreaseIngredientQuantityUseCase(
     private val shoppingRepository: ShoppingRepository
 ) {
 
-    suspend operator fun invoke(
-        ingredient: UiShoppingListIngredient
-    ) = withContext(Dispatchers.IO) {
-        shoppingRepository.addShoppingListIngredient(
-            ingredient = ingredient.toEntity()
-        )
-    }
+    suspend operator fun invoke(ingredient: UiShoppingListIngredient) =
+        withContext(Dispatchers.IO) {
+            if (ingredient.amount >= Int.MAX_VALUE) return@withContext
+            shoppingRepository.updateShoppingListIngredient(
+                ingredient = ingredient.copy(amount = ingredient.amount + 1).toEntity()
+            )
+        }
 
 }

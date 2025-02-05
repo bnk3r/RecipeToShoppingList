@@ -24,7 +24,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.Shopping
         ShoppingList::class,
         ShoppingListIngredient::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(

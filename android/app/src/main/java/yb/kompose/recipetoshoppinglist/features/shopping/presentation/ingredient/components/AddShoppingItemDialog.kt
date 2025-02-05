@@ -1,8 +1,11 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material3.AlertDialog
@@ -10,32 +13,41 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientViewModel
 
 @Composable
 fun AddShoppingItemDialog(
+    addIngredientViewModel: AddIngredientViewModel = koinViewModel(),
+    shoppingListId: Long,
     ingredients: List<UiIngredient>,
     onDismissRequest: () -> Unit,
-    onConfirmation: (UiIngredient) -> Unit
+    onConfirmation: (UiShoppingListIngredient) -> Unit
 ) {
 
-    var ingredientsStr by remember(ingredients) {
-        mutableStateOf(ingredients.map { ingredient ->
-            ingredient.name
-        })
+    LaunchedEffect(ingredients) {
+        addIngredientViewModel.addIngredients(ingredients)
+        addIngredientViewModel.registerShoppingList(shoppingListId)
     }
 
-    var selectedIngredient by remember { mutableStateOf<UiIngredient?>(null) }
+    val selectionIngredients =
+        addIngredientViewModel.selectionIngredients.collectAsStateWithLifecycle().value
+    val unitsStr = addIngredientViewModel.unitsStr.collectAsStateWithLifecycle().value
+    val ingredientToAdd = addIngredientViewModel.ingredientToAdd.collectAsStateWithLifecycle().value
 
     AlertDialog(
         icon = {
@@ -50,29 +62,60 @@ fun AddShoppingItemDialog(
             )
         },
         text = {
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = selectedIngredient?.name ?: stringResource(R.string.no_selection),
-                    style = MaterialTheme.typography.titleLarge
-                )
-                LongDropDownMenu(ingredientsStr) { ingredientStr ->
-                    val index = ingredients.indexOfFirst { ingredient ->
-                        ingredient.name == ingredientStr
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = ingredientToAdd.selectedIngredient?.name
+                            ?: stringResource(R.string.no_selection),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    LongDropDownMenu(selectionIngredients.map { it.name }) { ingredientStr ->
+                        addIngredientViewModel.updateIngredient(
+                            selectedIngredient = SelectionIngredient(
+                                name = ingredientStr,
+                                imageUrl = selectionIngredients.firstOrNull {
+                                    it.name == ingredientStr
+                                }?.imageUrl
+                            )
+                        )
                     }
-                    selectedIngredient = ingredients[index]
                 }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TextField(
+                        value = ingredientToAdd.amount.toString(),
+                        onValueChange = { value ->
+                            addIngredientViewModel.updateIngredient(
+                                amount = addIngredientViewModel.amountToString(value)
+                            )
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        suffix = { Text(text = ingredientToAdd.unit) },
+                        modifier = Modifier.width(150.dp)
+                    )
+                    LongDropDownMenu(unitsStr) { unitStr ->
+                        addIngredientViewModel.updateIngredient(unit = unitStr)
+                    }
+                }
+
             }
         },
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
                 onClick = {
-                    selectedIngredient?.let {
-                        onConfirmation(it)
+                    if (addIngredientViewModel.isIngredientValid()) {
+                        onConfirmation(ingredientToAdd.toShoppingIngredient())
                     }
                 }
             ) {

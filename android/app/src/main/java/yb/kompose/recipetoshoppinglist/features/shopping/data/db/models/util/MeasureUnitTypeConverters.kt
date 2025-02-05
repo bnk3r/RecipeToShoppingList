@@ -5,8 +5,9 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureU
 
 class MeasureUnitTypeConverters {
     @TypeConverter
-    fun from(value: MeasureUnit) : String = value.value
+    fun from(value: MeasureUnit): String = value.displayName
 
     @TypeConverter
-    fun to(s: String): MeasureUnit? = MeasureUnit.entries.toList().firstOrNull { it.value == s }
+    fun to(s: String): MeasureUnit? =
+        MeasureUnit.entries.toList().firstOrNull { it.displayName == s }
 }
