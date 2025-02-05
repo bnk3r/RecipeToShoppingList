@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -20,9 +19,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.RoundedIconButton
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SearchBar
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SectionTitle
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.button.RoundedIconButton
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.search.SearchBar
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.pxToDp
 
 @Composable

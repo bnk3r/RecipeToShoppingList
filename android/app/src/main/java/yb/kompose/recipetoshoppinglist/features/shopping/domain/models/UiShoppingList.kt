@@ -5,5 +5,6 @@ import java.time.LocalDate
 data class UiShoppingList(
     val id: Long,
     val updatedDate: LocalDate,
-    val ingredients: List<UiShoppingListIngredient>
+    val ingredients: List<UiShoppingListIngredient>,
+    val current: Boolean
 )

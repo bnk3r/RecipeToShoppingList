@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import org.koin.android.ext.android.inject
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.NavComponent
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RecipeToShoppingListTheme
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 

@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
+    implementation(libs.koin.androidx.compose)
 
     implementation(libs.retrofit.client)
     implementation(libs.retrofit.converter.gson)

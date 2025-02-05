@@ -9,7 +9,9 @@ import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealD
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
+import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.util.toEntity
 
 class RecipeRepository(
     private val remoteDataSource: TheMealDBService,
@@ -35,6 +37,18 @@ class RecipeRepository(
     suspend fun getRecipeDetailed(id: Int): Flow<Recipe?> {
         fetchAndSaveRecipeById(id)
         return recipeDao.getRecipeById(id.toLong())
+    }
+
+    suspend fun getIngredients(): Flow<List<Ingredient>> {
+        fetchAndSaveIngredients()
+        return recipeDao.getIngredients()
+    }
+
+    private suspend fun fetchAndSaveIngredients() {
+        remoteDataSource.getIngredients().body()?.meals
+            ?.forEach { ingredient ->
+                recipeDao.addIngredient(ingredient.toEntity())
+            }
     }
 
     private suspend fun fetchAndSaveRecipeById(id: Int) {

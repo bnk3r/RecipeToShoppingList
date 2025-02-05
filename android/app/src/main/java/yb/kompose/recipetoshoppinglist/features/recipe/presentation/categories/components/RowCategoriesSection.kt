@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.SectionTitle
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 
 @Composable

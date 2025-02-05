@@ -7,5 +7,6 @@ import java.time.LocalDate
 @Entity(tableName = "shopping_lists")
 data class ShoppingList(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val updated: LocalDate
+    val updated: LocalDate,
+    val current: Boolean
 )

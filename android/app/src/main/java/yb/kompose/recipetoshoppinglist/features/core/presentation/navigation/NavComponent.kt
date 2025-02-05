@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import yb.kompose.recipetoshoppinglist.features.core.domain.models.nav.ShoppingDestination
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
@@ -31,9 +31,6 @@ fun NavComponent(
                 shoppingViewModel = shoppingViewModel,
                 categoryViewModel = categoryViewModel,
                 recipeViewModel = recipeViewModel,
-                showRecipeDetails = {
-
-                },
                 modifier = Modifier.fillMaxSize()
             )
         }
