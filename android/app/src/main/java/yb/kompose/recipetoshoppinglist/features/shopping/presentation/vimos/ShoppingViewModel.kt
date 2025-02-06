@@ -12,15 +12,15 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredien
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.UpdateIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.AddShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.DeleteShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetCurrentShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.UpdateShoppingListUseCase
 import java.time.LocalDate
 
 class ShoppingViewModel(
@@ -29,11 +29,11 @@ class ShoppingViewModel(
     private val addShoppingListUseCase: AddShoppingListUseCase,
     private val updateShoppingListUseCase: UpdateShoppingListUseCase,
     private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
-    private val deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase,
+    private val deleteShoppingListIngredientUseCase: DeleteIngredientUseCase,
     private val getIngredientsUseCase: GetIngredientsUseCase,
     private val getCurrentShoppingListUseCase: GetCurrentShoppingListUseCase,
-    private val addIngredientToShoppingListUseCase: AddIngredientToShoppingListUseCase,
-    private val updateShoppingListIngredientUseCase: UpdateShoppingListIngredientUseCase
+    private val addIngredientToShoppingListUseCase: AddIngredientUseCase,
+    private val updateShoppingListIngredientUseCase: UpdateIngredientUseCase
 ) : ViewModel() {
 
     private var _shoppingLists = MutableStateFlow<List<UiShoppingList>?>(null)

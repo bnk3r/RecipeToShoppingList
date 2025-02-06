@@ -1,0 +1,22 @@
+package yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.converters.toEntity
+
+class DeleteIngredientUseCase(
+    private val shoppingRepository: ShoppingRepository
+) {
+
+    suspend operator fun invoke(
+        shoppingList: UiShoppingList,
+        ingredient: UiShoppingListIngredient
+    ) = withContext(Dispatchers.IO) {
+        if (shoppingList.id != ingredient.shoppingListId) return@withContext
+        shoppingRepository.deleteShoppingListIngredient(ingredient.toEntity())
+    }
+
+}

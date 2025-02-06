@@ -12,18 +12,18 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecip
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.IncreaseIngredientQuantityUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ReduceIngredientQuantityUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.AddShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.DeleteShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetCurrentShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.GetIngredientByIdUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.IncreaseIngredientQuantityUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.ReduceIngredientQuantityUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.UpdateIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.UpdateShoppingListUseCase
 
 fun provideGetRecipeCategoriesUseCase(categoriesRepository: CategoriesRepository) =
     GetRecipeCategoriesUseCase(categoriesRepository)
@@ -69,7 +69,7 @@ fun provideUpdateShoppingListUseCase(
 
 fun provideDeleteShoppingListIngredientUseCase(
     shoppingRepository: ShoppingRepository
-) = DeleteShoppingListIngredientUseCase(shoppingRepository)
+) = DeleteIngredientUseCase(shoppingRepository)
 
 fun provideGetCurrentShoppingList(
     shoppingRepository: ShoppingRepository
@@ -77,15 +77,15 @@ fun provideGetCurrentShoppingList(
 
 fun provideAddIngredientToShoppingListUseCase(
     shoppingRepository: ShoppingRepository
-) = AddIngredientToShoppingListUseCase(shoppingRepository)
+) = AddIngredientUseCase(shoppingRepository)
 
 fun provideUpdateShoppingListIngredientUseCase(
     shoppingRepository: ShoppingRepository
-) = UpdateShoppingListIngredientUseCase(shoppingRepository)
+) = UpdateIngredientUseCase(shoppingRepository)
 
 fun provideGetShoppingListIngredientUseCase(
     shoppingRepository: ShoppingRepository
-) = GetShoppingListIngredientUseCase(shoppingRepository)
+) = GetIngredientByIdUseCase(shoppingRepository)
 
 fun provideReduceIngredientQuantityUseCase(
     shoppingRepository: ShoppingRepository
