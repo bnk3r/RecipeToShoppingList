@@ -13,16 +13,15 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecip
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetCurrentShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.GetIngredientByIdUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.IncreaseIngredientQuantityUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.ReduceIngredientQuantityUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.UpdateIngredientUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.AddShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.DeleteShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.UpdateShoppingListUseCase
 
 fun provideGetRecipeCategoriesUseCase(categoriesRepository: CategoriesRepository) =
@@ -71,10 +70,6 @@ fun provideDeleteShoppingListIngredientUseCase(
     shoppingRepository: ShoppingRepository
 ) = DeleteIngredientUseCase(shoppingRepository)
 
-fun provideGetCurrentShoppingList(
-    shoppingRepository: ShoppingRepository
-) = GetCurrentShoppingListUseCase(shoppingRepository)
-
 fun provideAddIngredientToShoppingListUseCase(
     shoppingRepository: ShoppingRepository
 ) = AddIngredientUseCase(shoppingRepository)
@@ -112,7 +107,6 @@ val useCaseModule = module {
     // SHOPPING LISTS
     factory { provideGetShoppingListsUseCase(get()) }
     factory { provideGetShoppingListUseCase(get()) }
-    factory { provideGetCurrentShoppingList(get()) }
     factory { provideAddShoppingListUseCase(get()) }
     factory { provideUpdateShoppingListUseCase(get()) }
     factory { provideDeleteShoppingListUseCase(get()) }

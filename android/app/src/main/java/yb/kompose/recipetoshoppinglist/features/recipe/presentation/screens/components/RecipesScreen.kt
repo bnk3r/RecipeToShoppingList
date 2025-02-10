@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.RowCategoriesSection
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
@@ -40,8 +41,8 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.Recipe
 
 @Composable
 fun RecipesScreen(
-    categoryViewModel: CategoryViewModel,
-    recipeViewModel: RecipeViewModel,
+    categoryViewModel: CategoryViewModel = koinViewModel(),
+    recipeViewModel: RecipeViewModel = koinViewModel(),
     showRecipeDetails: (id: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {

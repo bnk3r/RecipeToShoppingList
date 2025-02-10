@@ -33,6 +33,7 @@ import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedTitle
@@ -43,8 +44,8 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.Recipe
 
 @Composable
 fun RecipeScreen(
+    recipeViewModel: RecipeViewModel = koinViewModel(),
     recipeId: Int,
-    recipeViewModel: RecipeViewModel,
     addToShoppingList: (UiIngredient) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier

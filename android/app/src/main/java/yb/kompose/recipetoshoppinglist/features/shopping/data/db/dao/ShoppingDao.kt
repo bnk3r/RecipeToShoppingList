@@ -25,10 +25,6 @@ interface ShoppingDao {
     @Query("SELECT * FROM shopping_lists WHERE id IS :id")
     fun getShoppingListById(id: Long): Flow<ShoppingListWithIngredients?>
 
-    @Transaction
-    @Query("SELECT * FROM shopping_lists WHERE current IS TRUE")
-    fun getCurrentShoppingList(): Flow<ShoppingListWithIngredients?>
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addShoppingList(shoppingList: ShoppingList): Long
 

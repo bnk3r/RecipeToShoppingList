@@ -14,6 +14,7 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,29 +24,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
+import yb.kompose.recipetoshoppinglist.features.core.domain.models.FlowState
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.dpToPx
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesScreen
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.components.ShoppingListComponent
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun ShoppingScreen(
-    shoppingViewModel: ShoppingViewModel,
-    categoryViewModel: CategoryViewModel,
-    recipeViewModel: RecipeViewModel,
+    viewModel: ShoppingViewModel = koinViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val shoppingLists = shoppingViewModel.shoppingLists.collectAsStateWithLifecycle()
-    val currentShoppingList = shoppingViewModel.currentShoppingList.collectAsStateWithLifecycle()
-    val ingredients = shoppingViewModel.ingredients.collectAsStateWithLifecycle()
-
     val configuration = LocalConfiguration.current
     val widthPx = configuration.screenWidthDp.dp.dpToPx().roundToInt()
+
+    val shoppingListsState = viewModel.shoppingListsState.collectAsStateWithLifecycle().value
+    val shoppingLists = viewModel.shoppingLists.collectAsStateWithLifecycle().value
+    val currentList = viewModel.currentShoppingList.collectAsStateWithLifecycle().value
+    val ingredients = viewModel.ingredients.collectAsStateWithLifecycle()
 
     var recipeDetailsVisible by remember { mutableStateOf(false) }
     var recipeDetailedId by remember { mutableStateOf<Int?>(null) }
@@ -55,35 +55,57 @@ fun ShoppingScreen(
         recipeDetailsVisible = true
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getShoppingLists()
+    }
+
     Box(
         modifier = modifier
     ) {
         VerticalSwipeablePanel(
             modifier = Modifier.fillMaxSize(),
             contentBehind = {
-                currentShoppingList.value?.let { currentList ->
-                    ShoppingListComponent(
-                        shoppingList = currentList,
-                        ingredients = ingredients.value,
-                        onAdd = { ingredient ->
-                            shoppingViewModel.addIngredientToCurrentList(ingredient)
-                        },
-                        onDelete = {
-                            shoppingViewModel.removeIngredientFromCurrentList(it)
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } ?: CreateNewShoppingListComponent(
-                    onClickCreate = {
-                        shoppingViewModel.addNewShoppingList(true)
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
+                when (shoppingListsState) {
+                    FlowState.LOADING -> {
+                        LoadingShoppingLists(modifier = Modifier.fillMaxSize())
+                    }
+
+                    FlowState.SUCCESS -> {
+                        when (currentList) {
+                            null -> {
+                                CreateNewShoppingListComponent(
+                                    onClickCreate = {
+                                        viewModel.addNewShoppingList(true)
+                                    },
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+
+                            else -> {
+                                ShoppingListComponent(
+                                    shoppingList = currentList,
+                                    ingredients = ingredients.value,
+                                    onAdd = { ingredient ->
+                                        viewModel.addIngredientToCurrentList(ingredient)
+                                    },
+                                    onDelete = {
+                                        viewModel.removeIngredientFromCurrentList(it)
+                                    },
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                    }
+
+                    FlowState.ERROR -> {
+                        ErrorShoppingLists(modifier = Modifier.fillMaxSize())
+                    }
+
+                    else -> {}
+                }
             },
             panelBody = {
                 RecipesScreen(
-                    categoryViewModel = categoryViewModel,
-                    recipeViewModel = recipeViewModel,
                     showRecipeDetails = { showRecipeDetails(it) },
                     modifier = Modifier
                         .fillMaxSize()
@@ -101,7 +123,6 @@ fun ShoppingScreen(
             recipeDetailedId?.let { id ->
                 RecipeScreen(
                     recipeId = id,
-                    recipeViewModel = recipeViewModel,
                     addToShoppingList = { /* TODO */ },
                     onBackPressed = { recipeDetailsVisible = false },
                     modifier = Modifier
@@ -149,5 +170,25 @@ fun CreateNewShoppingListComponent(
                 text = "Create List"
             )
         }
+    }
+}
+
+@Composable
+fun LoadingShoppingLists(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun ErrorShoppingLists(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        Text("ERROR !")
     }
 }

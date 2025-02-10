@@ -1,6 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.data.repos
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
@@ -10,9 +11,7 @@ class ShoppingRepository(
     private val shoppingDao: ShoppingDao
 ) {
 
-    suspend fun getShoppingLists() = withContext(Dispatchers.IO) {
-        shoppingDao.getShoppingLists()
-    }
+    fun getShoppingLists() = shoppingDao.getShoppingLists().flowOn(Dispatchers.IO)
 
     suspend fun getShoppingList(id: Long) = withContext(Dispatchers.IO) {
         shoppingDao.getShoppingListById(id)
@@ -65,11 +64,6 @@ class ShoppingRepository(
     suspend fun deleteShoppingListIngredient(ingredient: ShoppingListIngredient) =
         withContext(Dispatchers.IO) {
             shoppingDao.deleteShoppingListIngredient(ingredient)
-        }
-
-    suspend fun getCurrentShoppingList() =
-        withContext(Dispatchers.IO) {
-            shoppingDao.getCurrentShoppingList()
         }
 
     private suspend fun removeCurrentStatusFromOtherShoppingLists(currentId: Long) =

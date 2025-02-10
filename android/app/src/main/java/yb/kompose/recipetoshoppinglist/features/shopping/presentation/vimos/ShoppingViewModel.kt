@@ -1,13 +1,16 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import yb.kompose.recipetoshoppinglist.features.core.domain.models.FlowState
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
@@ -17,7 +20,6 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingred
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.UpdateIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.AddShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetCurrentShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.UpdateShoppingListUseCase
@@ -31,37 +33,42 @@ class ShoppingViewModel(
     private val deleteShoppingListUseCase: DeleteShoppingListUseCase,
     private val deleteShoppingListIngredientUseCase: DeleteIngredientUseCase,
     private val getIngredientsUseCase: GetIngredientsUseCase,
-    private val getCurrentShoppingListUseCase: GetCurrentShoppingListUseCase,
     private val addIngredientToShoppingListUseCase: AddIngredientUseCase,
     private val updateShoppingListIngredientUseCase: UpdateIngredientUseCase
 ) : ViewModel() {
 
-    private var _shoppingLists = MutableStateFlow<List<UiShoppingList>?>(null)
+    private var _shoppingListsState = MutableStateFlow(FlowState.IDLE)
+    private val _shoppingLists = MutableStateFlow(emptyList<UiShoppingList>())
+    private val _currentShoppingList = MutableStateFlow<UiShoppingList?>(null)
+    val shoppingListsState = _shoppingListsState.asStateFlow()
     val shoppingLists = _shoppingLists.asStateFlow()
-
-    private var _currentShoppingList = MutableStateFlow<UiShoppingList?>(null)
     val currentShoppingList = _currentShoppingList.asStateFlow()
 
     private var _ingredients = MutableStateFlow<List<UiIngredient>?>(null)
     val ingredients = _ingredients.asStateFlow()
 
     init {
-        // Expose shopping lists immediately
-        viewModelScope.launch {
-            getShoppingListsUseCase().collect {
-                _shoppingLists.emit(it)
-            }
-        }
         viewModelScope.launch {
             getIngredientsUseCase().collect {
                 _ingredients.emit(it)
             }
         }
-        viewModelScope.launch {
-            getCurrentShoppingListUseCase().collect {
-                _currentShoppingList.emit(it)
+    }
+
+    fun getShoppingLists() = viewModelScope.launch {
+        _shoppingListsState.emit(FlowState.LOADING)
+        getShoppingListsUseCase()
+            .catch { err ->
+                Log.e("getShoppingLists", err.message ?: "Error.")
+                _shoppingLists.emit(emptyList())
+                _currentShoppingList.emit(null)
+                _shoppingListsState.emit(FlowState.ERROR)
             }
-        }
+            .collect { shoppingLists ->
+                _shoppingLists.emit(shoppingLists)
+                _currentShoppingList.emit(shoppingLists.firstOrNull { it.current })
+                _shoppingListsState.emit(FlowState.SUCCESS)
+            }
     }
 
     fun addNewShoppingList(setAsCurrent: Boolean) =
