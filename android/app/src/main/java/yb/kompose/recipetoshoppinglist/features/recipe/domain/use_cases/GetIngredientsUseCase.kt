@@ -4,9 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
 import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.RecipeRepository
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.toUiModel
 
 class GetIngredientsUseCase(
     private val recipeRepository: RecipeRepository
@@ -19,16 +19,6 @@ class GetIngredientsUseCase(
                     ingredient.toUiModel()
                 }
             }
-        }
-
-    private suspend fun Ingredient.toUiModel() =
-        withContext(Dispatchers.Default) {
-            UiIngredient(
-                name = name,
-                amount = "",
-                imgUrl = "https://www.themealdb.com/images/ingredients/$name.png",
-                thumbnailUrl = "https://www.themealdb.com/images/ingredients/$name-Small.png"
-            )
         }
 
 }

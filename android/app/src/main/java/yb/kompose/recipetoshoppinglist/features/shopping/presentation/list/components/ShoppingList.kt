@@ -29,10 +29,11 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredien
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.AddShoppingItemDialog
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.DeleteableIngredient
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ShoppingListComponent(
+fun ShoppingList(
     shoppingList: UiShoppingList,
     ingredients: List<UiIngredient>?,
     onAdd: (UiShoppingListIngredient) -> Unit,
@@ -60,7 +61,7 @@ fun ShoppingListComponent(
                 )
             }
             items(shoppingList.ingredients) { ingredient ->
-                ShoppingListItemComponent(
+                DeleteableIngredient(
                     ingredient = ingredient,
                     delete = { onDelete(ingredient) },
                     modifier = Modifier.fillMaxWidth()

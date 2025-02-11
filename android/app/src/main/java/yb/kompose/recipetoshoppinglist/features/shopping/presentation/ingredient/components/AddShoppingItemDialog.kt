@@ -28,7 +28,7 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.components.pic
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddIngredientViewModel
 
 @Composable
 fun AddShoppingItemDialog(

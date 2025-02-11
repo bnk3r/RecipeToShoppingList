@@ -1,7 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.domain.models
 
 data class UiRecipe(
-    val id: Int,
+    val id: Long,
     val title: String,
     val instructions: String?,
     val ingredients: List<UiIngredient> = listOf(),

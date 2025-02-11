@@ -47,5 +47,8 @@ interface ShoppingDao {
 
     @Delete
     fun deleteShoppingListIngredient(ingredient: ShoppingListIngredient)
+
+    @Query("UPDATE shopping_lists SET current = FALSE")
+    fun resetShoppingListsCurrentValue()
 }
 

@@ -19,15 +19,12 @@ class ShoppingRepository(
 
     suspend fun addShoppingList(shoppingList: ShoppingListWithIngredients) =
         withContext(Dispatchers.IO) {
-            val id = shoppingDao.addShoppingList(shoppingList.shoppingList).toInt()
-            if (id == -1) return@withContext id.toLong()
+            val id = shoppingDao.addShoppingList(shoppingList.shoppingList)
+            if (id == -1L) return@withContext id
             shoppingList.ingredients.forEach { ingredient ->
                 addShoppingListIngredient(ingredient)
             }
-            if (shoppingList.shoppingList.current) {
-                removeCurrentStatusFromOtherShoppingLists(id.toLong())
-            }
-            id.toLong()
+            id
         }
 
     suspend fun updateShoppingList(shoppingList: ShoppingListWithIngredients) =
@@ -65,6 +62,10 @@ class ShoppingRepository(
         withContext(Dispatchers.IO) {
             shoppingDao.deleteShoppingListIngredient(ingredient)
         }
+
+    fun resetShoppingListsCurrentValue() {
+        shoppingDao.resetShoppingListsCurrentValue()
+    }
 
     private suspend fun removeCurrentStatusFromOtherShoppingLists(currentId: Long) =
         withContext(Dispatchers.IO) {

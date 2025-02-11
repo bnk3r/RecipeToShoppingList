@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed.Companion.MEAL_DB_API_INGREDIENTS_COUNT
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealDBService
-import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.CategoryDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.dao.RecipeDAO
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Ingredient
 import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Recipe
@@ -27,16 +26,16 @@ class RecipeRepository(
         return recipeDao.getRecipesByName(query)
     }
 
-    suspend fun getRecipeDetailed(id: Int): Flow<Recipe?> {
+    suspend fun getRecipeDetailed(id: Long): Flow<Recipe?> {
         fetchAndSaveRecipeById(id)
-        return recipeDao.getRecipeById(id.toLong())
+        return recipeDao.getRecipeById(id)
     }
 
     suspend fun getIngredients(): Flow<List<Ingredient>> = withContext(Dispatchers.IO) {
         recipeDao.getIngredients()
     }
 
-    private suspend fun fetchAndSaveRecipeById(id: Int) {
+    private suspend fun fetchAndSaveRecipeById(id: Long) {
         remoteDataSource.getMealsById(id.toString()).body()?.meals?.getOrNull(0)
             ?.toDBEntity()
             ?.let { recipeDao.addRecipe(it) }

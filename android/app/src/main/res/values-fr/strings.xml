@@ -12,4 +12,5 @@
     <string name="dismiss">Annuler</string>
     <string name="add_ingredient_title">Choisir un ingrédient</string>
     <string name="no_selection">Pas de sélection</string>
+    <string name="new_list">Nouvelle liste</string>
 </resources>

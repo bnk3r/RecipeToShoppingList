@@ -23,7 +23,7 @@ class RecipeViewModel(
         return getRecipesByQueryUseCase(query)
     }
 
-    suspend fun getRecipeDetailed(id: Int): Flow<UiRecipe?> {
+    suspend fun getRecipeDetailed(id: Long): Flow<UiRecipe?> {
         return getRecipeDetailedUseCase(id)
     }
 

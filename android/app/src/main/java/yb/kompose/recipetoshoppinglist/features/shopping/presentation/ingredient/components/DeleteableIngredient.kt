@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +14,10 @@ import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.HorizontalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.Red
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.ShoppingItemPanelBackContent
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.ShoppingItemPanelContent
 
 @OptIn(ExperimentalWearMaterialApi::class)
 @Composable
-fun ShoppingListItemComponent(
+fun DeleteableIngredient(
     ingredient: UiShoppingListIngredient,
     delete: () -> Unit,
     modifier: Modifier = Modifier

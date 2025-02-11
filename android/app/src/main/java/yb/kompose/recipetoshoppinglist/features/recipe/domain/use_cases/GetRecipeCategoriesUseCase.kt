@@ -4,9 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import yb.kompose.recipetoshoppinglist.features.recipe.data.db.models.Category
 import yb.kompose.recipetoshoppinglist.features.recipe.data.repos.CategoriesRepository
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.toUiModel
 
 class GetRecipeCategoriesUseCase(
     private val categoriesRepository: CategoriesRepository
@@ -17,13 +17,5 @@ class GetRecipeCategoriesUseCase(
             categories.map { it.toUiModel() }
         }
     }
-
-    private suspend fun Category.toUiModel() =
-        withContext(Dispatchers.Default) {
-            UiCategory(
-                name = name,
-                imageUrl = imageUrl
-            )
-        }
 
 }

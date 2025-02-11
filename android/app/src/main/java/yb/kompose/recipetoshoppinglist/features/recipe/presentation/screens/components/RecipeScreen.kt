@@ -45,7 +45,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.Recipe
 @Composable
 fun RecipeScreen(
     recipeViewModel: RecipeViewModel = koinViewModel(),
-    recipeId: Int,
+    recipeId: Long,
     addToShoppingList: (UiIngredient) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
