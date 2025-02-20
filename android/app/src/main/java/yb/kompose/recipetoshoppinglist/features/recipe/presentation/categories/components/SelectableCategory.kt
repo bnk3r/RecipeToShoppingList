@@ -12,19 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.request.CachePolicy
-import coil3.request.ImageRequest
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 
 @Composable
-fun RowCategory(
+fun SelectableCategory(
     category: UiCategory,
     selected: Boolean?,
     iconSize: Dp = 56.dp,
@@ -36,13 +32,7 @@ fun RowCategory(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.clickable { onClick() }
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(category.imageUrl)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .build(),
-            contentDescription = category.name,
-            contentScale = ContentScale.Crop,
+        CachedAsyncImage(
             modifier = Modifier
                 .size(iconSize)
                 .clip(RoundedCornerShape(8.dp))
@@ -56,7 +46,9 @@ fun RowCategory(
                         else -> Color.Transparent
                     },
                     shape = RoundedCornerShape(8.dp)
-                )
+                ),
+            url = category.imageUrl,
+            title = category.name
         )
         FrenchTranslatedText(
             text = category.name,

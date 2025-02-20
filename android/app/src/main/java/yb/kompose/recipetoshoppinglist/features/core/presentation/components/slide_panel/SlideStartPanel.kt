@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.components
+package yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
@@ -8,29 +8,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.dpToPx
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipeScreen
 import kotlin.math.roundToInt
 
 @Composable
-fun RecipeAnimatedPanel(
+fun SlideStartPanel(
     modifier: Modifier = Modifier,
-    recipeId: Long,
     visible: Boolean,
-    onBackPressed: () -> Unit
+    content: @Composable () -> Unit
 ) {
     val configuration = LocalConfiguration.current
     val widthPx = configuration.screenWidthDp.dp.dpToPx().roundToInt()
 
     AnimatedVisibility(
         visible = visible,
-        enter = slideInHorizontally(initialOffsetX = { widthPx }),
-        exit = slideOutHorizontally(targetOffsetX = { widthPx })
+        enter = slideInHorizontally(initialOffsetX = { -widthPx }),
+        exit = slideOutHorizontally(targetOffsetX = { -widthPx }),
+        modifier = modifier
     ) {
-        RecipeScreen(
-            recipeId = recipeId,
-            addToShoppingList = { /* TODO */ },
-            onBackPressed = onBackPressed,
-            modifier = modifier
-        )
+        content()
     }
 }

@@ -18,7 +18,7 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.components.tex
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 
 @Composable
-fun RowCategoriesSection(
+fun CategoriesRow(
     categories: List<UiCategory>,
     selectedCategory: UiCategory?,
     onCategorySelected: (UiCategory) -> Unit,
@@ -40,7 +40,7 @@ fun RowCategoriesSection(
                 Spacer(modifier = Modifier.width(0.dp))
             }
             items(categories) { category ->
-                RowCategory(
+                SelectableCategory(
                     category = category,
                     selected = selectedCategory == category,
                     onClick = { onCategorySelected(category) }

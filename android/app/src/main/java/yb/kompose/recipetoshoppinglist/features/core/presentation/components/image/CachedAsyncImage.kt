@@ -1,6 +1,5 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.components
+package yb.kompose.recipetoshoppinglist.features.core.presentation.components.image
 
-import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -10,11 +9,10 @@ import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 
 @Composable
-fun RecipeThumbnail(
+fun CachedAsyncImage(
     modifier: Modifier = Modifier,
     url: String?,
-    title: String,
-    onClick: () -> Unit
+    title: String
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -23,6 +21,6 @@ fun RecipeThumbnail(
             .build(),
         contentDescription = title,
         contentScale = ContentScale.Crop,
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier
     )
 }

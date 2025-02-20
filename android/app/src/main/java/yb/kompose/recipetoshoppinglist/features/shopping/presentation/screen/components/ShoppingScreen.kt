@@ -14,16 +14,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.components.RecipeAnimatedPanel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components.RecipesPanel
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideStartPanel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.components.RecipePanel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.components.RecipesPanel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.components.ShoppingListsDashboard
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.components.ShoppingList
 
 @Composable
 fun ShoppingScreen(
     modifier: Modifier = Modifier
 ) {
-    var recipeDetailsVisible by remember { mutableStateOf(false) }
     var recipeDetailedId by remember { mutableStateOf<Long?>(null) }
+    var selectedShoppingListId by remember { mutableStateOf<Long?>(null) }
 
     Box(
         modifier = modifier
@@ -34,14 +37,16 @@ fun ShoppingScreen(
             modifier = Modifier.fillMaxSize(),
             contentBehind = {
                 ShoppingListsDashboard(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    onListClicked = { id ->
+                        selectedShoppingListId = id
+                    }
                 )
             },
             panelBody = {
                 RecipesPanel(
                     showRecipeDetails = { id ->
                         recipeDetailedId = id
-                        recipeDetailsVisible = true
                     },
                     modifier = Modifier
                         .fillMaxSize()
@@ -53,18 +58,33 @@ fun ShoppingScreen(
         )
 
         // PANEL (slide from right) : RECIPE
-        // Visible when an ID is set
-        recipeDetailedId?.let { id ->
-            RecipeAnimatedPanel(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.surface),
-                recipeId = id,
-                visible = recipeDetailsVisible,
-                onBackPressed = { recipeDetailsVisible = false }
+        SlideEndPanel(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            visible = recipeDetailedId != null,
+        ) {
+            RecipePanel(
+                recipeId = recipeDetailedId,
+                addToShoppingList = { /* TODO */ },
+                onBackPressed = { recipeDetailedId = null },
+                modifier = modifier.fillMaxSize()
             )
         }
 
+        // PANEL (slide from left) : SHOPPING LIST
+        SlideStartPanel(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
+            visible = selectedShoppingListId != null
+        ) {
+            ShoppingList(
+                modifier = Modifier.fillMaxSize(),
+                shoppingListId = selectedShoppingListId,
+                onBackPressed = { selectedShoppingListId = null },
+            )
+        }
     }
 }
 

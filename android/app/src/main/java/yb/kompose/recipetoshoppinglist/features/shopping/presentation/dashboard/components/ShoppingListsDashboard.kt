@@ -20,10 +20,10 @@ import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.
 
 @Composable
 fun ShoppingListsDashboard(
+    viewModel: ShoppingListsDashboardViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
-    viewModel: ShoppingListsDashboardViewModel = koinViewModel()
+    onListClicked: (id: Long) -> Unit
 ) {
-    val shoppingListsState = viewModel.shoppingListsState.collectAsStateWithLifecycle().value
     val shoppingLists = viewModel.shoppingLists.collectAsStateWithLifecycle().value
 
     LaunchedEffect(Unit) {
@@ -62,7 +62,7 @@ fun ShoppingListsDashboard(
             ShoppingListDashboardItem(
                 modifier = Modifier.aspectRatio(1f),
                 shoppingList = list,
-                onClick = { /* TODO */ }
+                onClick = { onListClicked(list.id) }
             )
         }
         item(

@@ -1,5 +1,6 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.components
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material.CircularProgressIndicator
 import org.koin.androidx.compose.koinViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.RowCategoriesSection
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.recipes.components.RecipeThumbnail
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.vimos.RecipesPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.CategoriesRow
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.components.RecipeSearchBarSection
 
 @Composable
@@ -83,7 +84,7 @@ fun RecipesPanel(
         item(
             span = { GridItemSpan(3) }
         ) {
-            RowCategoriesSection(
+            CategoriesRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp),
@@ -97,15 +98,13 @@ fun RecipesPanel(
 
         // RECIPES
         items(recipes) { recipe ->
-            RecipeThumbnail(
+            CachedAsyncImage(
                 modifier = Modifier
                     .size(recipeItemSize)
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .clickable { showRecipeDetails(recipe.id) },
                 url = recipe.imgUrl,
-                title = recipe.title,
-                onClick = {
-                    showRecipeDetails(recipe.id)
-                }
+                title = recipe.title
             )
         }
 

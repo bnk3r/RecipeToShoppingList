@@ -13,4 +13,7 @@
     <string name="add_ingredient_title">Choisir un ingrédient</string>
     <string name="no_selection">Pas de sélection</string>
     <string name="new_list">Nouvelle liste</string>
+    <string name="quantity">Quantité</string>
+    <string name="selected_ingredient">Sélectionné : %1$s</string>
+    <string name="nothing">Aucun</string>
 </resources>

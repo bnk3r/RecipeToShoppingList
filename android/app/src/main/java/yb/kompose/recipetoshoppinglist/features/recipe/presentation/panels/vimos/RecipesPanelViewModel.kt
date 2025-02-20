@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screens.vimos
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
