@@ -2,8 +2,13 @@ package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredien
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.FetchAndSaveIngredientsUseCase
@@ -24,10 +29,39 @@ class AddIngredientViewModel(
     private val _ingredientToAdd = MutableStateFlow(IngredientToAdd())
     private val _unitsStr = MutableStateFlow(MeasureUnit.entries.map { it.displayName })
 
+    var ingLoading = MutableStateFlow(false)
+        private set
+
+    val ing = getIngredientsUseCase()
+        .also {
+            ingLoading.value = true
+        }
+        .map { list ->
+            list.map { element ->
+                SelectionIngredient(
+                    name = element.name,
+                    imageUrl = element.imgUrl
+                )
+            }
+        }
+        .flowOn(Dispatchers.Default)
+        .also {
+            ingLoading.value = false
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
+
     val ingredientsAreLoading = _ingredientsAreLoading.asStateFlow()
     val ingredientToAdd = _ingredientToAdd.asStateFlow()
     val ingredients = _ingredients.asStateFlow()
     val unitsStr = _unitsStr.asStateFlow()
+
+    fun fetchIngredients() = viewModelScope.launch {
+        fetchAndSaveIngredientsUseCase()
+    }
 
     fun getIngredients() = viewModelScope.launch {
         _ingredientsAreLoading.emit(true)

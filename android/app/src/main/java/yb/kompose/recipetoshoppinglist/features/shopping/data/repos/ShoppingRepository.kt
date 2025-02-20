@@ -13,9 +13,7 @@ class ShoppingRepository(
 
     fun getShoppingLists() = shoppingDao.getShoppingLists().flowOn(Dispatchers.IO)
 
-    suspend fun getShoppingList(id: Long) = withContext(Dispatchers.IO) {
-        shoppingDao.getShoppingListById(id)
-    }
+    fun getShoppingList(id: Long) = shoppingDao.getShoppingListById(id).flowOn(Dispatchers.IO)
 
     suspend fun addShoppingList(shoppingList: ShoppingListWithIngredients) =
         withContext(Dispatchers.IO) {
@@ -63,24 +61,8 @@ class ShoppingRepository(
             shoppingDao.deleteShoppingListIngredient(ingredient)
         }
 
-    fun resetShoppingListsCurrentValue() {
+    suspend fun resetShoppingListsCurrentValue() = withContext(Dispatchers.IO) {
         shoppingDao.resetShoppingListsCurrentValue()
     }
 
-    private suspend fun removeCurrentStatusFromOtherShoppingLists(currentId: Long) =
-        withContext(Dispatchers.IO) {
-            getShoppingLists().collect { lists ->
-                lists
-                    .filter { it.shoppingList.id != currentId }
-                    .forEach { list ->
-                        updateShoppingList(
-                            list.copy(
-                                shoppingList = list.shoppingList.copy(
-                                    current = false
-                                )
-                            )
-                        )
-                    }
-            }
-        }
 }

@@ -13,9 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideStartPanel
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.VerticalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.components.RecipePanel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.components.RecipesPanel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.components.ShoppingListsDashboard
@@ -66,7 +66,6 @@ fun ShoppingScreen(
         ) {
             RecipePanel(
                 recipeId = recipeDetailedId,
-                addToShoppingList = { /* TODO */ },
                 onBackPressed = { recipeDetailedId = null },
                 modifier = modifier.fillMaxSize()
             )

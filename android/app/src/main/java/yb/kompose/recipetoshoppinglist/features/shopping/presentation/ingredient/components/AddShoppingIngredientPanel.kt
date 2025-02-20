@@ -45,14 +45,10 @@ fun AddShoppingIngredientPanel(
     onBackPressed: () -> Unit
 ) {
 
-    val ingredients = viewModel.ingredients.collectAsStateWithLifecycle().value
-    val ingredientsAreLoading = viewModel.ingredientsAreLoading.collectAsStateWithLifecycle().value
+    val ingredients = viewModel.ing.collectAsStateWithLifecycle().value
+    val ingredientsAreLoading = viewModel.ingLoading.collectAsStateWithLifecycle().value
     val unitsStr = viewModel.unitsStr.collectAsStateWithLifecycle().value
     val ingredientToAdd = viewModel.ingredientToAdd.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(Unit) {
-        viewModel.getIngredients()
-    }
 
     LaunchedEffect(shoppingListId) {
         viewModel.updateIngredient(shoppingListId = shoppingListId)

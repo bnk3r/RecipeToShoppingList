@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,10 +24,6 @@ fun ShoppingListsDashboard(
     onListClicked: (id: Long) -> Unit
 ) {
     val shoppingLists = viewModel.shoppingLists.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(Unit) {
-        viewModel.getShoppingLists()
-    }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -49,7 +44,7 @@ fun ShoppingListsDashboard(
         item(
             span = { GridItemSpan(2) }
         ) {
-            ShoppingListsDashboardAddItem(
+            ShoppingListsDashboardAddItemButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

@@ -11,6 +11,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecip
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.GetIngredientsByNameUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.data.repos.ShoppingRepository
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
@@ -24,6 +25,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shoppi
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.ResetShoppingListsCurrentValueUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.UpdateShoppingListUseCase
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.converters.AddCurrentShoppingListUseCase
 
 fun provideGetRecipeCategoriesUseCase(categoriesRepository: CategoriesRepository) =
     GetRecipeCategoriesUseCase(categoriesRepository)
@@ -95,6 +97,20 @@ fun provideResetShoppingListsCurrentValueUseCase(
     shoppingRepository: ShoppingRepository
 ) = ResetShoppingListsCurrentValueUseCase(shoppingRepository)
 
+fun provideAddCurrentShoppingList(
+    addShoppingListUseCase: AddShoppingListUseCase,
+    resetShoppingListsCurrentValueUseCase: ResetShoppingListsCurrentValueUseCase
+) = AddCurrentShoppingListUseCase(
+    addShoppingListUseCase,
+    resetShoppingListsCurrentValueUseCase
+)
+
+fun provideGetIngredientsByNameUseCase(
+    getIngredientsUseCase: GetIngredientsUseCase
+) = GetIngredientsByNameUseCase(
+    getIngredientsUseCase
+)
+
 val useCaseModule = module {
     // RECIPES
     factory { provideGetRecipeCategoriesUseCase(get()) }
@@ -108,6 +124,7 @@ val useCaseModule = module {
     // RECIPE INGREDIENTS
     factory { provideGetIngredientsUseCase(get()) }
     factory { provideFetchIngredientsUseCase(get()) }
+    factory { provideGetIngredientsByNameUseCase(get()) }
 
     // SHOPPING LISTS
     factory { provideGetShoppingListsUseCase(get()) }
@@ -116,6 +133,7 @@ val useCaseModule = module {
     factory { provideUpdateShoppingListUseCase(get()) }
     factory { provideDeleteShoppingListUseCase(get()) }
     factory { provideResetShoppingListsCurrentValueUseCase(get()) }
+    factory { provideAddCurrentShoppingList(get(), get()) }
 
     // SHOPPING INGREDIENTS
     factory { provideGetShoppingListIngredientUseCase(get()) }

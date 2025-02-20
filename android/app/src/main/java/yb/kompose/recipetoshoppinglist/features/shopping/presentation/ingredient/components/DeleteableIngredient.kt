@@ -33,7 +33,7 @@ fun DeleteableIngredient(
     HorizontalSwipeablePanel(
         modifier = modifier,
         frontContent = {
-            ShoppingItemPanelContent(
+            DeleteableIngredientContent(
                 ingredient = ingredient,
                 modifier = panelContentModifier
                     .fillMaxSize()
@@ -41,7 +41,7 @@ fun DeleteableIngredient(
             )
         },
         backContent = { swipeableState ->
-            ShoppingItemPanelBackContent(
+            DeleteableIngredientBackground(
                 onClickDelete = {
                     coroutineScope.launch {
                         swipeableState.animateTo(0)

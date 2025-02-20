@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ShoppingItemPanelBackContent(
+fun DeleteableIngredientBackground(
     onClickDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {

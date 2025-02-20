@@ -83,8 +83,7 @@ fun ShoppingList(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 120.dp)
-                    .padding(16.dp),
+                    .padding(32.dp),
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Row(
@@ -132,7 +131,6 @@ fun ShoppingList(
     }
 
     BackHandler {
-        viewModel.clearJobs()
         onBackPressed()
     }
 

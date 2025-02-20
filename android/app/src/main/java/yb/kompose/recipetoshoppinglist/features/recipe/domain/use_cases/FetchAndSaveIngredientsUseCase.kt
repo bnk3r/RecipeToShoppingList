@@ -8,10 +8,8 @@ class FetchAndSaveIngredientsUseCase(
     private val ingredientsRepository: IngredientsRepository
 ) {
 
-    suspend operator fun invoke() : Int = withContext(Dispatchers.IO) {
-        val ingredients = ingredientsRepository.fetchIngredients()
-        if (ingredients.isEmpty()) return@withContext 0
-        ingredientsRepository.saveIngredients(ingredients)
+    suspend operator fun invoke(): Int = withContext(Dispatchers.IO) {
+        ingredientsRepository.saveIngredients(ingredientsRepository.fetchIngredients())
     }
 
 }

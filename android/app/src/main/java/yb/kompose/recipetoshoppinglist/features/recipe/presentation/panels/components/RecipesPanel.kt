@@ -11,11 +11,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -23,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material.CircularProgressIndicator
 import org.koin.androidx.compose.koinViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.CategoriesRow
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.CategoriesRow
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.components.RecipeSearchBarSection
 
@@ -37,28 +32,11 @@ fun RecipesPanel(
     val configuration = LocalConfiguration.current
     val recipeItemSize = configuration.screenWidthDp.dp / 3
 
-    var queryRecipe by remember { mutableStateOf("") }
-
     val categories = viewModel.categories.collectAsStateWithLifecycle().value
     val selectedCategory = viewModel.selectedCategory.collectAsStateWithLifecycle().value
     val recipes = viewModel.recipes.collectAsStateWithLifecycle().value
     val recipesAreLoading = viewModel.recipesAreLoading.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchAndSaveCategories()
-        viewModel.getCategories()
-    }
-
-    LaunchedEffect(selectedCategory) {
-        selectedCategory?.let { category ->
-            viewModel.getRecipesForCategory(category.name)
-        }
-    }
-
-    fun searchByQuery() {
-        if (queryRecipe.isBlank()) return
-        viewModel.getRecipesByQuery(queryRecipe)
-    }
+    val queryRecipe = viewModel.queryRecipe.collectAsStateWithLifecycle().value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -70,9 +48,11 @@ fun RecipesPanel(
         ) {
             RecipeSearchBarSection(
                 query = queryRecipe,
-                onQueryChange = { queryRecipe = it },
+                onQueryChange = {
+                    viewModel.updateQueryRecipe(it)
+                },
                 onSearch = {
-                    searchByQuery()
+                    viewModel.updateQueryRecipe(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

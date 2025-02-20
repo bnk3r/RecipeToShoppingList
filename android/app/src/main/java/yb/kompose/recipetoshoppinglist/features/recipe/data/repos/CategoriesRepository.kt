@@ -2,6 +2,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.data.repos
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.category.CategoryDetailed
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealDBService
@@ -17,9 +18,8 @@ class CategoriesRepository(
         apiService.getCategoriesDetailed().body()?.categories ?: emptyList()
     }
 
-    suspend fun getCategories(): Flow<List<Category>> = withContext(Dispatchers.IO) {
-        categoriesDao.getAllCategories()
-    }
+    fun getCategories(): Flow<List<Category>> =
+        categoriesDao.getAllCategories().flowOn(Dispatchers.IO)
 
     suspend fun saveCategories(categories: List<CategoryDetailed>): Int =
         withContext(Dispatchers.IO) {

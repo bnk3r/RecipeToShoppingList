@@ -15,4 +15,6 @@
     <string name="quantity">Quantity</string>
     <string name="selected_ingredient">Selected : %1$s</string>
     <string name="nothing">Nothing</string>
+    <string name="add_this_ingredient">Add this ingredient :</string>
+    <string name="name">Name</string>
 </resources>

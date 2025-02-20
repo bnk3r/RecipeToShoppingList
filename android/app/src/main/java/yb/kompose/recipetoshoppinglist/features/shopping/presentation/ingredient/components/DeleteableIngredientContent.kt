@@ -25,7 +25,7 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.components.but
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 
 @Composable
-fun ShoppingItemPanelContent(
+fun DeleteableIngredientContent(
     ingredient: UiShoppingListIngredient,
     modifier: Modifier = Modifier
 ) {

@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
 
 @Composable
-fun ShoppingListsDashboardAddItem(
+fun ShoppingListsDashboardAddItemButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {

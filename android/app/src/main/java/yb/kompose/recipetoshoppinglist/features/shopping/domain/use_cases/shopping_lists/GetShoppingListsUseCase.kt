@@ -12,10 +12,15 @@ class GetShoppingListsUseCase(
     private val shoppingRepository: ShoppingRepository
 ) {
 
-    suspend operator fun invoke(): Flow<List<UiShoppingList>> =
+    operator fun invoke(): Flow<List<UiShoppingList>> =
         shoppingRepository.getShoppingLists()
             .map { dbShoppingLists ->
                 dbShoppingLists.map { shoppingList -> shoppingList.toUiModel() }
+            }
+            .map { lists ->
+                lists.sortedByDescending { item ->
+                    item.id
+                }
             }
             .flowOn(Dispatchers.Default)
 

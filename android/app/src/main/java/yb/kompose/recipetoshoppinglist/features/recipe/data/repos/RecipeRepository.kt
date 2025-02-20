@@ -3,7 +3,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.data.repos
 import androidx.compose.ui.util.fastJoinToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.flowOn
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.models.meal.MealDetailed.Companion.MEAL_DB_API_INGREDIENTS_COUNT
 import yb.kompose.recipetoshoppinglist.features.recipe.data.api.service.TheMealDBService
@@ -31,9 +31,7 @@ class RecipeRepository(
         return recipeDao.getRecipeById(id)
     }
 
-    suspend fun getIngredients(): Flow<List<Ingredient>> = withContext(Dispatchers.IO) {
-        recipeDao.getIngredients()
-    }
+    fun getIngredients(): Flow<List<Ingredient>> = recipeDao.getIngredients().flowOn(Dispatchers.IO)
 
     private suspend fun fetchAndSaveRecipeById(id: Long) {
         remoteDataSource.getMealsById(id.toString()).body()?.meals?.getOrNull(0)
