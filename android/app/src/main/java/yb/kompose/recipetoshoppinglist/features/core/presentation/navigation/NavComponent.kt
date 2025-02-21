@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingDestination
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingScreen
+import yb.kompose.recipetoshoppinglist.features.test.presentation.screen.components.TestDesign
+import yb.kompose.recipetoshoppinglist.features.test.presentation.screen.models.TestDesignDestination
 
 @Composable
 fun NavComponent(
@@ -17,7 +19,7 @@ fun NavComponent(
 
     NavHost(
         navController = navController,
-        startDestination = ShoppingDestination,
+        startDestination = TestDesignDestination,
         modifier = modifier
     ) {
         composable<ShoppingDestination> {
@@ -25,5 +27,10 @@ fun NavComponent(
                 modifier = Modifier.fillMaxSize()
             )
         }
+
+        composable<TestDesignDestination> {
+            TestDesign()
+        }
     }
 }
+
