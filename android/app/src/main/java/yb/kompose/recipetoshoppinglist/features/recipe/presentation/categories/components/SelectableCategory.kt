@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,9 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 
 @Composable
 fun SelectableCategory(
@@ -50,7 +50,7 @@ fun SelectableCategory(
             url = category.imageUrl,
             title = category.name
         )
-        FrenchTranslatedText(
+        Text(
             text = category.name,
             textAlign = TextAlign.Center,
             color = when (selected) {

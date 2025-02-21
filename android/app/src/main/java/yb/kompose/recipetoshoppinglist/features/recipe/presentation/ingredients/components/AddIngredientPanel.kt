@@ -33,7 +33,6 @@ import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
 
@@ -78,7 +77,7 @@ fun AddIngredientPanel(
                             .weight(1f)
                             .padding(16.dp)
                     )
-                    FrenchTranslatedText(
+                    Text(
                         text = ingredient.name,
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
@@ -96,7 +95,7 @@ fun AddIngredientPanel(
                             .weight(1f)
                             .padding(16.dp)
                     )
-                    FrenchTranslatedText(
+                    Text(
                         text = ingredient.amount,
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
@@ -174,7 +173,7 @@ fun RefIngredient(
             url = ingredient.imgUrl,
             title = ingredient.name
         )
-        FrenchTranslatedText(
+        Text(
             modifier = Modifier.padding(start = 16.dp),
             text = ingredient.name
         )

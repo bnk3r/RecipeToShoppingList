@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,10 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.AddIngredientPanel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.RecipeIngredient
@@ -68,9 +67,10 @@ fun RecipePanel(
                     )
                 }
                 item {
-                    FrenchTranslatedTitle(
-                        title = r.title,
+                    Text(
+                        text = r.title,
                         textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 32.dp)
@@ -78,7 +78,7 @@ fun RecipePanel(
                 }
                 item {
                     val instructions = r.instructions ?: return@item
-                    FrenchTranslatedText(
+                    Text(
                         text = instructions,
                         textAlign = TextAlign.Center,
                         modifier = Modifier

@@ -33,7 +33,6 @@ import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.translation.FrenchTranslatedText
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddIngredientViewModel
 
@@ -170,7 +169,7 @@ fun ShoppingIngredient(
             url = ingredient.imageUrl,
             title = ingredient.name
         )
-        FrenchTranslatedText(
+        Text(
             modifier = Modifier.padding(start = 16.dp),
             text = ingredient.name
         )
