@@ -1,6 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.data.repos
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.dao.ShoppingDao
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.ShoppingListIngredient
@@ -10,25 +11,18 @@ class ShoppingRepository(
     private val shoppingDao: ShoppingDao
 ) {
 
-    suspend fun getShoppingLists() = withContext(Dispatchers.IO) {
-        shoppingDao.getShoppingLists()
-    }
+    fun getShoppingLists() = shoppingDao.getShoppingLists().flowOn(Dispatchers.IO)
 
-    suspend fun getShoppingList(id: Long) = withContext(Dispatchers.IO) {
-        shoppingDao.getShoppingListById(id)
-    }
+    fun getShoppingList(id: Long) = shoppingDao.getShoppingListById(id).flowOn(Dispatchers.IO)
 
     suspend fun addShoppingList(shoppingList: ShoppingListWithIngredients) =
         withContext(Dispatchers.IO) {
-            val id = shoppingDao.addShoppingList(shoppingList.shoppingList).toInt()
-            if (id == -1) return@withContext id.toLong()
+            val id = shoppingDao.addShoppingList(shoppingList.shoppingList)
+            if (id == -1L) return@withContext id
             shoppingList.ingredients.forEach { ingredient ->
                 addShoppingListIngredient(ingredient)
             }
-            if (shoppingList.shoppingList.current) {
-                removeCurrentStatusFromOtherShoppingLists(id.toLong())
-            }
-            id.toLong()
+            id
         }
 
     suspend fun updateShoppingList(shoppingList: ShoppingListWithIngredients) =
@@ -67,25 +61,8 @@ class ShoppingRepository(
             shoppingDao.deleteShoppingListIngredient(ingredient)
         }
 
-    suspend fun getCurrentShoppingList() =
-        withContext(Dispatchers.IO) {
-            shoppingDao.getCurrentShoppingList()
-        }
+    suspend fun resetShoppingListsCurrentValue() = withContext(Dispatchers.IO) {
+        shoppingDao.resetShoppingListsCurrentValue()
+    }
 
-    private suspend fun removeCurrentStatusFromOtherShoppingLists(currentId: Long) =
-        withContext(Dispatchers.IO) {
-            getShoppingLists().collect { lists ->
-                lists
-                    .filter { it.shoppingList.id != currentId }
-                    .forEach { list ->
-                        updateShoppingList(
-                            list.copy(
-                                shoppingList = list.shoppingList.copy(
-                                    current = false
-                                )
-                            )
-                        )
-                    }
-            }
-        }
 }

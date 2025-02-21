@@ -1,81 +1,29 @@
 package yb.kompose.recipetoshoppinglist.features.core.di
 
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.DeleteShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngredientsUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.AddIngredientToShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetCurrentShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.GetShoppingListsUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.UpdateShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
+import yb.kompose.recipetoshoppinglist.activities.MainViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.GetIngredientsByNameUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipePanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddIngredientViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
 
-fun provideCategoryViewModel(getRecipeCategoriesUseCase: GetRecipeCategoriesUseCase) =
-    CategoryViewModel(getRecipeCategoriesUseCase)
-
-fun provideRecipeViewModel(
-    getRecipesForCategoryUseCase: GetRecipesForCategoryUseCase,
-    getRecipesByQueryUseCase: GetRecipesByQueryUseCase,
-    getRecipeDetailedUseCase: GetRecipeDetailedUseCase
-) = RecipeViewModel(
-    getRecipesForCategoryUseCase,
-    getRecipesByQueryUseCase,
-    getRecipeDetailedUseCase
+fun provideAddIngredientPanelViewModel(
+    getIngredientsByNameUseCase: GetIngredientsByNameUseCase
+) = AddIngredientPanelViewModel(
+    getIngredientsByNameUseCase
 )
-
-fun provideShoppingViewModel(
-    getShoppingListsUseCase: GetShoppingListsUseCase,
-    getShoppingListUseCase: GetShoppingListUseCase,
-    addShoppingListUseCase: AddShoppingListUseCase,
-    updateShoppingListUseCase: UpdateShoppingListUseCase,
-    deleteShoppingListUseCase: DeleteShoppingListUseCase,
-    deleteShoppingListIngredientUseCase: DeleteShoppingListIngredientUseCase,
-    getIngredientsUseCase: GetIngredientsUseCase,
-    getCurrentShoppingListUseCase: GetCurrentShoppingListUseCase,
-    addIngredientToShoppingListUseCase: AddIngredientToShoppingListUseCase,
-    updateShoppingListIngredientUseCase: UpdateShoppingListIngredientUseCase
-) = ShoppingViewModel(
-    getShoppingListsUseCase,
-    getShoppingListUseCase,
-    addShoppingListUseCase,
-    updateShoppingListUseCase,
-    deleteShoppingListUseCase,
-    deleteShoppingListIngredientUseCase,
-    getIngredientsUseCase,
-    getCurrentShoppingListUseCase,
-    addIngredientToShoppingListUseCase,
-    updateShoppingListIngredientUseCase
-)
-
-fun provideAddIngredientViewModel() = AddIngredientViewModel()
 
 val viewModelModule = module {
-    viewModel { provideCategoryViewModel(get()) }
-    viewModel { provideRecipeViewModel(get(), get(), get()) }
-    viewModel {
-        provideShoppingViewModel(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    viewModel { provideAddIngredientViewModel() }
+    viewModelOf(::MainViewModel)
+    viewModelOf(::ShoppingListsDashboardViewModel)
+    viewModelOf(::RecipesPanelViewModel)
+    viewModelOf(::RecipePanelViewModel)
+    viewModelOf(::ShoppingListViewModel)
+    viewModelOf(::AddIngredientViewModel)
+    viewModel { provideAddIngredientPanelViewModel(get()) }
 }

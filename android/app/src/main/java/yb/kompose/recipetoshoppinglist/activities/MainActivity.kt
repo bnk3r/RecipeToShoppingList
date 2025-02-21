@@ -7,17 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.NavComponent
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RecipeToShoppingListTheme
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val categoryViewModel: CategoryViewModel by inject()
-    private val recipeViewModel: RecipeViewModel by inject()
-    private val shoppingViewModel: ShoppingViewModel by inject()
+    private val mainViewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +21,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             RecipeToShoppingListTheme {
                 NavComponent(
-                    categoryViewModel = categoryViewModel,
-                    recipeViewModel = recipeViewModel,
-                    shoppingViewModel = shoppingViewModel,
                     modifier = Modifier.fillMaxSize()
                 )
             }
         }
+        fetchImportantData()
     }
+
+    private fun fetchImportantData() {
+        mainViewModel.fetchImportantData()
+    }
+
 }
