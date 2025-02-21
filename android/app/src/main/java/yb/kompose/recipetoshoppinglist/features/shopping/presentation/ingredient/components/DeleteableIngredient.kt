@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.swipe_panel.HorizontalSwipeablePanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.Red
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
+import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RedLight
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 
 @OptIn(ExperimentalWearMaterialApi::class)
@@ -52,7 +53,7 @@ fun DeleteableIngredient(
                 },
                 modifier = panelContentModifier
                     .fillMaxSize()
-                    .background(Red)
+                    .background(RedLight)
             )
         }
     )
