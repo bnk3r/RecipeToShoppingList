@@ -10,31 +10,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun IconDesignButton(
+fun DesignIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     imageVector: ImageVector,
     contentDescription: String,
-    style: IconDesignButtonStyle,
+    style: DesignIconButtonStyle,
     customColors: IconButtonColors? = null,
     enabled: Boolean = true
 ) {
     val colors = when (style) {
-        IconDesignButtonStyle.PRIMARY -> IconButtonDefaults.iconButtonColors(
+        DesignIconButtonStyle.PRIMARY -> IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.tertiary,
             contentColor = MaterialTheme.colorScheme.primary,
             disabledContainerColor = MaterialTheme.colorScheme.tertiary,
             disabledContentColor = MaterialTheme.colorScheme.onTertiary
         )
 
-        IconDesignButtonStyle.WHITE -> IconButtonDefaults.iconButtonColors(
+        DesignIconButtonStyle.WHITE -> IconButtonDefaults.iconButtonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContainerColor = MaterialTheme.colorScheme.tertiary,
             disabledContentColor = MaterialTheme.colorScheme.onTertiary
         )
 
-        IconDesignButtonStyle.CUSTOM -> customColors
+        DesignIconButtonStyle.CUSTOM -> customColors
             ?: throw IllegalArgumentException("Style CUSTOM without customColors argument.")
     }
 
