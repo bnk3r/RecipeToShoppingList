@@ -9,8 +9,9 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipePanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddIngredientViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingScreenViewModel
 
 fun provideAddIngredientPanelViewModel(
     getIngredientsByNameUseCase: GetIngredientsByNameUseCase
@@ -20,10 +21,11 @@ fun provideAddIngredientPanelViewModel(
 
 val viewModelModule = module {
     viewModelOf(::MainViewModel)
+    viewModelOf(::ShoppingScreenViewModel)
     viewModelOf(::ShoppingListsDashboardViewModel)
     viewModelOf(::RecipesPanelViewModel)
     viewModelOf(::RecipePanelViewModel)
     viewModelOf(::ShoppingListViewModel)
-    viewModelOf(::AddIngredientViewModel)
+    viewModelOf(::AddShoppingIngredientPanelViewModel)
     viewModel { provideAddIngredientPanelViewModel(get()) }
 }

@@ -12,19 +12,21 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
+
+data class ShoppingListsDashboardState(
+    val shoppingLists : List<UiShoppingList> = emptyList()
+)
 
 @Composable
 fun ShoppingListsDashboard(
-    viewModel: ShoppingListsDashboardViewModel = koinViewModel(),
-    modifier: Modifier = Modifier,
-    onListClicked: (id: Long) -> Unit
+    state: ShoppingListsDashboardState,
+    onCreateNewList: () -> Unit,
+    onClickShoppingList: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val shoppingLists = viewModel.shoppingLists.collectAsStateWithLifecycle().value
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(16.dp),
@@ -45,19 +47,17 @@ fun ShoppingListsDashboard(
             span = { GridItemSpan(2) }
         ) {
             ShoppingListsDashboardAddItemButton(
+                onClick = onCreateNewList,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                onClick = {
-                    viewModel.addNewListAsCurrent()
-                }
+                    .height(56.dp)
             )
         }
-        items(shoppingLists) { list ->
+        items(state.shoppingLists) { list ->
             ShoppingListDashboardItem(
                 modifier = Modifier.aspectRatio(1f),
                 shoppingList = list,
-                onClick = { onListClicked(list.id) }
+                onClick = { onClickShoppingList(list.id) }
             )
         }
         item(
@@ -71,4 +71,14 @@ fun ShoppingListsDashboard(
         }
     }
 
+}
+
+@Preview
+@Composable
+private fun ShoppingListsDashboardPreview() {
+    ShoppingListsDashboard(
+        state = ShoppingListsDashboardState(),
+        onCreateNewList = {},
+        onClickShoppingList = {}
+    )
 }

@@ -20,41 +20,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
+import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.AddShoppingIngredientPanel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.DeleteableIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.models.ShoppingListState
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun ShoppingList(
-    viewModel: ShoppingListViewModel = koinViewModel(),
-    modifier: Modifier = Modifier,
-    shoppingListId: Long?,
-    onBackPressed: () -> Unit
+    state: ShoppingListState,
+    onDeleteIngredient: (UiShoppingListIngredient) -> Unit,
+    onAddIngredientPanelVisibilityChanged: (Boolean) -> Unit,
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
-    val shoppingList = viewModel.shoppingList.collectAsStateWithLifecycle().value
-    val shoppingListIsLoading = viewModel.shoppingListIsLoading.collectAsStateWithLifecycle().value
-
-    var addIngredientPanelVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(shoppingListId) {
-        shoppingListId?.let { id ->
-            viewModel.getShoppingList(id)
-        }
-    }
-
-    shoppingList?.let { list ->
+    state.shoppingList?.let { shoppingList ->
         Box(
             modifier = modifier
         ) {
@@ -68,14 +56,14 @@ fun ShoppingList(
             ) {
                 item {
                     Text(
-                        text = list.updatedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        text = shoppingList.updatedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                         modifier = Modifier.padding(bottom = 32.dp)
                     )
                 }
-                items(list.ingredients) { ingredient ->
+                items(shoppingList.ingredients) { ingredient ->
                     DeleteableIngredient(
                         ingredient = ingredient,
-                        delete = { viewModel.deleteIngredient(ingredient) },
+                        delete = { onDeleteIngredient(ingredient) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -91,9 +79,7 @@ fun ShoppingList(
                     horizontalArrangement = Arrangement.End
                 ) {
                     FloatingActionButton(
-                        onClick = {
-                            addIngredientPanelVisible = true
-                        }
+                        onClick = { onAddIngredientPanelVisibilityChanged(true) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -104,7 +90,7 @@ fun ShoppingList(
             }
 
             // LOADING SHOPPING LIST INDICATOR
-            if (shoppingListIsLoading) {
+            if (state.isShoppingListLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -115,15 +101,39 @@ fun ShoppingList(
 
             SlideEndPanel(
                 modifier = Modifier.fillMaxSize(),
-                visible = addIngredientPanelVisible
+                visible = state.isAddIngredientPanelVisible
             ) {
+                val addShoppingIngredientViewModel =
+                    koinViewModel<AddShoppingIngredientPanelViewModel>()
+                val addShoppingIngredientState =
+                    addShoppingIngredientViewModel.state.collectAsStateWithLifecycle().value
+
+                LaunchedEffect(shoppingList.id) {
+                    if (shoppingList.id == -1L) return@LaunchedEffect
+                    addShoppingIngredientViewModel.updateShoppingListId(shoppingList.id)
+                }
+
                 AddShoppingIngredientPanel(
+                    state = addShoppingIngredientState,
+                    onIngredientSelected = {
+                        addShoppingIngredientViewModel.updateIngredientToAdd(it)
+                    },
+                    onIngredientAmountChanged = {
+                        addShoppingIngredientViewModel.updateIngredientToAddAmount(it)
+                    },
+                    onIngredientUnitChanged = {
+                        addShoppingIngredientViewModel.updateIngredientToAddUnit(it)
+                    },
+                    onSubmitIngredient = {
+                        addShoppingIngredientViewModel.addIngredientToShoppingList()
+                    },
+                    onBackPressed = {
+                        onAddIngredientPanelVisibilityChanged(false)
+                    },
                     modifier = Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(vertical = 56.dp),
-                    shoppingListId = list.id,
-                    onBackPressed = { addIngredientPanelVisible = false }
                 )
             }
 
@@ -134,5 +144,16 @@ fun ShoppingList(
         onBackPressed()
     }
 
+}
+
+@Preview
+@Composable
+private fun ShoppingListPreview() {
+    ShoppingList(
+        state = ShoppingListState(),
+        onDeleteIngredient = {},
+        onAddIngredientPanelVisibilityChanged = {},
+        onBackPressed = {}
+    )
 }
 
