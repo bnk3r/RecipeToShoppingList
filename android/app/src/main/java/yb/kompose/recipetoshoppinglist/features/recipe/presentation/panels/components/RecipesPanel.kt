@@ -2,6 +2,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.comp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -97,13 +98,21 @@ fun RecipesPanel(
 
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun RecipesPanelPreview() {
     RecipesPanel(
-        state = RecipesPanelState(),
+        state = RecipesPanelState(
+            categories = listOf(
+                UiCategory(
+                    name = "Beef",
+                    imageUrl = ""
+                )
+            )
+        ),
         onRecipeSearchQueryChanged = {},
         onSelectedCategoryChanged = {},
-        onClickRecipe = {}
+        onClickRecipe = {},
+        modifier = Modifier.fillMaxSize()
     )
 }

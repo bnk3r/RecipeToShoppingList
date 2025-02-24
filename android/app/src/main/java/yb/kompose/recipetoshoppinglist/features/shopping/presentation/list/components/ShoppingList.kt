@@ -63,7 +63,7 @@ fun ShoppingList(
                 items(shoppingList.ingredients) { ingredient ->
                     DeleteableIngredient(
                         ingredient = ingredient,
-                        delete = { onDeleteIngredient(ingredient) },
+                        onDelete = { onDeleteIngredient(ingredient) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -146,7 +146,7 @@ fun ShoppingList(
 
 }
 
-@Preview
+@Preview(showSystemUi = true, backgroundColor = 0xffffffff)
 @Composable
 private fun ShoppingListPreview() {
     ShoppingList(
