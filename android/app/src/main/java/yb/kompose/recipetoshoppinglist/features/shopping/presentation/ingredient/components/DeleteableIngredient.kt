@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 @Composable
 fun DeleteableIngredient(
     ingredient: UiShoppingListIngredient,
-    delete: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -45,7 +46,7 @@ fun DeleteableIngredient(
                 onClickDelete = {
                     coroutineScope.launch {
                         swipeableState.animateTo(0)
-                        delete()
+                        onDelete()
                     }
                 },
                 modifier = panelContentModifier
@@ -55,4 +56,20 @@ fun DeleteableIngredient(
         }
     )
 
+}
+
+@Preview
+@Composable
+private fun DeleteableIngredientPreview() {
+    DeleteableIngredient(
+        ingredient = UiShoppingListIngredient(
+            id = 0,
+            shoppingListId = 0,
+            name = "Chicken",
+            amount = 100,
+            unit = MeasureUnit.GRAM.displayName,
+            imageUrl = "www.themealdb.com/images/ingredients/Chicken.png"
+        ),
+        onDelete = {},
+    )
 }

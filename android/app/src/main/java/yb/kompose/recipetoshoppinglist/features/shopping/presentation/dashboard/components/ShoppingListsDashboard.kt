@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,9 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
+import java.time.LocalDate
 
 data class ShoppingListsDashboardState(
-    val shoppingLists : List<UiShoppingList> = emptyList()
+    val shoppingLists: List<UiShoppingList> = emptyList()
 )
 
 @Composable
@@ -73,12 +75,28 @@ fun ShoppingListsDashboard(
 
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun ShoppingListsDashboardPreview() {
     ShoppingListsDashboard(
-        state = ShoppingListsDashboardState(),
+        state = ShoppingListsDashboardState(
+            shoppingLists = listOf(
+                UiShoppingList(
+                    id = 0,
+                    updatedDate = LocalDate.now(),
+                    ingredients = emptyList(),
+                    current = true
+                ),
+                UiShoppingList(
+                    id = 1,
+                    updatedDate = LocalDate.now(),
+                    ingredients = emptyList(),
+                    current = false
+                )
+            )
+        ),
         onCreateNewList = {},
-        onClickShoppingList = {}
+        onClickShoppingList = {},
+        modifier = Modifier.fillMaxSize()
     )
 }
