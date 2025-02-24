@@ -22,37 +22,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.AddShoppingIngredientPanelState
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddIngredientViewModel
 
 @Composable
 fun AddShoppingIngredientPanel(
-    viewModel: AddIngredientViewModel = koinViewModel(),
-    modifier: Modifier = Modifier,
-    shoppingListId: Long,
-    onBackPressed: () -> Unit
+    state: AddShoppingIngredientPanelState,
+    onIngredientSelected: (SelectionIngredient) -> Unit,
+    onIngredientAmountChanged: (String) -> Unit,
+    onIngredientUnitChanged: (String) -> Unit,
+    onSubmitIngredient: () -> Unit,
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
-    val ingredients = viewModel.ing.collectAsStateWithLifecycle().value
-    val ingredientsAreLoading = viewModel.ingLoading.collectAsStateWithLifecycle().value
-    val unitsStr = viewModel.unitsStr.collectAsStateWithLifecycle().value
-    val ingredientToAdd = viewModel.ingredientToAdd.collectAsStateWithLifecycle().value
-
-    LaunchedEffect(shoppingListId) {
-        viewModel.updateIngredient(shoppingListId = shoppingListId)
-    }
-
     Column(
         modifier = modifier.padding(16.dp)
     ) {
@@ -62,11 +52,13 @@ fun AddShoppingIngredientPanel(
                 .padding(bottom = 16.dp),
             title = stringResource(R.string.add_ingredient_title)
         )
+        val selectedIngredientText = state.ingredientToAdd.selectedIngredient?.name
+            ?: stringResource(R.string.nothing)
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(
                 R.string.selected_ingredient,
-                ingredientToAdd.selectedIngredient?.name ?: stringResource(R.string.nothing)
+                selectedIngredientText
             )
         )
         LazyColumn(
@@ -77,7 +69,7 @@ fun AddShoppingIngredientPanel(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            when (ingredientsAreLoading) {
+            when (state.areIngredientsLoading) {
                 true -> {
                     item {
                         Box(
@@ -90,16 +82,14 @@ fun AddShoppingIngredientPanel(
                 }
 
                 false -> {
-                    items(ingredients) { ingredient ->
-                        ShoppingIngredient(
-                            modifier = Modifier.fillMaxWidth(),
-                            ingredient = ingredient,
-                            onClick = {
-                                viewModel.updateIngredient(
-                                    selectedIngredient = ingredient
-                                )
-                            }
-                        )
+                    state.ingredients?.let { ingredients ->
+                        items(ingredients) { ingredient ->
+                            ShoppingIngredient(
+                                modifier = Modifier.fillMaxWidth(),
+                                ingredient = ingredient,
+                                onClick = { onIngredientSelected(ingredient) }
+                            )
+                        }
                     }
                 }
             }
@@ -116,33 +106,33 @@ fun AddShoppingIngredientPanel(
         ) {
             TextField(
                 modifier = Modifier.weight(1f),
-                value = ingredientToAdd.amount.toString(),
-                onValueChange = { viewModel.updateIngredient(amount = viewModel.amountToString(it)) },
+                value = state.ingredientToAdd.amount.toString(),
+                onValueChange = onIngredientAmountChanged,
                 suffix = {
                     Text(
-                        text = ingredientToAdd.unit
+                        text = state.ingredientToAdd.unit
                     )
                 }
             )
-            LongDropDownMenu(
-                menuItemData = unitsStr,
-                onItemClick = { unit ->
-                    viewModel.updateIngredient(unit = unit)
-                }
-            )
+            state.units?.let { units ->
+                LongDropDownMenu(
+                    menuItemData = units,
+                    onItemClick = onIngredientUnitChanged
+                )
+            }
         }
 
-        Button(
-            onClick = {
-                if (viewModel.isIngredientValid()) {
-                    viewModel.addIngredientToShoppingList()
+        if (state.isIngredientToAddValid) {
+            Button(
+                onClick = {
+                    onSubmitIngredient()
                     onBackPressed()
                 }
+            ) {
+                Text(
+                    text = stringResource(R.string.add_to_shopping_list)
+                )
             }
-        ) {
-            Text(
-                text = stringResource(R.string.add_to_shopping_list)
-            )
         }
     }
 
