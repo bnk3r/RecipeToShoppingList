@@ -23,7 +23,7 @@ import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.SwipeableState
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
-import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.Red
+import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.RedLight
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.dpToPx
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.pxToDp
 import kotlin.math.roundToInt
@@ -54,13 +54,13 @@ fun HorizontalSwipeablePanel(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(backContainerWidth.roundToInt().pxToDp())
-                    .background(Red)
+                    .background(RedLight)
             )
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(backContainerWidth.roundToInt().pxToDp())
-                    .background(Red)
+                    .background(RedLight)
             ) {
                 backContent(swipeableState)
             }

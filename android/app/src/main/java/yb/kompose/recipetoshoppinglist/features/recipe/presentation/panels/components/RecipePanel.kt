@@ -14,61 +14,48 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.AddIngredientPanel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.RecipeIngredient
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipePanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.models.RecipePanelState
 
 @Composable
 fun RecipePanel(
-    viewModel: RecipePanelViewModel = koinViewModel(),
-    recipeId: Long?,
+    state: RecipePanelState,
+    onIngredientToAddChanged: (UiIngredient?) -> Unit,
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val recipe = viewModel.recipe.collectAsStateWithLifecycle().value
-    val recipeIsLoading = viewModel.recipeIsLoading.collectAsStateWithLifecycle().value
-
-    var ingredientToAdd by remember { mutableStateOf<UiIngredient?>(null) }
-
-    LaunchedEffect(recipeId) {
-        recipeId?.let { id ->
-            viewModel.getRecipe(id)
-        }
-    }
-
     Box(
         modifier = modifier
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            recipe?.let { r ->
+            state.recipe?.let { recipe ->
                 item {
                     CachedAsyncImage(
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(16f / 9f),
-                        url = r.imgUrl,
-                        title = r.title
+                        url = recipe.imgUrl,
+                        title = recipe.title
                     )
                 }
                 item {
                     Text(
-                        text = r.title,
+                        text = recipe.title,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
@@ -77,7 +64,7 @@ fun RecipePanel(
                     )
                 }
                 item {
-                    val instructions = r.instructions ?: return@item
+                    val instructions = recipe.instructions ?: return@item
                     Text(
                         text = instructions,
                         textAlign = TextAlign.Center,
@@ -88,7 +75,7 @@ fun RecipePanel(
                     )
 
                 }
-                if (r.ingredients.isNotEmpty()) {
+                if (recipe.ingredients.isNotEmpty()) {
                     item {
                         SectionTitle(
                             title = stringResource(R.string.ingredients),
@@ -100,19 +87,17 @@ fun RecipePanel(
                                 .fillMaxWidth()
                                 .padding(16.dp),
                         ) {
-                            r.ingredients.forEachIndexed { i, ingredient ->
+                            recipe.ingredients.forEachIndexed { i, ingredient ->
                                 Column(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     RecipeIngredient(
                                         ingredient = ingredient,
-                                        addToShoppingList = {
-                                            ingredientToAdd = it
-                                        },
+                                        addToShoppingList = onIngredientToAddChanged,
                                         modifier = Modifier.fillMaxWidth()
                                     )
-                                    if (i < r.ingredients.lastIndex) {
+                                    if (i < recipe.ingredients.lastIndex) {
                                         HorizontalDivider(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -127,7 +112,7 @@ fun RecipePanel(
                 }
             }
 
-            if (recipeIsLoading) {
+            if (state.isRecipeLoading) {
                 item {
                     Box(
                         modifier = Modifier
@@ -142,19 +127,62 @@ fun RecipePanel(
 
         }
 
+        val addIngredientPanelViewModel = koinViewModel<AddIngredientPanelViewModel>()
+        val addIngredientPanelState =
+            addIngredientPanelViewModel.state.collectAsStateWithLifecycle().value
+
         AddIngredientPanel(
-            visible = ingredientToAdd != null,
-            ingredientToAdd = ingredientToAdd,
-            onBackPressed = {
-                ingredientToAdd = null
+            state = addIngredientPanelState,
+            visible = state.isAddIngredientPanelVisible,
+            ingredientToAdd = state.ingredientToAdd,
+            onRegisterIngredientToAdd = {
+                addIngredientPanelViewModel.updateIngredientToAdd(it)
             },
+            onRefIngredientChanged = {
+                addIngredientPanelViewModel.updateRefIngredient(it)
+            },
+            onBackPressed = { onIngredientToAddChanged(null) },
             modifier = Modifier.fillMaxSize()
         )
     }
 
     BackHandler {
-        viewModel.clearRecipeJob()
         onBackPressed()
     }
 
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RecipePanelPreview() {
+    RecipePanel(
+        state = RecipePanelState(
+            recipeId = 52781,
+            isRecipeLoading = false,
+            getRecipeJob = null,
+            ingredientToAdd = null,
+            isAddIngredientPanelVisible = false,
+            recipe = UiRecipe(
+                id = 52781,
+                title = "Irish stew",
+                instructions = "Heat the oven to 180C/350F/gas mark 4. Drain and rinse the soaked wheat, put it in a medium pan with lots of water, bring to a boil and simmer for an hour, until cooked. Drain and set aside.\\r\\n\\r\\nSeason the lamb with a teaspoon of salt and some black pepper. Put one tablespoon of oil in a large, deep sauté pan for which you have a lid; place on a medium-high heat. Add some of the lamb – don't overcrowd the pan – and sear for four minutes on all sides. Transfer to a bowl, and repeat with the remaining lamb, adding oil as needed.\\r\\n\\r\\nLower the heat to medium and add a tablespoon of oil to the pan.",
+                ingredients = listOf(
+                    UiIngredient(
+                        name = "whole wheat",
+                        amount = "300g soaked overnight in water",
+                        imgUrl = "www.themealdb.com/images/ingredients/whole wheat.png",
+                        thumbnailUrl = "www.themealdb.com/images/ingredients/whole wheat-Small.png"
+                    )
+                ),
+                imgUrl = "https://www.themealdb.com/images/media/meals/sxxpst1468569714.jpg",
+                thumbnailUrl = "https://www.themealdb.com/images/media/meals/sxxpst1468569714.jpg",
+                recipeUrl = null,
+                category = "Beef",
+                area = "Irish"
+            )
+        ),
+        onBackPressed = {},
+        onIngredientToAddChanged = {},
+        modifier = Modifier.fillMaxSize()
+    )
 }

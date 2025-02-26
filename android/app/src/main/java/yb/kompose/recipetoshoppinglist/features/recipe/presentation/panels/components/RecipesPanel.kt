@@ -2,6 +2,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.comp
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,29 +15,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material.CircularProgressIndicator
-import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.CategoriesRow
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.models.RecipesPanelState
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.components.RecipeSearchBarSection
 
 @Composable
 fun RecipesPanel(
-    viewModel: RecipesPanelViewModel = koinViewModel(),
-    showRecipeDetails: (id: Long) -> Unit,
+    state: RecipesPanelState,
+    onRecipeSearchQueryChanged: (String) -> Unit,
+    onSelectedCategoryChanged: (UiCategory) -> Unit,
+    onClickRecipe: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val configuration = LocalConfiguration.current
     val recipeItemSize = configuration.screenWidthDp.dp / 3
-
-    val categories = viewModel.categories.collectAsStateWithLifecycle().value
-    val selectedCategory = viewModel.selectedCategory.collectAsStateWithLifecycle().value
-    val recipes = viewModel.recipes.collectAsStateWithLifecycle().value
-    val recipesAreLoading = viewModel.recipesAreLoading.collectAsStateWithLifecycle().value
-    val queryRecipe = viewModel.queryRecipe.collectAsStateWithLifecycle().value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -47,20 +44,16 @@ fun RecipesPanel(
             span = { GridItemSpan(3) }
         ) {
             RecipeSearchBarSection(
-                query = queryRecipe,
-                onQueryChange = {
-                    viewModel.updateQueryRecipe(it)
-                },
-                onSearch = {
-                    viewModel.updateQueryRecipe(it)
-                },
+                query = state.searchQuery,
+                onQueryChange = onRecipeSearchQueryChanged,
+                onSearch = onRecipeSearchQueryChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
         }
 
-        // RECIPE CATEGORIES
+        // CATEGORIES
         item(
             span = { GridItemSpan(3) }
         ) {
@@ -68,28 +61,13 @@ fun RecipesPanel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp),
-                categories = categories,
-                selectedCategory = selectedCategory,
-                onCategorySelected = { category ->
-                    viewModel.updateSelectedCategory(category)
-                }
+                categories = state.categories,
+                selectedCategory = state.selectedCategory,
+                onCategorySelected = onSelectedCategoryChanged
             )
         }
 
-        // RECIPES
-        items(recipes) { recipe ->
-            CachedAsyncImage(
-                modifier = Modifier
-                    .size(recipeItemSize)
-                    .padding(16.dp)
-                    .clickable { showRecipeDetails(recipe.id) },
-                url = recipe.imgUrl,
-                title = recipe.title
-            )
-        }
-
-        // LOADING
-        if (recipesAreLoading) {
+        if (state.areRecipesLoading) {
             item(
                 span = { GridItemSpan(3) }
             ) {
@@ -102,7 +80,39 @@ fun RecipesPanel(
                     CircularProgressIndicator()
                 }
             }
+        } else {
+            state.recipes?.let { recipes ->
+                items(recipes) { recipe ->
+                    CachedAsyncImage(
+                        modifier = Modifier
+                            .size(recipeItemSize)
+                            .padding(16.dp)
+                            .clickable { onClickRecipe(recipe.id) },
+                        url = recipe.imgUrl,
+                        title = recipe.title
+                    )
+                }
+            }
         }
     }
 
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RecipesPanelPreview() {
+    RecipesPanel(
+        state = RecipesPanelState(
+            categories = listOf(
+                UiCategory(
+                    name = "Beef",
+                    imageUrl = ""
+                )
+            )
+        ),
+        onRecipeSearchQueryChanged = {},
+        onSelectedCategoryChanged = {},
+        onClickRecipe = {},
+        modifier = Modifier.fillMaxSize()
+    )
 }

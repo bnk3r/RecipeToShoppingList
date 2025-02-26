@@ -27,39 +27,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.models.AddIngredientPanelState
 
 @Composable
 fun AddIngredientPanel(
-    viewModel: AddIngredientPanelViewModel = koinViewModel(),
-    modifier: Modifier = Modifier,
+    state: AddIngredientPanelState,
     visible: Boolean,
     ingredientToAdd: UiIngredient?,
-    onBackPressed: () -> Unit
+    onRegisterIngredientToAdd: (UiIngredient) -> Unit,
+    onRefIngredientChanged: (UiIngredient) -> Unit,
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
-    val refs = viewModel.refIngredients.collectAsStateWithLifecycle().value
-    val refsAreLoading = viewModel.refIngredientsAreLoading.collectAsStateWithLifecycle().value
-    val refIngredient = viewModel.refIngredient.collectAsStateWithLifecycle().value
-
     LaunchedEffect(ingredientToAdd) {
-        ingredientToAdd?.name?.let {
-            viewModel.collectRefIngredients(it)
-        }
+        ingredientToAdd?.let { onRegisterIngredientToAdd(it) }
     }
 
     SlideEndPanel(
         modifier = modifier.background(MaterialTheme.colorScheme.surface),
         visible = visible
     ) {
-        ingredientToAdd?.let { ingredient ->
+        state.ingredientToAdd?.let { ingredient ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -113,7 +107,7 @@ fun AddIngredientPanel(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    when (refsAreLoading) {
+                    when (state.areRefIngredientsLoading) {
                         true -> {
                             item {
                                 Box(
@@ -126,15 +120,17 @@ fun AddIngredientPanel(
                         }
 
                         false -> {
-                            items(refs) { i ->
-                                RefIngredient(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    ingredient = i,
-                                    selected = refIngredient == i,
-                                    onClick = {
-                                        viewModel.updateRefIngredient(i)
-                                    }
-                                )
+                            state.refIngredients?.let { ingredients ->
+                                items(ingredients) { refIngredient ->
+                                    RefIngredient(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        ingredient = refIngredient,
+                                        selected = state.refIngredient == refIngredient,
+                                        onClick = {
+                                            onRefIngredientChanged(refIngredient)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
