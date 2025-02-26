@@ -16,11 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.models.ShoppingListsDashboardState
 import java.time.LocalDate
-
-data class ShoppingListsDashboardState(
-    val shoppingLists: List<UiShoppingList> = emptyList()
-)
 
 @Composable
 fun ShoppingListsDashboard(

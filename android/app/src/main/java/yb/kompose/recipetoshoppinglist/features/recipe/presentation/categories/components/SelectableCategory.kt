@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
@@ -60,4 +61,15 @@ fun SelectableCategory(
             modifier = Modifier.padding(top = 4.dp)
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SelectableCategoryPreview() {
+    val beef = UiCategory("beef", "")
+    SelectableCategory(
+        category = beef,
+        selected = true,
+        onClick = {}
+    )
 }

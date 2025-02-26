@@ -18,9 +18,9 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredien
 
 @Composable
 fun RecipeIngredient(
-    modifier: Modifier = Modifier,
     ingredient: UiIngredient,
-    addToShoppingList: (ingredient: UiIngredient) -> Unit
+    addToShoppingList: (ingredient: UiIngredient) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,

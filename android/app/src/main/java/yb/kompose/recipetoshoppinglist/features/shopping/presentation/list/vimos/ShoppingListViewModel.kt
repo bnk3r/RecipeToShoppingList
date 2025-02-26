@@ -36,9 +36,7 @@ class ShoppingListViewModel(
         .map { it.shoppingListId }
         .filterNotNull()
         .filter { it != -1L }
-        .onEach {
-            getShoppingList(it)
-        }
+        .onEach { getShoppingList(it) }
         .launchIn(viewModelScope)
 
     private fun observeShoppingListForLoadingState() = state
@@ -69,7 +67,6 @@ class ShoppingListViewModel(
         val shoppingList = _state.value.shoppingList ?: return@launch
         deleteIngredientUseCase(shoppingList, ingredient)
     }
-
 
     fun updateAddIngredientPanelVisibility(visible: Boolean) {
         _state.update { it.copy(isAddIngredientPanelVisible = visible) }

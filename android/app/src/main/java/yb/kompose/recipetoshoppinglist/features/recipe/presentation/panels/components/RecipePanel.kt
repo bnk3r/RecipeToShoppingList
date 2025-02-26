@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
@@ -27,6 +29,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredien
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.AddIngredientPanel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.RecipeIngredient
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.models.RecipePanelState
 
 @Composable
@@ -36,7 +39,6 @@ fun RecipePanel(
     onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Box(
         modifier = modifier
     ) {
@@ -125,9 +127,20 @@ fun RecipePanel(
 
         }
 
+        val addIngredientPanelViewModel = koinViewModel<AddIngredientPanelViewModel>()
+        val addIngredientPanelState =
+            addIngredientPanelViewModel.state.collectAsStateWithLifecycle().value
+
         AddIngredientPanel(
+            state = addIngredientPanelState,
             visible = state.isAddIngredientPanelVisible,
             ingredientToAdd = state.ingredientToAdd,
+            onRegisterIngredientToAdd = {
+                addIngredientPanelViewModel.updateIngredientToAdd(it)
+            },
+            onRefIngredientChanged = {
+                addIngredientPanelViewModel.updateRefIngredient(it)
+            },
             onBackPressed = { onIngredientToAddChanged(null) },
             modifier = Modifier.fillMaxSize()
         )

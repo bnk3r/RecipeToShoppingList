@@ -17,45 +17,36 @@ class ShoppingScreenViewModel : ViewModel() {
     val state = _state.asStateFlow()
 
     init {
-        state
-            .distinctUntilChangedBy { it.recipeDetailedId }
-            .map { it.recipeDetailedId != null }
-            .onEach { isRecipeDetailedNotNull ->
-                _state.update {
-                    it.copy(
-                        isRecipePanelVisible = isRecipeDetailedNotNull
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+        observeRecipeIdForPanelVisibility()
+        observeShoppingListIdForPanelVisibility()
+    }
 
-        state
-            .distinctUntilChangedBy { it.selectedShoppingListId }
-            .map { it.selectedShoppingListId != null }
-            .onEach { isSelectedShoppingListIdNotNull ->
-                _state.update {
-                    it.copy(
-                        isShoppingListPanelVisible = isSelectedShoppingListIdNotNull
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
+    private fun observeRecipeIdForPanelVisibility() = state
+        .distinctUntilChangedBy { it.recipeDetailedId }
+        .map { it.recipeDetailedId != null }
+        .onEach { updateRecipePanelVisibility(it) }
+        .launchIn(viewModelScope)
+
+    private fun observeShoppingListIdForPanelVisibility() = state
+        .distinctUntilChangedBy { it.selectedShoppingListId }
+        .map { it.selectedShoppingListId != null }
+        .onEach { updateShoppingListPanelVisibility(it) }
+        .launchIn(viewModelScope)
+
+    private fun updateRecipePanelVisibility(isVisible: Boolean) {
+        _state.update { it.copy(isRecipePanelVisible = isVisible) }
+    }
+
+    private fun updateShoppingListPanelVisibility(isVisible: Boolean) {
+        _state.update { it.copy(isShoppingListPanelVisible = isVisible) }
     }
 
     fun updateSelectedShoppingListId(id: Long?) {
-        _state.update {
-            it.copy(
-                selectedShoppingListId = id
-            )
-        }
+        _state.update { it.copy(selectedShoppingListId = id) }
     }
 
     fun updateRecipeDetailedId(id: Long?) {
-        _state.update {
-            it.copy(
-                recipeDetailedId = id
-            )
-        }
+        _state.update { it.copy(recipeDetailedId = id) }
     }
 
 }
