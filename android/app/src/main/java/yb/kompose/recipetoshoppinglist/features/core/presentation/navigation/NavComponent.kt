@@ -20,7 +20,7 @@ fun NavComponent(
 
     NavHost(
         navController = navController,
-        startDestination = TestDesignDestination,
+        startDestination = ShoppingDestination,
         modifier = modifier
     ) {
         composable<ShoppingDestination> {
@@ -38,10 +38,6 @@ fun NavComponent(
                 },
                 modifier = Modifier.fillMaxSize()
             )
-        }
-
-        composable<TestDesignDestination> {
-            TestDesign()
         }
     }
 }
