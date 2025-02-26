@@ -3,12 +3,10 @@ package yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.mo
 import kotlinx.serialization.Serializable
 
 @Serializable
+object ShoppingListsDestination
+
+@Serializable
 object RecipesDestination
 
 @Serializable
-data class RecipeDestination(
-    val id: Int
-)
-
-@Serializable
-object ShoppingDestination
+object ProfileDestination

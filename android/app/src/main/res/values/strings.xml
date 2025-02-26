@@ -17,4 +17,7 @@
     <string name="nothing">Nothing</string>
     <string name="add_this_ingredient">Add this ingredient :</string>
     <string name="name">Name</string>
+    <string name="shopping_lists">Shopping Lists</string>
+    <string name="recipes">Recipes</string>
+    <string name="profile">Profile</string>
 </resources>
