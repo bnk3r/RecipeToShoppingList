@@ -1,28 +1,31 @@
 package yb.kompose.recipetoshoppinglist.features.core.di
 
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.vimos.CategoryViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeViewModel
+import yb.kompose.recipetoshoppinglist.activities.MainViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.GetIngredientsByNameUseCase
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipePanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingScreenViewModel
 
-fun provideCategoryViewModel(getRecipeCategoriesUseCase: GetRecipeCategoriesUseCase) =
-    CategoryViewModel(getRecipeCategoriesUseCase)
-
-fun provideRecipeViewModel(
-    getRecipesForCategoryUseCase: GetRecipesForCategoryUseCase,
-    getRecipesByQueryUseCase: GetRecipesByQueryUseCase,
-    getRecipeDetailedUseCase: GetRecipeDetailedUseCase
-) = RecipeViewModel(
-    getRecipesForCategoryUseCase,
-    getRecipesByQueryUseCase,
-    getRecipeDetailedUseCase
+fun provideAddIngredientPanelViewModel(
+    getIngredientsByNameUseCase: GetIngredientsByNameUseCase
+) = AddIngredientPanelViewModel(
+    getIngredientsByNameUseCase
 )
 
 val viewModelModule = module {
-    viewModel { provideCategoryViewModel(get()) }
-    viewModel { provideRecipeViewModel(get(), get(), get()) }
+    viewModelOf(::MainViewModel)
+    viewModelOf(::ShoppingScreenViewModel)
+    viewModelOf(::ShoppingListsDashboardViewModel)
+    viewModelOf(::RecipesPanelViewModel)
+    viewModelOf(::RecipePanelViewModel)
+    viewModelOf(::ShoppingListViewModel)
+    viewModelOf(::AddShoppingIngredientPanelViewModel)
+    viewModel { provideAddIngredientPanelViewModel(get()) }
 }

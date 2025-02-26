@@ -2,10 +2,20 @@ package yb.kompose.recipetoshoppinglist.features.core.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val GrayLight = Color(0xffD5D5D5)
+val GrayMedium = Color(0xffB4B4B4)
+val GrayDark = Color(0xff787878)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val White = Color(0xffFFFFFF)
+val Black = Color(0xff282828)
+
+val OrangeLight = Color(0xffE9C1AC)
+val OrangeDark = Color(0xffD2673F)
+
+val GreenLight = Color(0xffA3B6AC)
+val GreenDark = Color(0xff5D9A72)
+
+val RedLight = Color(0xffDA5050)
+val RedDark = Color(0xffBA4646)
+
+val Yellow = Color(0xffCEA33D)
