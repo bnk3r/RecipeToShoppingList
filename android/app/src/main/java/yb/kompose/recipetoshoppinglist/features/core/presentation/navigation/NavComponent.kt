@@ -8,9 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import org.koin.compose.koinInject
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ProfileDestination
@@ -35,9 +38,24 @@ fun NavComponent(
         bottomBar = {
             BottomNavBar(
                 navController = navController,
-                onClickShoppingLists = { navController.navigate(ShoppingListsDestination) },
-                onClickRecipes = { navController.navigate(RecipesDestination) },
-                onClickProfile = { navController.navigate(ProfileDestination) },
+                onClickShoppingLists = {
+                    navController.navigate(
+                        ShoppingListsDestination,
+                        navOptions { popUpTo<ShoppingListsDestination> { inclusive = true } }
+                    )
+                },
+                onClickRecipes = {
+                    navController.navigate(
+                        RecipesDestination,
+                        navOptions { popUpTo<RecipesDestination> { inclusive = true } }
+                    )
+                },
+                onClickProfile = {
+                    navController.navigate(
+                        ProfileDestination,
+                        navOptions { popUpTo<ProfileDestination> { inclusive = true } }
+                    )
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
