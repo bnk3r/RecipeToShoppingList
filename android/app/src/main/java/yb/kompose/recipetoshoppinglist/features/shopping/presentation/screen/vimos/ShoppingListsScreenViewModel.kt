@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingScreenState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingListsScreenState
 
-class ShoppingScreenViewModel : ViewModel() {
+class ShoppingListsScreenViewModel : ViewModel() {
 
-    private val _state = MutableStateFlow(ShoppingScreenState())
+    private val _state = MutableStateFlow(ShoppingListsScreenState())
     val state = _state.asStateFlow()
 
     init {

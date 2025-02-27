@@ -11,9 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
+import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ProfileDestination
+import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.RecipesDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListsDestination
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingScreen
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.profile.presentation.screen.components.ProfileScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components.RecipesScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingListsScreen
 
 @Composable
 fun NavComponent(
@@ -25,9 +30,9 @@ fun NavComponent(
         bottomBar = {
             BottomNavBar(
                 navController = navController,
-                onClickShoppingLists = {},
-                onClickRecipes = {},
-                onClickProfile = {},
+                onClickShoppingLists = { navController.navigate(ShoppingListsDestination) },
+                onClickRecipes = { navController.navigate(RecipesDestination) },
+                onClickProfile = { navController.navigate(ProfileDestination) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -39,18 +44,38 @@ fun NavComponent(
             modifier = modifier.padding(innerPadding)
         ) {
             composable<ShoppingListsDestination> {
-                val shoppingScreenViewModel = koinInject<ShoppingScreenViewModel>()
-                val shoppingScreenState =
-                    shoppingScreenViewModel.state.collectAsStateWithLifecycle().value
+                val shoppingListsDashboardViewModel = koinInject<ShoppingListsDashboardViewModel>()
+                val shoppingListsDashboardState =
+                    shoppingListsDashboardViewModel.state.collectAsStateWithLifecycle().value
+                ShoppingListsScreen(
+                    state = shoppingListsDashboardState,
+                    onClickAddNewList = {
+                        shoppingListsDashboardViewModel.addNewListAsCurrent()
+                    },
+                    onSelectedShoppingListIdChanged = { /* TODO */ },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
 
-                ShoppingScreen(
-                    state = shoppingScreenState,
-                    onRecipeDetailedIdChanged = {
-                        shoppingScreenViewModel.updateRecipeDetailedId(it)
+            composable<RecipesDestination> {
+                val recipesScreenViewModel = koinInject<RecipesScreenViewModel>()
+                val recipesScreenState =
+                    recipesScreenViewModel.state.collectAsStateWithLifecycle().value
+                RecipesScreen(
+                    state = recipesScreenState,
+                    onRecipeSearchQueryChanged = {
+                        recipesScreenViewModel.updateQueryRecipe(it)
                     },
-                    onSelectedShoppingListIdChanged = {
-                        shoppingScreenViewModel.updateSelectedShoppingListId(it)
+                    onSelectedCategoryChanged = {
+                        recipesScreenViewModel.updateSelectedCategory(it)
                     },
+                    onClickRecipe = { /* TODO */ },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            composable<ProfileDestination> {
+                ProfileScreen(
                     modifier = Modifier.fillMaxSize()
                 )
             }

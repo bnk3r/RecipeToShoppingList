@@ -8,10 +8,11 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converte
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos.AddIngredientPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipePanelViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos.RecipesPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingListsScreenViewModel
 
 fun provideAddIngredientPanelViewModel(
     getIngredientsByNameUseCase: GetIngredientsByNameUseCase
@@ -21,7 +22,8 @@ fun provideAddIngredientPanelViewModel(
 
 val viewModelModule = module {
     viewModelOf(::MainViewModel)
-    viewModelOf(::ShoppingScreenViewModel)
+    viewModelOf(::ShoppingListsScreenViewModel)
+    viewModelOf(::RecipesScreenViewModel)
     viewModelOf(::ShoppingListsDashboardViewModel)
     viewModelOf(::RecipesPanelViewModel)
     viewModelOf(::RecipePanelViewModel)
