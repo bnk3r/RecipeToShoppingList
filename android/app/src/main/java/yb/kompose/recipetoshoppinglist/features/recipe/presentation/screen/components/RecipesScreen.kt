@@ -85,7 +85,9 @@ fun RecipesScreen(
                         modifier = Modifier
                             .size(recipeItemSize)
                             .padding(16.dp)
-                            .clickable { onClickRecipe(recipe.id) },
+                            .clickable {
+                                onClickRecipe(recipe.id)
+                            },
                         url = recipe.imgUrl,
                         title = recipe.title
                     )
