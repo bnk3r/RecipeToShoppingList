@@ -8,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,6 +17,7 @@ import org.koin.compose.koinInject
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ProfileDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.RecipeDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.RecipesDestination
+import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListsDestination
 import yb.kompose.recipetoshoppinglist.features.profile.presentation.screen.components.ProfileScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components.RecipeScreen
@@ -26,7 +25,9 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.compo
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipeScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingListsScreen
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingListScreenViewModel
 
 @Composable
 fun NavComponent(
@@ -75,7 +76,9 @@ fun NavComponent(
                     onClickAddNewList = {
                         shoppingListsDashboardViewModel.addNewListAsCurrent()
                     },
-                    onSelectedShoppingListIdChanged = { /* TODO */ },
+                    onClickShoppingList = {
+                        navController.navigate(ShoppingListDestination(id = it))
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -102,6 +105,27 @@ fun NavComponent(
             composable<ProfileDestination> {
                 ProfileScreen(
                     modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            composable<ShoppingListDestination> {
+                val id = it.toRoute<ShoppingListDestination>().id
+                val shoppingListScreenViewModel = koinInject<ShoppingListScreenViewModel>()
+                val shoppingListScreenState =
+                    shoppingListScreenViewModel.state.collectAsStateWithLifecycle().value
+
+                LaunchedEffect(id) {
+                    shoppingListScreenViewModel.updateShoppingListId(id)
+                }
+
+                ShoppingListScreen(
+                    state = shoppingListScreenState,
+                    onAddIngredientPanelVisibilityChanged = {
+                        shoppingListScreenViewModel.updateAddIngredientPanelVisibility(it)
+                    },
+                    onDeleteIngredient = {
+                        shoppingListScreenViewModel.deleteIngredient(it)
+                    }
                 )
             }
 

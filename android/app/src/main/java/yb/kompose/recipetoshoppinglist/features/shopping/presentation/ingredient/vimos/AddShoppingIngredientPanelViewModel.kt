@@ -20,6 +20,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingred
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.AddShoppingIngredientPanelState
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.IngredientToAdd
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
+import java.lang.Exception
 
 class AddShoppingIngredientPanelViewModel(
     private val getIngredientsUseCase: GetIngredientsUseCase,
@@ -134,7 +135,11 @@ class AddShoppingIngredientPanelViewModel(
     private fun sanitizeInputToInt(value: String): Int {
         val amountStr = value.trim()
         if (amountStr.isBlank()) return 0
-        return Regex("[^A-Za-z0-9 ]").replace(amountStr, "").toInt()
+        return try {
+            amountStr.toInt()
+        } catch (e: Exception) {
+            0
+        }
     }
 
     fun updateIngredientToAdd(ingredient: SelectionIngredient) {

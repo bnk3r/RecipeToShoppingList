@@ -22,7 +22,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.
 @Composable
 fun ShoppingListsScreen(
     state: ShoppingListsDashboardState,
-    onSelectedShoppingListIdChanged: (Long?) -> Unit,
+    onClickShoppingList: (Long) -> Unit,
     onClickAddNewList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +47,7 @@ fun ShoppingListsScreen(
             ShoppingListDashboardItem(
                 modifier = Modifier.aspectRatio(1f),
                 shoppingList = list,
-                onClick = { onSelectedShoppingListIdChanged(list.id) }
+                onClick = { onClickShoppingList(list.id) }
             )
         }
         item(
@@ -68,7 +68,7 @@ private fun ShoppingScreenPreview() {
     ShoppingListsScreen(
         state = ShoppingListsDashboardState(),
         onClickAddNewList = {},
-        onSelectedShoppingListIdChanged = {},
+        onClickShoppingList = {},
         modifier = Modifier.fillMaxSize()
     )
 }

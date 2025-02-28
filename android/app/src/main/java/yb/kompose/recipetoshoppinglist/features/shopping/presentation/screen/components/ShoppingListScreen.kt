@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -31,15 +31,14 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.AddShoppingIngredientPanel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.DeleteableIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.models.ShoppingListState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingListScreenState
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ShoppingList(
-    state: ShoppingListState,
+fun ShoppingListScreen(
+    state: ShoppingListScreenState,
     onDeleteIngredient: (UiShoppingListIngredient) -> Unit,
     onAddIngredientPanelVisibilityChanged: (Boolean) -> Unit,
-    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     state.shoppingList?.let { shoppingList ->
@@ -49,7 +48,6 @@ fun ShoppingList(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 120.dp)
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -139,21 +137,15 @@ fun ShoppingList(
 
         }
     }
-
-    BackHandler {
-        onBackPressed()
-    }
-
 }
 
 @Preview(showSystemUi = true, backgroundColor = 0xffffffff)
 @Composable
 private fun ShoppingListPreview() {
-    ShoppingList(
-        state = ShoppingListState(),
+    ShoppingListScreen(
+        state = ShoppingListScreenState(),
         onDeleteIngredient = {},
         onAddIngredientPanelVisibilityChanged = {},
-        onBackPressed = {}
     )
 }
 

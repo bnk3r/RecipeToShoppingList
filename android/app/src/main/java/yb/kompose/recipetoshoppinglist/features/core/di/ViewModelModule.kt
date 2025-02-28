@@ -12,7 +12,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos.ShoppingListViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingListScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingListsScreenViewModel
 
 fun provideAddIngredientPanelViewModel(
@@ -29,7 +29,7 @@ val viewModelModule = module {
     viewModelOf(::ShoppingListsDashboardViewModel)
     viewModelOf(::RecipesPanelViewModel)
     viewModelOf(::RecipePanelViewModel)
-    viewModelOf(::ShoppingListViewModel)
+    viewModelOf(::ShoppingListScreenViewModel)
     viewModelOf(::AddShoppingIngredientPanelViewModel)
     viewModel { provideAddIngredientPanelViewModel(get()) }
 }

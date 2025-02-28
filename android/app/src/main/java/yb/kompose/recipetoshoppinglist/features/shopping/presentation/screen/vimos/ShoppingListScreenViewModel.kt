@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.vimos
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,14 +16,14 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.list.models.ShoppingListState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingListScreenState
 
-class ShoppingListViewModel(
+class ShoppingListScreenViewModel(
     private val getShoppingListUseCase: GetShoppingListUseCase,
     private val deleteIngredientUseCase: DeleteIngredientUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ShoppingListState())
+    private val _state = MutableStateFlow(ShoppingListScreenState())
     val state = _state.asStateFlow()
 
     init {
