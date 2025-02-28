@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -19,9 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.CircularProgressIndicator
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.categories.components.CategoriesRow
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.models.RecipesScreenState
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.search.components.RecipeSearchBarSection
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipesScreenState
 
 @Composable
 fun RecipesScreen(

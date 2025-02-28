@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

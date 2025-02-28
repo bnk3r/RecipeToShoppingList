@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.update
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.models.RecipePanelState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipeScreenState
 
-class RecipePanelViewModel(
+class RecipeScreenViewModel(
     private val getRecipeDetailedUseCase: GetRecipeDetailedUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(RecipePanelState())
+    private val _state = MutableStateFlow(RecipeScreenState())
     val state = _state.asStateFlow()
 
     init {
@@ -31,9 +31,13 @@ class RecipePanelViewModel(
 
     private fun observeRecipeIdToGetRecipe() = state
         .distinctUntilChangedBy { it.recipeId }
-        .map { it.recipeId }
+        .map {
+            it.recipeId
+        }
         .filterNotNull()
-        .map { getRecipe(it) }
+        .map {
+            getRecipe(it)
+        }
         .onEach { updateGetRecipeJob(it) }
         .launchIn(viewModelScope)
 
@@ -51,11 +55,15 @@ class RecipePanelViewModel(
 
     private suspend fun getRecipe(id: Long) = getRecipeDetailedUseCase(id)
         .filterNotNull()
-        .onEach { updateRecipe(it) }
+        .onEach {
+            updateRecipe(it)
+        }
         .launchIn(viewModelScope)
 
     private fun updateRecipe(recipe: UiRecipe) {
-        _state.update { it.copy(recipe = recipe) }
+        _state.update {
+            it.copy(recipe = recipe)
+        }
     }
 
     private fun updateIsRecipeLoading(isLoading: Boolean) {

@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,8 +21,7 @@ import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.components.RecipeIngredient
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.models.RecipeScreenState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipeScreenState
 
 @Composable
 fun RecipeScreen(

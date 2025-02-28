@@ -20,10 +20,10 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.mod
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListsDestination
 import yb.kompose.recipetoshoppinglist.features.profile.presentation.screen.components.ProfileScreen
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components.RecipeScreen
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components.RecipesScreen
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipeScreenViewModel
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.RecipeScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.RecipesScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipesScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListsScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListScreenViewModel

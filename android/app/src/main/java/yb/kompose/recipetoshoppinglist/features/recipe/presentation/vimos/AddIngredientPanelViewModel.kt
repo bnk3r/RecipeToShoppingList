@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.vimos
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.GetIngredientsByNameUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.models.AddIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.AddIngredientPanelState
 
 class AddIngredientPanelViewModel(
     private val getIngredientsByNameUseCase: GetIngredientsByNameUseCase

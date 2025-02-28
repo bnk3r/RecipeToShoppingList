@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.vimos
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,15 +17,15 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.panels.models.RecipesPanelState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipesScreenState
 
-class RecipesPanelViewModel(
+class RecipesScreenViewModel(
     private val getCategoriesUseCase: GetRecipeCategoriesUseCase,
     private val getRecipesForCategoryUseCase: GetRecipesForCategoryUseCase,
     private val getRecipesByQueryUseCase: GetRecipesByQueryUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(RecipesPanelState())
+    private val _state = MutableStateFlow(RecipesScreenState())
     val state = _state.asStateFlow()
 
     init {

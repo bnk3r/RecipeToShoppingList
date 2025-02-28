@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.ingredients.models
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.models
 
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 
