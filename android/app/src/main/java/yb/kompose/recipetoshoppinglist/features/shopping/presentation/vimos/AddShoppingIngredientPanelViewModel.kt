@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,9 +17,9 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngre
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.AddShoppingIngredientPanelState
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.IngredientToAdd
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddShoppingIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 import java.lang.Exception
 
 class AddShoppingIngredientPanelViewModel(

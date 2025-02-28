@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 
 @Composable
-fun ShoppingListDashboardItem(
+fun ShoppingListItem(
     modifier: Modifier = Modifier,
     shoppingList: UiShoppingList,
     onClick: () -> Unit

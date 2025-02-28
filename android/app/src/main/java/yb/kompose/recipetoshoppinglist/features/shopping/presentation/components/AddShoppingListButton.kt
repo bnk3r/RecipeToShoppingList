@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
 
 @Composable
-fun ShoppingListsDashboardAddItemButton(
+fun AddShoppingListButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {

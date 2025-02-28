@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,14 +12,14 @@ import kotlinx.coroutines.launch
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListsUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.converters.AddCurrentShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.models.ShoppingListsDashboardState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.ShoppingListsScreenState
 
-class ShoppingListsDashboardViewModel(
+class ShoppingListsScreenViewModel(
     private val getShoppingListsUseCase: GetShoppingListsUseCase,
     private val addCurrentShoppingListUseCase: AddCurrentShoppingListUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ShoppingListsDashboardState())
+    private val _state = MutableStateFlow(ShoppingListsScreenState())
     val state = _state.asStateFlow()
 
     init {

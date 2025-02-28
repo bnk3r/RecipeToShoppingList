@@ -1,6 +1,5 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.components
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,10 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.slide_panel.SlideEndPanel
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.AddShoppingIngredientPanel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components.DeleteableIngredient
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.vimos.AddShoppingIngredientPanelViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingListScreenState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddShoppingIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.ShoppingListScreenState
 import java.time.format.DateTimeFormatter
 
 @Composable

@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui
 
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 

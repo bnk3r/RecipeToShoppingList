@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui
 
 data class SelectionIngredient(
     val name: String,

@@ -1,4 +1,7 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states
+
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
 data class AddShoppingIngredientPanelState(
     val shoppingListId: Long? = null,

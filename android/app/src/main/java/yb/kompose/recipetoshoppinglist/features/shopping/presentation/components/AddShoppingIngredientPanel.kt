@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.components
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
@@ -32,8 +32,8 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.components.ima
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.AddShoppingIngredientPanelState
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.ingredient.models.SelectionIngredient
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddShoppingIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
 @Composable
 fun AddShoppingIngredientPanel(

@@ -24,10 +24,10 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.compo
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.components.RecipesScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipeScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.screen.vimos.RecipesScreenViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.dashboard.vimos.ShoppingListsDashboardViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingListScreen
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.components.ShoppingListsScreen
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos.ShoppingListScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListScreen
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListsScreen
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListsScreenViewModel
 
 @Composable
 fun NavComponent(
@@ -68,13 +68,13 @@ fun NavComponent(
             modifier = modifier.padding(innerPadding)
         ) {
             composable<ShoppingListsDestination> {
-                val shoppingListsDashboardViewModel = koinInject<ShoppingListsDashboardViewModel>()
-                val shoppingListsDashboardState =
-                    shoppingListsDashboardViewModel.state.collectAsStateWithLifecycle().value
+                val shoppingListsScreenViewModel = koinInject<ShoppingListsScreenViewModel>()
+                val shoppingListsScreenState =
+                    shoppingListsScreenViewModel.state.collectAsStateWithLifecycle().value
                 ShoppingListsScreen(
-                    state = shoppingListsDashboardState,
+                    state = shoppingListsScreenState,
                     onClickAddNewList = {
-                        shoppingListsDashboardViewModel.addNewListAsCurrent()
+                        shoppingListsScreenViewModel.addNewListAsCurrent()
                     },
                     onClickShoppingList = {
                         navController.navigate(ShoppingListDestination(id = it))

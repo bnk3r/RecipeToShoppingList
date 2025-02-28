@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states
 
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingList
 

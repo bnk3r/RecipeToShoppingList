@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.vimos
+package yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +16,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.DeleteIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.shopping_lists.GetShoppingListUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.screen.models.ShoppingListScreenState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.ShoppingListScreenState
 
 class ShoppingListScreenViewModel(
     private val getShoppingListUseCase: GetShoppingListUseCase,
