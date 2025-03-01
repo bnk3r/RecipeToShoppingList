@@ -26,7 +26,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.Recip
 @Composable
 fun RecipeScreen(
     state: RecipeScreenState,
-    onIngredientToAddChanged: (UiIngredient) -> Unit,
+    onClickAddIngredientToShoppingList: (UiIngredient) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -83,7 +83,7 @@ fun RecipeScreen(
                             ) {
                                 RecipeIngredient(
                                     ingredient = ingredient,
-                                    addToShoppingList = onIngredientToAddChanged,
+                                    addToShoppingList = onClickAddIngredientToShoppingList,
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 if (i < recipe.ingredients.lastIndex) {

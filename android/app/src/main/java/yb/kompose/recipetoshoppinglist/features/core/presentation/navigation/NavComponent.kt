@@ -18,6 +18,7 @@ import androidx.navigation.navOptions
 import androidx.navigation.toRoute
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.AddIngredientFromRecipeDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.AddIngredientFromShoppingListDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ProfileDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.RecipeDestination
@@ -29,9 +30,11 @@ import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.R
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.RecipesScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipesScreenViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.AddIngredientFromRecipeScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.AddIngredientFromShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListsScreen
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientFromRecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientFromShoppingListViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListsScreenViewModel
@@ -148,14 +151,16 @@ fun NavComponent(
 
                 RecipeScreen(
                     state = recipeScreenState,
-                    onIngredientToAddChanged = { /* TODO */ },
+                    onClickAddIngredientToShoppingList = {
+                        navController.navigate(AddIngredientFromRecipeDestination(it))
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }
 
             composable<AddIngredientFromShoppingListDestination> { backStackEntry ->
                 val id =
-                    backStackEntry.toRoute<AddIngredientFromShoppingListDestination>().shoppingListId
+                    backStackEntry.toRoute<AddIngredientFromShoppingListDestination>().id
                 val addIngredientFromShoppingListViewModel =
                     koinViewModel<AddIngredientFromShoppingListViewModel>()
                 val addIngredientFromShoppingListState =
@@ -186,6 +191,19 @@ fun NavComponent(
                         .padding(vertical = 56.dp),
                 )
             }
+
+            composable<AddIngredientFromRecipeDestination> {
+                val addIngredientFromRecipeViewModel =
+                    koinInject<AddIngredientFromRecipeViewModel>()
+                val addIngredientFromRecipeState =
+                    addIngredientFromRecipeViewModel.state.collectAsStateWithLifecycle().value
+
+                AddIngredientFromRecipeScreen(
+                    state = addIngredientFromRecipeState,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
         }
     }
 

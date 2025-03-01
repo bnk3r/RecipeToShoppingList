@@ -1,6 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models
 
 import kotlinx.serialization.Serializable
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 
 @Serializable
 object ShoppingListsDestination
@@ -23,5 +24,10 @@ data class RecipeDestination(
 
 @Serializable
 data class AddIngredientFromShoppingListDestination(
-    val shoppingListId: Long
+    val id: Long
+)
+
+@Serializable
+data class AddIngredientFromRecipeDestination(
+    val ingredient: UiIngredient
 )
