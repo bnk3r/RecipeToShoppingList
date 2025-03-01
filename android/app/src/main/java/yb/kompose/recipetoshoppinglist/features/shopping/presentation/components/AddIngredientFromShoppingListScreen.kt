@@ -1,19 +1,15 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.components
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -28,21 +24,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddShoppingIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddIngredientFromShoppingListState
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
 @Composable
-fun AddShoppingIngredientPanel(
-    state: AddShoppingIngredientPanelState,
+fun AddIngredientFromShoppingListScreen(
+    state: AddIngredientFromShoppingListState,
     onIngredientSelected: (SelectionIngredient) -> Unit,
     onIngredientAmountChanged: (String) -> Unit,
     onIngredientUnitChanged: (String) -> Unit,
     onSubmitIngredient: () -> Unit,
-    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -86,7 +80,7 @@ fun AddShoppingIngredientPanel(
                 false -> {
                     state.ingredients?.let { ingredients ->
                         items(ingredients) { ingredient ->
-                            ShoppingIngredient(
+                            ChooseIngredientItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 ingredient = ingredient,
                                 onClick = { onIngredientSelected(ingredient) }
@@ -128,7 +122,6 @@ fun AddShoppingIngredientPanel(
             Button(
                 onClick = {
                     onSubmitIngredient()
-                    onBackPressed()
                 }
             ) {
                 Text(
@@ -138,62 +131,20 @@ fun AddShoppingIngredientPanel(
         }
     }
 
-    BackHandler {
-        onBackPressed()
-    }
-
-}
-
-@Composable
-fun ShoppingIngredient(
-    modifier: Modifier = Modifier,
-    ingredient: SelectionIngredient,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = modifier.clickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        CachedAsyncImage(
-            modifier = Modifier
-                .width(36.dp)
-                .aspectRatio(1f),
-            url = ingredient.imageUrl,
-            title = ingredient.name
-        )
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = ingredient.name
-        )
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun AddShoppingIngredientPanelPreview() {
-    AddShoppingIngredientPanel(
-        state = AddShoppingIngredientPanelState(
+    AddIngredientFromShoppingListScreen(
+        state = AddIngredientFromShoppingListState(
             units = MeasureUnit.entries.map { it.displayName },
             isIngredientToAddValid = true
         ),
-        onBackPressed = {},
         onIngredientAmountChanged = {},
         onIngredientSelected = {},
         onIngredientUnitChanged = {},
         onSubmitIngredient = {},
         modifier = Modifier.fillMaxSize()
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ShoppingIngredientPreview() {
-    ShoppingIngredient(
-        ingredient = SelectionIngredient(
-            name = "Chicken",
-            imageUrl = "www.themealdb.com/images/ingredients/Chicken.png"
-        ),
-        onClick = {},
-        modifier = Modifier.fillMaxWidth()
     )
 }

@@ -5,7 +5,7 @@ import org.koin.dsl.module
 import yb.kompose.recipetoshoppinglist.activities.MainViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipesScreenViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddShoppingIngredientPanelViewModel
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientFromShoppingListViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListsScreenViewModel
 
@@ -15,5 +15,5 @@ val viewModelModule = module {
     viewModelOf(::RecipesScreenViewModel)
     viewModelOf(::RecipeScreenViewModel)
     viewModelOf(::ShoppingListScreenViewModel)
-    viewModelOf(::AddShoppingIngredientPanelViewModel)
+    viewModelOf(::AddIngredientFromShoppingListViewModel)
 }

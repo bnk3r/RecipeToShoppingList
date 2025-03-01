@@ -20,3 +20,8 @@ data class ShoppingListDestination(
 data class RecipeDestination(
     val id: Long
 )
+
+@Serializable
+data class AddIngredientFromShoppingListDestination(
+    val shoppingListId: Long
+)

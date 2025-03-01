@@ -3,7 +3,7 @@ package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.st
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
-data class AddShoppingIngredientPanelState(
+data class AddIngredientFromShoppingListState(
     val shoppingListId: Long? = null,
     val ingredients: List<SelectionIngredient>? = null,
     val areIngredientsLoading: Boolean = false,

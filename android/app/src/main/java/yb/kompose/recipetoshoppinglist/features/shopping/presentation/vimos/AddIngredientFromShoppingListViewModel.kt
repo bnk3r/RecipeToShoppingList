@@ -17,18 +17,18 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetIngre
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddShoppingIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddIngredientFromShoppingListState
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 import java.lang.Exception
 
-class AddShoppingIngredientPanelViewModel(
+class AddIngredientFromShoppingListViewModel(
     private val getIngredientsUseCase: GetIngredientsUseCase,
     private val fetchAndSaveIngredientsUseCase: FetchAndSaveIngredientsUseCase,
     private val addIngredientUseCase: AddIngredientUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(AddShoppingIngredientPanelState())
+    private val _state = MutableStateFlow(AddIngredientFromShoppingListState())
     val state = _state.asStateFlow()
 
     init {
