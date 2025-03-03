@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeDetailedUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipeScreenState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states.RecipeScreenState
 
 class RecipeScreenViewModel(
     private val getRecipeDetailedUseCase: GetRecipeDetailedUseCase
@@ -31,13 +31,9 @@ class RecipeScreenViewModel(
 
     private fun observeRecipeIdToGetRecipe() = state
         .distinctUntilChangedBy { it.recipeId }
-        .map {
-            it.recipeId
-        }
+        .map { it.recipeId }
         .filterNotNull()
-        .map {
-            getRecipe(it)
-        }
+        .map { getRecipe(it) }
         .onEach { updateGetRecipeJob(it) }
         .launchIn(viewModelScope)
 
@@ -61,9 +57,7 @@ class RecipeScreenViewModel(
         .launchIn(viewModelScope)
 
     private fun updateRecipe(recipe: UiRecipe) {
-        _state.update {
-            it.copy(recipe = recipe)
-        }
+        _state.update { it.copy(recipe = recipe) }
     }
 
     private fun updateIsRecipeLoading(isLoading: Boolean) {

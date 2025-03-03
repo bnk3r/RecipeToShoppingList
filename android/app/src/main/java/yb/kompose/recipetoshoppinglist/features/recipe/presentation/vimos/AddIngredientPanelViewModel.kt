@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.converters.GetIngredientsByNameUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.AddIngredientPanelState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states.AddIngredientPanelState
 
 class AddIngredientPanelViewModel(
     private val getIngredientsByNameUseCase: GetIngredientsByNameUseCase

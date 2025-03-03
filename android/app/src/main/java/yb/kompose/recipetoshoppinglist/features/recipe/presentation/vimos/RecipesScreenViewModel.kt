@@ -17,7 +17,7 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiRecipe
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipeCategoriesUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesByQueryUseCase
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.use_cases.GetRecipesForCategoryUseCase
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipesScreenState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states.RecipesScreenState
 
 class RecipesScreenViewModel(
     private val getCategoriesUseCase: GetRecipeCategoriesUseCase,

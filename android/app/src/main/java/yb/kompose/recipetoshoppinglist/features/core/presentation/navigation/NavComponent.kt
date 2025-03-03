@@ -26,15 +26,16 @@ import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.mod
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListDestination
 import yb.kompose.recipetoshoppinglist.features.core.presentation.navigation.models.ShoppingListsDestination
 import yb.kompose.recipetoshoppinglist.features.profile.presentation.screen.components.ProfileScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.AddIngredientFromRecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.RecipeScreen
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.components.RecipesScreen
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.AddIngredientFromRecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipeScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.vimos.RecipesScreenViewModel
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.AddIngredientFromRecipeScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.AddIngredientFromShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListScreen
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ShoppingListsScreen
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientFromRecipeViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.AddIngredientFromShoppingListViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListScreenViewModel
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.vimos.ShoppingListsScreenViewModel
@@ -152,7 +153,13 @@ fun NavComponent(
                 RecipeScreen(
                     state = recipeScreenState,
                     onClickAddIngredientToShoppingList = {
-                        navController.navigate(AddIngredientFromRecipeDestination(it))
+                        navController.navigate(
+                            AddIngredientFromRecipeDestination(
+                                ingredientName = it.name,
+                                ingredientAmountDescription = it.amount,
+                                ingredientImageUrl = it.imgUrl
+                            )
+                        )
                     },
                     modifier = Modifier.fillMaxSize()
                 )
@@ -192,14 +199,39 @@ fun NavComponent(
                 )
             }
 
-            composable<AddIngredientFromRecipeDestination> {
+            composable<AddIngredientFromRecipeDestination> { backStackEntry ->
+                val destination = backStackEntry.toRoute<AddIngredientFromRecipeDestination>()
+                val ingredientToAdd = UiIngredient(
+                    name = destination.ingredientName,
+                    amount = destination.ingredientAmountDescription,
+                    imgUrl = destination.ingredientImageUrl,
+                    thumbnailUrl = null
+                )
+
                 val addIngredientFromRecipeViewModel =
                     koinInject<AddIngredientFromRecipeViewModel>()
                 val addIngredientFromRecipeState =
                     addIngredientFromRecipeViewModel.state.collectAsStateWithLifecycle().value
 
+                LaunchedEffect(ingredientToAdd) {
+                    addIngredientFromRecipeViewModel.registerIngredient(ingredientToAdd)
+                }
+
                 AddIngredientFromRecipeScreen(
                     state = addIngredientFromRecipeState,
+                    onRefIngredientChanged = {
+                        addIngredientFromRecipeViewModel.updateRefIngredient(it)
+                    },
+                    onAmountChanged = {
+                        addIngredientFromRecipeViewModel.updateAmount(it)
+                    },
+                    onUnitChanged = {
+                        addIngredientFromRecipeViewModel.updateUnit(it)
+                    },
+                    onClickSubmit = {
+                        addIngredientFromRecipeViewModel.submitIngredient()
+                        navController.popBackStack()
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }

@@ -1,4 +1,4 @@
-package yb.kompose.recipetoshoppinglist.features.recipe.presentation.models
+package yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states
 
 import kotlinx.coroutines.Job
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiCategory

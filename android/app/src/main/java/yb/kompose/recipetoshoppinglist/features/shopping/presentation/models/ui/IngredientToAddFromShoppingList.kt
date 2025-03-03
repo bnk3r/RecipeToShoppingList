@@ -2,7 +2,7 @@ package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui
 
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 
-data class IngredientToAdd(
+data class IngredientToAddFromShoppingList(
     val id: Long = 0,
     val shoppingListId: Long? = null,
     val selectedIngredient: SelectionIngredient? = null,

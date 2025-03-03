@@ -21,7 +21,7 @@ import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
-import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.RecipeScreenState
+import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states.RecipeScreenState
 
 @Composable
 fun RecipeScreen(

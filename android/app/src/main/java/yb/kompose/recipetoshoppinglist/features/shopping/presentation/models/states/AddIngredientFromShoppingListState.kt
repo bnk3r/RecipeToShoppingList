@@ -1,6 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states
 
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAddFromShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
 data class AddIngredientFromShoppingListState(
@@ -8,6 +8,6 @@ data class AddIngredientFromShoppingListState(
     val ingredients: List<SelectionIngredient>? = null,
     val areIngredientsLoading: Boolean = false,
     val units: List<String>? = null,
-    val ingredientToAdd: IngredientToAdd = IngredientToAdd(),
+    val ingredientToAdd: IngredientToAddFromShoppingList = IngredientToAddFromShoppingList(),
     val isIngredientToAddValid: Boolean = false
 )

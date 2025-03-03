@@ -18,7 +18,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureU
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppingListIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddIngredientFromShoppingListState
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAdd
+import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAddFromShoppingList
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 import java.lang.Exception
 
@@ -78,7 +78,7 @@ class AddIngredientFromShoppingListViewModel(
         .onEach { updateIngredientToAddValidity(it) }
         .launchIn(viewModelScope)
 
-    private fun IngredientToAdd.isValid() = id == 0L &&
+    private fun IngredientToAddFromShoppingList.isValid() = id == 0L &&
             shoppingListId != -1L &&
             selectedIngredient?.name?.isNotBlank() == true &&
             amount >= 0 &&
@@ -86,7 +86,7 @@ class AddIngredientFromShoppingListViewModel(
             unit != MeasureUnit.NONE.displayName &&
             selectedIngredient.imageUrl?.isNotBlank() == true
 
-    private fun IngredientToAdd.toShoppingIngredient() = UiShoppingListIngredient(
+    private fun IngredientToAddFromShoppingList.toShoppingIngredient() = UiShoppingListIngredient(
         id = id,
         shoppingListId = shoppingListId ?: throw IllegalArgumentException("No shopping list ID."),
         name = selectedIngredient?.name ?: throw IllegalArgumentException("No name."),
@@ -107,7 +107,7 @@ class AddIngredientFromShoppingListViewModel(
         _state.update { it.copy(units = units) }
     }
 
-    private fun updateIngredientToAdd(ingredient: IngredientToAdd) {
+    private fun updateIngredientToAdd(ingredient: IngredientToAddFromShoppingList) {
         _state.update { it.copy(ingredientToAdd = ingredient) }
     }
 
@@ -160,7 +160,9 @@ class AddIngredientFromShoppingListViewModel(
 
     fun addIngredientToShoppingList() = viewModelScope.launch {
         val ingredient = _state.value.ingredientToAdd
-        if (!ingredient.isValid()) return@launch
+        if (!ingredient.isValid()) {
+            throw IllegalStateException("Cannot submit invalid ingredient")
+        }
         addIngredientUseCase(ingredient.toShoppingIngredient())
     }
 
