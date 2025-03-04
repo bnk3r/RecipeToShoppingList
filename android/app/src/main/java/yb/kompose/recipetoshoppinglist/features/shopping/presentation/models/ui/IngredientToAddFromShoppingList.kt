@@ -1,11 +1,12 @@
 package yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui
 
+import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
 
 data class IngredientToAddFromShoppingList(
     val id: Long = 0,
     val shoppingListId: Long? = null,
-    val selectedIngredient: SelectionIngredient? = null,
+    val selectedIngredient: UiIngredient? = null,
     val amount: Int = 0,
     val unit: String = MeasureUnit.NONE.displayName
 )

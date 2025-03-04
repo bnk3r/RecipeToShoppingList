@@ -19,8 +19,6 @@ import yb.kompose.recipetoshoppinglist.features.shopping.domain.models.UiShoppin
 import yb.kompose.recipetoshoppinglist.features.shopping.domain.use_cases.ingredients.AddIngredientUseCase
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.states.AddIngredientFromShoppingListState
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAddFromShoppingList
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
-import java.lang.Exception
 
 class AddIngredientFromShoppingListViewModel(
     private val getIngredientsUseCase: GetIngredientsUseCase,
@@ -35,7 +33,6 @@ class AddIngredientFromShoppingListViewModel(
         fetchIngredients()
         updateUnits(MeasureUnit.entries.map { it.displayName })
         getIngredients()
-        observeIngredientsForLoadingState()
         observeIngredientsToAddForValidation()
         observeShoppingListIdForIngredientToAdd()
     }
@@ -47,25 +44,9 @@ class AddIngredientFromShoppingListViewModel(
         .onEach { updateIngredient(shoppingListId = it) }
         .launchIn(viewModelScope)
 
-    private fun observeIngredientsForLoadingState() = state
-        .distinctUntilChangedBy { it.ingredients }
-        .map { it.ingredients == null }
-        .onEach { updateIngredientsLoadingState(it) }
-        .launchIn(viewModelScope)
-
     private fun getIngredients() = getIngredientsUseCase()
-        .map { it.toSelectionIngredients() }
         .onEach { updateIngredients(it) }
         .launchIn(viewModelScope)
-
-    private fun List<UiIngredient>.toSelectionIngredients() = map { ingredient ->
-        ingredient.toSelectionIngredient()
-    }
-
-    private fun UiIngredient.toSelectionIngredient() = SelectionIngredient(
-        name = name,
-        imageUrl = imgUrl
-    )
 
     private fun fetchIngredients() = viewModelScope.launch {
         fetchAndSaveIngredientsUseCase()
@@ -83,8 +64,7 @@ class AddIngredientFromShoppingListViewModel(
             selectedIngredient?.name?.isNotBlank() == true &&
             amount >= 0 &&
             _state.value.units?.contains(unit) == true &&
-            unit != MeasureUnit.NONE.displayName &&
-            selectedIngredient.imageUrl?.isNotBlank() == true
+            selectedIngredient.imgUrl?.isNotBlank() == true
 
     private fun IngredientToAddFromShoppingList.toShoppingIngredient() = UiShoppingListIngredient(
         id = id,
@@ -92,15 +72,11 @@ class AddIngredientFromShoppingListViewModel(
         name = selectedIngredient?.name ?: throw IllegalArgumentException("No name."),
         amount = amount,
         unit = unit,
-        imageUrl = selectedIngredient.imageUrl
+        imageUrl = selectedIngredient.imgUrl
     )
 
-    private fun updateIngredients(ingredients: List<SelectionIngredient>) {
+    private fun updateIngredients(ingredients: List<UiIngredient>) {
         _state.update { it.copy(ingredients = ingredients) }
-    }
-
-    private fun updateIngredientsLoadingState(isLoading: Boolean) {
-        _state.update { it.copy(areIngredientsLoading = isLoading) }
     }
 
     private fun updateUnits(units: List<String>) {
@@ -117,7 +93,7 @@ class AddIngredientFromShoppingListViewModel(
 
     private fun updateIngredient(
         shoppingListId: Long? = null,
-        selectedIngredient: SelectionIngredient? = null,
+        selectedIngredient: UiIngredient? = null,
         amount: Int? = null,
         unit: String? = null,
     ) {
@@ -142,7 +118,7 @@ class AddIngredientFromShoppingListViewModel(
         }
     }
 
-    fun updateIngredientToAdd(ingredient: SelectionIngredient) {
+    fun updateIngredientToAdd(ingredient: UiIngredient) {
         updateIngredient(selectedIngredient = ingredient)
     }
 

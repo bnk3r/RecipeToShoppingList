@@ -30,4 +30,5 @@
     <string name="ingredients_count">Size : %1$d</string>
     <string name="shopping_list">Shopping List</string>
     <string name="last_update_on">Last update : %1$s</string>
+    <string name="quantity_placeholder">ie. 100</string>
 </resources>

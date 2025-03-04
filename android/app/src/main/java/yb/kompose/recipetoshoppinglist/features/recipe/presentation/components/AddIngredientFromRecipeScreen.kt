@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,12 +28,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.image.CachedAsyncImage
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.item.SelectableListItemContainer
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.picker.LongDropDownMenu
 import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredient
 import yb.kompose.recipetoshoppinglist.features.recipe.presentation.models.states.AddIngredientFromRecipeState
 import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureUnit
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.components.ChooseIngredientItem
-import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.SelectionIngredient
 
 @Composable
 fun AddIngredientFromRecipeScreen(
@@ -110,21 +112,30 @@ fun AddIngredientFromRecipeScreen(
 
                     else -> {
                         items(state.refIngredients) { refIngredient ->
-                            ChooseIngredientItem(
-                                ingredient = SelectionIngredient(
-                                    name = refIngredient.name,
-                                    imageUrl = refIngredient.imgUrl
-                                ),
+                            SelectableListItemContainer(
                                 onClick = { onRefIngredientChanged(refIngredient) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        when {
-                                            state.refIngredient == refIngredient -> Color.Yellow
-                                            else -> Color.Transparent
-                                        }
+                                selected = refIngredient == state.refIngredient,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(4.dp)
+                                ) {
+                                    CachedAsyncImage(
+                                        modifier = Modifier
+                                            .width(36.dp)
+                                            .aspectRatio(1f),
+                                        url = refIngredient.imgUrl,
+                                        title = refIngredient.name
                                     )
-                            )
+                                    Text(
+                                        modifier = Modifier.padding(start = 16.dp),
+                                        text = refIngredient.name
+                                    )
+                                }
+                            }
                         }
                     }
                 }
