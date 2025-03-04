@@ -23,4 +23,7 @@
     <string name="profile">Profile</string>
     <string name="measure_units">Measure units</string>
     <string name="add_this_ingredient_to_current_shopping_list">Add this ingredient to current shopping list</string>
+    <string name="filters">Filters</string>
+    <string name="reduce_quantity">Reduce quantity</string>
+    <string name="increase_quantity">Increase quantity</string>
 </resources>

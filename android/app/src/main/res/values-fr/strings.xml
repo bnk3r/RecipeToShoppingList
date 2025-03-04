@@ -24,4 +24,7 @@
     <string name="profile">Profil</string>
     <string name="measure_units">Unités de mesure</string>
     <string name="add_this_ingredient_to_current_shopping_list">Ajouter cet ingrédient à la liste de course en cours</string>
+    <string name="filters">Filtres</string>
+    <string name="reduce_quantity">Réduire la quantité</string>
+    <string name="increase_quantity">Augmenter la quantité</string>
 </resources>
