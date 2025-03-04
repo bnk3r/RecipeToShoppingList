@@ -77,26 +77,28 @@ fun RecipeScreen(
                             .padding(16.dp),
                     ) {
                         recipe.ingredients.forEachIndexed { i, ingredient ->
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                RecipeIngredient(
-                                    ingredient = ingredient,
-                                    addToShoppingList = onClickAddIngredientToShoppingList,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(56.dp)
-                                        .padding(horizontal = 16.dp, vertical = 4.dp)
-                                )
-                                if (i < recipe.ingredients.lastIndex) {
-                                    HorizontalDivider(
+                            if (ingredient.name.isNotBlank() && ingredient.amount.isNotBlank()) {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    RecipeIngredient(
+                                        ingredient = ingredient,
+                                        addToShoppingList = onClickAddIngredientToShoppingList,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(vertical = 4.dp)
+                                            .height(56.dp)
+                                            .padding(horizontal = 16.dp, vertical = 4.dp)
                                     )
-                                }
+                                    if (i < recipe.ingredients.lastIndex) {
+                                        HorizontalDivider(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(vertical = 4.dp)
+                                        )
+                                    }
 
+                                }
                             }
                         }
                     }

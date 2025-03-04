@@ -62,7 +62,7 @@ class AddIngredientFromRecipeViewModel(
 
     private fun getRefIngredients(name: String) = getIngredientsUseCase()
         .flowOn(Dispatchers.IO)
-        .map { list -> list.filter { it.name.contains(name) } }
+        .map { list -> list.filter { it.name.lowercase().contains(name.lowercase()) } }
         .onEach { updateRefIngredients(it) }
         .flowOn(Dispatchers.Default)
         .launchIn(viewModelScope)
