@@ -12,7 +12,8 @@ import coil3.request.ImageRequest
 fun CachedAsyncImage(
     modifier: Modifier = Modifier,
     url: String?,
-    title: String
+    title: String,
+    contentScale: ContentScale = ContentScale.Fit
 ) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -20,7 +21,7 @@ fun CachedAsyncImage(
             .memoryCachePolicy(CachePolicy.ENABLED)
             .build(),
         contentDescription = title,
-        contentScale = ContentScale.Crop,
-        modifier = modifier
+        contentScale = contentScale,
+        modifier = modifier,
     )
 }
