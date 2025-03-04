@@ -22,8 +22,8 @@ fun DesignIconButton(
 ) {
     val colors = when (style) {
         DesignIconButtonStyle.PRIMARY -> IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             disabledContainerColor = MaterialTheme.colorScheme.tertiary,
             disabledContentColor = MaterialTheme.colorScheme.onTertiary
         )
