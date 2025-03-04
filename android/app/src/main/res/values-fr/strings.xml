@@ -27,4 +27,6 @@
     <string name="filters">Filtres</string>
     <string name="reduce_quantity">Réduire la quantité</string>
     <string name="increase_quantity">Augmenter la quantité</string>
+    <string name="update">Mise à jour</string>
+    <string name="ingredients_count">Taille : %1$d</string>
 </resources>

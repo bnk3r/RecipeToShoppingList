@@ -26,4 +26,6 @@
     <string name="filters">Filters</string>
     <string name="reduce_quantity">Reduce quantity</string>
     <string name="increase_quantity">Increase quantity</string>
+    <string name="update">Last update</string>
+    <string name="ingredients_count">Size : %1$d</string>
 </resources>
