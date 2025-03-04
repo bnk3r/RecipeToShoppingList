@@ -28,4 +28,6 @@
     <string name="increase_quantity">Increase quantity</string>
     <string name="update">Last update</string>
     <string name="ingredients_count">Size : %1$d</string>
+    <string name="shopping_list">Shopping List</string>
+    <string name="last_update_on">Last update : %1$s</string>
 </resources>

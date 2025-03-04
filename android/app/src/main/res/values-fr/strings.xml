@@ -29,4 +29,6 @@
     <string name="increase_quantity">Augmenter la quantité</string>
     <string name="update">Mise à jour</string>
     <string name="ingredients_count">Taille : %1$d</string>
+    <string name="shopping_list">Liste de Courses</string>
+    <string name="last_update_on">Dernière mise à jour : %1$s</string>
 </resources>
