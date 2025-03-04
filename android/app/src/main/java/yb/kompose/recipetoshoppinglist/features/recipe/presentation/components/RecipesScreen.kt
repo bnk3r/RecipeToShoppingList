@@ -1,6 +1,7 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -32,9 +37,18 @@ fun RecipesScreen(
     val configuration = LocalConfiguration.current
     val recipeItemSize = configuration.screenWidthDp.dp / 3
 
+    val interactionSource = remember { MutableInteractionSource() }
+    var hideKeyboard by remember { mutableStateOf(false) }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                hideKeyboard = true
+            }
     ) {
         // SEARCH BAR (+ filters)
         item(
@@ -44,6 +58,8 @@ fun RecipesScreen(
                 query = state.searchQuery,
                 onQueryChange = onRecipeSearchQueryChanged,
                 onSearch = onRecipeSearchQueryChanged,
+                hideKeyboard = hideKeyboard,
+                onHideKeyboard = { hideKeyboard = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)

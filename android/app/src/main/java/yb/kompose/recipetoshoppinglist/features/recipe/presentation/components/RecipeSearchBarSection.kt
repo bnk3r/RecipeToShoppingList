@@ -3,6 +3,7 @@ package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -20,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.R
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.button.RoundedIconButton
-import yb.kompose.recipetoshoppinglist.features.core.presentation.components.search.SearchBar
+import yb.kompose.recipetoshoppinglist.features.core.presentation.components.search.DesignSearchBar
 import yb.kompose.recipetoshoppinglist.features.core.presentation.components.text.SectionTitle
 import yb.kompose.recipetoshoppinglist.features.core.presentation.util.pxToDp
 
@@ -29,10 +30,10 @@ fun RecipeSearchBarSection(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
+    hideKeyboard: Boolean,
+    onHideKeyboard: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var searchBarHeightPx by remember { mutableIntStateOf(0) }
-
     Column(
         modifier = modifier
     ) {
@@ -44,15 +45,16 @@ fun RecipeSearchBarSection(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SearchBar(
+            DesignSearchBar(
                 query = query,
                 onQueryChange = onQueryChange,
+                placeholder = stringResource(R.string.search_placeholder),
                 onSearch = onSearch,
+                hideKeyboard = hideKeyboard,
+                onFocusClear = { onHideKeyboard(false) },
                 modifier = Modifier
+                    .height(56.dp)
                     .weight(1f)
-                    .onGloballyPositioned { coordinates ->
-                        searchBarHeightPx = coordinates.size.height
-                    }
                     .padding(end = 8.dp)
             )
             RoundedIconButton(
@@ -61,7 +63,7 @@ fun RecipeSearchBarSection(
                 onClick = { onSearch(query) },
                 backgroundColor = MaterialTheme.colorScheme.primary,
                 tint = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.size(searchBarHeightPx.pxToDp())
+                modifier = Modifier.size(56.dp)
             )
         }
     }
