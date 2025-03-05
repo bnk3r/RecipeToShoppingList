@@ -62,7 +62,7 @@ class AddIngredientFromShoppingListViewModel(
     private fun IngredientToAddFromShoppingList.isValid() = id == 0L &&
             shoppingListId != -1L &&
             selectedIngredient?.name?.isNotBlank() == true &&
-            amount >= 0 &&
+            amount > 0 &&
             _state.value.units?.contains(unit) == true &&
             selectedIngredient.imgUrl?.isNotBlank() == true
 
