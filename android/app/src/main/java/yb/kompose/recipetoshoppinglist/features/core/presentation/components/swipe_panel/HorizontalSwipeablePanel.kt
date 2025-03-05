@@ -47,7 +47,7 @@ fun HorizontalSwipeablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(8.dp)),
             horizontalArrangement = Arrangement.End
         ) {
             Box(
@@ -71,7 +71,7 @@ fun HorizontalSwipeablePanel(
                 .fillMaxWidth()
                 .height(height)
                 .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(8.dp))
                 .swipeable(
                     state = swipeableState,
                     anchors = mapOf(0f to 0, backContainerWidth * -1f to 1),
