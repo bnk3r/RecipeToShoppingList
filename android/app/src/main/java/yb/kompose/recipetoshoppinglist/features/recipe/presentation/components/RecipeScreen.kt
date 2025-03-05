@@ -1,5 +1,6 @@
 package yb.kompose.recipetoshoppinglist.features.recipe.presentation.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -72,33 +73,16 @@ fun RecipeScreen(
                         textAlign = TextAlign.Center
                     )
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        recipe.ingredients.forEachIndexed { i, ingredient ->
+                        recipe.ingredients.forEach { ingredient ->
                             if (ingredient.name.isNotBlank() && ingredient.amount.isNotBlank()) {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    RecipeIngredient(
-                                        ingredient = ingredient,
-                                        addToShoppingList = onClickAddIngredientToShoppingList,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(56.dp)
-                                            .padding(horizontal = 16.dp, vertical = 4.dp)
-                                    )
-                                    if (i < recipe.ingredients.lastIndex) {
-                                        HorizontalDivider(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(vertical = 4.dp)
-                                        )
-                                    }
-
-                                }
+                                RecipeIngredient(
+                                    ingredient = ingredient,
+                                    addToShoppingList = onClickAddIngredientToShoppingList,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
                             }
                         }
                     }
