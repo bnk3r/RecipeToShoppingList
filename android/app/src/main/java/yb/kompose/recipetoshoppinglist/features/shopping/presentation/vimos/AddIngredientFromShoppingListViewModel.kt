@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -34,15 +33,7 @@ class AddIngredientFromShoppingListViewModel(
         updateUnits(MeasureUnit.entries.map { it.displayName })
         getIngredients()
         observeIngredientsToAddForValidation()
-        observeShoppingListIdForIngredientToAdd()
     }
-
-    private fun observeShoppingListIdForIngredientToAdd() = state
-        .distinctUntilChangedBy { it.shoppingListId }
-        .map { it.shoppingListId }
-        .filterNotNull()
-        .onEach { updateIngredient(shoppingListId = it) }
-        .launchIn(viewModelScope)
 
     private fun getIngredients() = getIngredientsUseCase()
         .onEach { updateIngredients(it) }
@@ -62,18 +53,9 @@ class AddIngredientFromShoppingListViewModel(
     private fun IngredientToAddFromShoppingList.isValid() = id == 0L &&
             shoppingListId != -1L &&
             selectedIngredient?.name?.isNotBlank() == true &&
-            amount > 0 &&
+            amount != null && amount > 0 &&
             _state.value.units?.contains(unit) == true &&
             selectedIngredient.imgUrl?.isNotBlank() == true
-
-    private fun IngredientToAddFromShoppingList.toShoppingIngredient() = UiShoppingListIngredient(
-        id = id,
-        shoppingListId = shoppingListId ?: throw IllegalArgumentException("No shopping list ID."),
-        name = selectedIngredient?.name ?: throw IllegalArgumentException("No name."),
-        amount = amount,
-        unit = unit,
-        imageUrl = selectedIngredient.imgUrl
-    )
 
     private fun updateIngredients(ingredients: List<UiIngredient>) {
         _state.update { it.copy(ingredients = ingredients) }
@@ -83,55 +65,42 @@ class AddIngredientFromShoppingListViewModel(
         _state.update { it.copy(units = units) }
     }
 
-    private fun updateIngredientToAdd(ingredient: IngredientToAddFromShoppingList) {
-        _state.update { it.copy(ingredientToAdd = ingredient) }
-    }
-
     private fun updateIngredientToAddValidity(isValid: Boolean) {
         _state.update { it.copy(isIngredientToAddValid = isValid) }
     }
 
-    private fun updateIngredient(
-        shoppingListId: Long? = null,
-        selectedIngredient: UiIngredient? = null,
-        amount: Int? = null,
-        unit: String? = null,
-    ) {
-        val ref = _state.value.ingredientToAdd
-        updateIngredientToAdd(
-            ref.copy(
-                shoppingListId = shoppingListId ?: ref.shoppingListId,
-                selectedIngredient = selectedIngredient ?: ref.selectedIngredient,
-                amount = amount ?: ref.amount,
-                unit = unit ?: ref.unit
-            )
-        )
-    }
-
-    private fun sanitizeInputToInt(value: String): Int {
+    private fun sanitizeInputToInt(value: String): Int? {
         val amountStr = value.trim()
-        if (amountStr.isBlank()) return 0
+        if (amountStr.isBlank()) {
+            return null
+        }
         return try {
-            amountStr.toInt()
+            val a = amountStr.toInt()
+            a
         } catch (e: Exception) {
-            0
+            null
         }
     }
 
-    fun updateIngredientToAdd(ingredient: UiIngredient) {
-        updateIngredient(selectedIngredient = ingredient)
+    fun updateIngredientToAdd(ingredient: UiIngredient?) {
+        val ref = state.value.ingredientToAdd
+        _state.update { it.copy(ingredientToAdd = ref.copy(selectedIngredient = ingredient)) }
     }
 
     fun updateIngredientToAddAmount(amount: String) {
-        updateIngredient(amount = sanitizeInputToInt(amount))
+        val ref = state.value.ingredientToAdd
+        _state.update { it.copy(ingredientToAdd = ref.copy(amount = sanitizeInputToInt(amount))) }
     }
 
     fun updateIngredientToAddUnit(unit: String) {
-        updateIngredient(unit = unit)
+        if (state.value.units?.contains(unit) == false) return
+        val ref = state.value.ingredientToAdd
+        _state.update { it.copy(ingredientToAdd = ref.copy(unit = unit)) }
     }
 
     fun updateShoppingListId(id: Long) {
-        _state.update { it.copy(shoppingListId = id) }
+        val ref = state.value.ingredientToAdd
+        _state.update { it.copy(ingredientToAdd = ref.copy(shoppingListId = id)) }
     }
 
     fun addIngredientToShoppingList() = viewModelScope.launch {
@@ -139,7 +108,19 @@ class AddIngredientFromShoppingListViewModel(
         if (!ingredient.isValid()) {
             throw IllegalStateException("Cannot submit invalid ingredient")
         }
-        addIngredientUseCase(ingredient.toShoppingIngredient())
+        addIngredientUseCase(
+            UiShoppingListIngredient(
+                id = ingredient.id,
+                shoppingListId = ingredient.shoppingListId
+                    ?: throw IllegalArgumentException("No shopping list ID."),
+                name = ingredient.selectedIngredient?.name
+                    ?: throw IllegalArgumentException("No name."),
+                amount = ingredient.amount
+                    ?: throw IllegalArgumentException("No amount."),
+                unit = ingredient.unit,
+                imageUrl = ingredient.selectedIngredient.imgUrl
+            )
+        )
     }
 
 }

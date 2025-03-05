@@ -136,7 +136,7 @@ fun AddIngredientFromShoppingListScreen(
             title = stringResource(R.string.quantity)
         )
         DesignOutlinedTextField(
-            value = state.ingredientToAdd.amount.toString(),
+            value = state.ingredientToAdd.amount?.toString() ?: "",
             onValueChanged = onIngredientAmountChanged,
             placeholder = stringResource(R.string.quantity_placeholder),
             hideKeyboard = hideKeyboard,

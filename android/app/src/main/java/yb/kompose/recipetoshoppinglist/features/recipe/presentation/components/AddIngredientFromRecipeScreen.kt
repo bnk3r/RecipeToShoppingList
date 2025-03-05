@@ -160,7 +160,7 @@ fun AddIngredientFromRecipeScreen(
 
         item {
             DesignOutlinedTextField(
-                value = state.ingredient?.amount.toString(),
+                value = state.ingredient?.amount?.toString() ?: "",
                 onValueChanged = onAmountChanged,
                 placeholder = stringResource(R.string.quantity_placeholder),
                 hideKeyboard = hideKeyboard,
