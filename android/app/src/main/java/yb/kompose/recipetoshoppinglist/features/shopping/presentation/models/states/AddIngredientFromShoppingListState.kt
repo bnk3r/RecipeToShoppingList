@@ -4,7 +4,6 @@ import yb.kompose.recipetoshoppinglist.features.recipe.domain.models.UiIngredien
 import yb.kompose.recipetoshoppinglist.features.shopping.presentation.models.ui.IngredientToAddFromShoppingList
 
 data class AddIngredientFromShoppingListState(
-    val shoppingListId: Long? = null,
     val ingredients: List<UiIngredient>? = null,
     val units: List<String>? = null,
     val ingredientToAdd: IngredientToAddFromShoppingList = IngredientToAddFromShoppingList(),

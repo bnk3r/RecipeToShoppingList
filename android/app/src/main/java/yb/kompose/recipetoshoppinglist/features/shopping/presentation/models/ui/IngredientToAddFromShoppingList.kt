@@ -7,6 +7,6 @@ data class IngredientToAddFromShoppingList(
     val id: Long = 0,
     val shoppingListId: Long? = null,
     val selectedIngredient: UiIngredient? = null,
-    val amount: Int = 0,
+    val amount: Int? = null,
     val unit: String = MeasureUnit.NONE.displayName
 )
