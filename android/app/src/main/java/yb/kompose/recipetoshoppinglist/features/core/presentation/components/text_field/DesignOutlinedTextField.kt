@@ -29,6 +29,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.OrangeDark
 import yb.kompose.recipetoshoppinglist.features.core.presentation.theme.OrangeLight
@@ -41,6 +42,7 @@ fun DesignOutlinedTextField(
     hideKeyboard: Boolean = false,
     onFocusClear: () -> Unit = {},
     suffix: (@Composable () -> Unit)? = null,
+    keyboardType: KeyboardType = KeyboardType.Unspecified,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -60,7 +62,10 @@ fun DesignOutlinedTextField(
             },
             value = value,
             onValueChange = onValueChanged,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = keyboardType
+            ),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             maxLines = 1,
             singleLine = true,
