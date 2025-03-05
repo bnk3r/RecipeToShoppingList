@@ -14,7 +14,7 @@ suspend fun UiShoppingListIngredient.toEntity(): ShoppingListIngredient =
             shoppingListId = shoppingListId,
             name = name,
             amount = amount,
-            unit = MeasureUnitTypeConverters().to(unit) ?: MeasureUnit.NONE,
+            unit = unit,
             imageUrl = imageUrl
         )
     }

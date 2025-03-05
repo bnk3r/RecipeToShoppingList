@@ -63,21 +63,18 @@ fun DeleteableIngredientContent(
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.tertiary)
             )
-            Column(
+            SectionTitle(
+                title = ingredient.name,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp)
-            ) {
-                SectionTitle(
-                    title = ingredient.name
-                )
-            }
+            )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "${ingredient.amount}${ingredient.unit}"
+                text = "${ingredient.amount} ${stringResource(ingredient.unit.stringRes)}"
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -114,7 +111,7 @@ private fun DeleteableIngredientContentPreview() {
             shoppingListId = 0,
             name = "Chicken",
             amount = 100,
-            unit = MeasureUnit.GRAM.displayName,
+            unit = MeasureUnit.GRAM,
             imageUrl = "www.themealdb.com/images/ingredients/Chicken.png"
         ),
         modifier = Modifier.fillMaxWidth()

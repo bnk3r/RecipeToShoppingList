@@ -12,7 +12,7 @@ suspend fun ShoppingListIngredient.toUiModel(): UiShoppingListIngredient =
             shoppingListId = shoppingListId,
             name = name,
             amount = amount,
-            unit = unit.displayName,
+            unit = unit,
             imageUrl = imageUrl
         )
     }

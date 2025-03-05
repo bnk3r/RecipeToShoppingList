@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun LongDropDownMenu(
     menuItemData: List<String>,
-    onItemClick: (String) -> Unit
+    onItemClick: (index: Int) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -37,11 +37,11 @@ fun LongDropDownMenu(
             onDismissRequest = { expanded = false },
             containerColor = MaterialTheme.colorScheme.surface
         ) {
-            menuItemData.forEach { option ->
+            menuItemData.forEachIndexed { i, option ->
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        onItemClick(option)
+                        onItemClick(i)
                         expanded = false
                     },
                     colors = MenuItemColors(

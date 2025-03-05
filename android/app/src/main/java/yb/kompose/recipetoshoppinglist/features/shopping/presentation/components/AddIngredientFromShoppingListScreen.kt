@@ -47,7 +47,7 @@ fun AddIngredientFromShoppingListScreen(
     state: AddIngredientFromShoppingListState,
     onIngredientSelected: (UiIngredient) -> Unit,
     onIngredientAmountChanged: (String) -> Unit,
-    onIngredientUnitChanged: (String) -> Unit,
+    onIngredientUnitChanged: (MeasureUnit) -> Unit,
     onSubmitIngredient: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -147,14 +147,12 @@ fun AddIngredientFromShoppingListScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = state.ingredientToAdd.unit
+                        text = stringResource(state.ingredientToAdd.unit.stringRes)
                     )
-                    state.units?.let { units ->
-                        LongDropDownMenu(
-                            menuItemData = units,
-                            onItemClick = onIngredientUnitChanged
-                        )
-                    }
+                    LongDropDownMenu(
+                        menuItemData = state.units.map { stringResource(it) },
+                        onItemClick = { onIngredientUnitChanged(MeasureUnit.entries[it]) }
+                    )
                 }
             },
             modifier = Modifier
@@ -179,7 +177,7 @@ private fun AddShoppingIngredientPanelPreview() {
     Scaffold { innerPadding ->
         AddIngredientFromShoppingListScreen(
             state = AddIngredientFromShoppingListState(
-                units = MeasureUnit.entries.map { it.displayName },
+                units = MeasureUnit.entries.map { it.stringRes },
                 isIngredientToAddValid = true
             ),
             onIngredientAmountChanged = {},

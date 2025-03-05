@@ -44,7 +44,7 @@ fun AddIngredientFromRecipeScreen(
     state: AddIngredientFromRecipeState,
     onRefIngredientChanged: (UiIngredient) -> Unit,
     onAmountChanged: (String) -> Unit,
-    onUnitChanged: (String) -> Unit,
+    onUnitChanged: (MeasureUnit) -> Unit,
     onClickSubmit: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -171,12 +171,14 @@ fun AddIngredientFromRecipeScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = state.ingredient?.unit?.displayName
-                                ?: MeasureUnit.NONE.displayName
+                            text = stringResource(
+                                state.ingredient?.unit?.stringRes ?: MeasureUnit.NONE.stringRes
+                            )
+
                         )
                         LongDropDownMenu(
-                            menuItemData = state.measureUnits,
-                            onItemClick = onUnitChanged
+                            menuItemData = state.measureUnits.map { stringResource(it) },
+                            onItemClick = { onUnitChanged(MeasureUnit.entries[it]) }
                         )
                     }
                 },

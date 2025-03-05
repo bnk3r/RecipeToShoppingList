@@ -31,4 +31,9 @@
     <string name="shopping_list">Shopping List</string>
     <string name="last_update_on">Last update : %1$s</string>
     <string name="quantity_placeholder">ie. 100</string>
+    <string name="unit_none">Full</string>
+    <string name="unit_gram">G</string>
+    <string name="unit_kilogram">Kg</string>
+    <string name="unit_milliliter">Ml</string>
+    <string name="unit_liter">L</string>
 </resources>

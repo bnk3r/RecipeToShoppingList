@@ -32,4 +32,9 @@
     <string name="shopping_list">Liste de Courses</string>
     <string name="last_update_on">Dernière mise à jour : %1$s</string>
     <string name="quantity_placeholder">ex : 100</string>
+    <string name="unit_none">Entier(s)</string>
+    <string name="unit_gram">G</string>
+    <string name="unit_kilogram">Kg</string>
+    <string name="unit_milliliter">Ml</string>
+    <string name="unit_liter">L</string>
 </resources>
