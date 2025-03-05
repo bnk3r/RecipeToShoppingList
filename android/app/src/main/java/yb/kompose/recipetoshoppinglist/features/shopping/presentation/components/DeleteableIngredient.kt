@@ -71,7 +71,7 @@ private fun DeleteableIngredientPreview() {
             shoppingListId = 0,
             name = "Chicken",
             amount = 100,
-            unit = MeasureUnit.GRAM.displayName,
+            unit = MeasureUnit.GRAM,
             imageUrl = "www.themealdb.com/images/ingredients/Chicken.png"
         ),
         onDelete = {},

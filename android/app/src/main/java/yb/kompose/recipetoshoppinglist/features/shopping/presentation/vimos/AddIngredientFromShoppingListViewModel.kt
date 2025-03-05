@@ -30,7 +30,6 @@ class AddIngredientFromShoppingListViewModel(
 
     init {
         fetchIngredients()
-        updateUnits(MeasureUnit.entries.map { it.displayName })
         getIngredients()
         observeIngredientsToAddForValidation()
     }
@@ -54,15 +53,10 @@ class AddIngredientFromShoppingListViewModel(
             shoppingListId != -1L &&
             selectedIngredient?.name?.isNotBlank() == true &&
             amount != null && amount > 0 &&
-            _state.value.units?.contains(unit) == true &&
             selectedIngredient.imgUrl?.isNotBlank() == true
 
     private fun updateIngredients(ingredients: List<UiIngredient>) {
         _state.update { it.copy(ingredients = ingredients) }
-    }
-
-    private fun updateUnits(units: List<String>) {
-        _state.update { it.copy(units = units) }
     }
 
     private fun updateIngredientToAddValidity(isValid: Boolean) {
@@ -92,8 +86,7 @@ class AddIngredientFromShoppingListViewModel(
         _state.update { it.copy(ingredientToAdd = ref.copy(amount = sanitizeInputToInt(amount))) }
     }
 
-    fun updateIngredientToAddUnit(unit: String) {
-        if (state.value.units?.contains(unit) == false) return
+    fun updateIngredientToAddUnit(unit: MeasureUnit) {
         val ref = state.value.ingredientToAdd
         _state.update { it.copy(ingredientToAdd = ref.copy(unit = unit)) }
     }

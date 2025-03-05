@@ -121,8 +121,7 @@ class AddIngredientFromRecipeViewModel(
         updateIngredientAmount(amount)
     }
 
-    fun updateUnit(unitStr: String) {
-        val unit = MeasureUnit.entries.firstOrNull { it.displayName == unitStr } ?: MeasureUnit.NONE
+    fun updateUnit(unit: MeasureUnit) {
         val ref = state.value.ingredient
             ?: throw IllegalStateException("Ingredient to add is null.")
         _state.update { it.copy(ingredient = ref.copy(unit = unit)) }
@@ -145,7 +144,7 @@ class AddIngredientFromRecipeViewModel(
                 name = refIngredient.name,
                 amount = ingredientToAdd.amount
                     ?: throw IllegalStateException("Amount is null."),
-                unit = ingredientToAdd.unit.displayName,
+                unit = ingredientToAdd.unit,
                 imageUrl = refIngredient.imgUrl
             )
         )

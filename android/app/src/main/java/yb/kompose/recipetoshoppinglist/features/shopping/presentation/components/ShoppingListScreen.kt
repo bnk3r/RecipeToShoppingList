@@ -103,7 +103,7 @@ private fun ShoppingListPreview() {
                             shoppingListId = 0,
                             name = "Ingredient 1",
                             amount = 100,
-                            unit = MeasureUnit.GRAM.displayName,
+                            unit = MeasureUnit.GRAM,
                             imageUrl = null
                         ),
                         UiShoppingListIngredient(
@@ -111,7 +111,7 @@ private fun ShoppingListPreview() {
                             shoppingListId = 0,
                             name = "Ingredient 2",
                             amount = 2,
-                            unit = MeasureUnit.KILOGRAM.displayName,
+                            unit = MeasureUnit.KILOGRAM,
                             imageUrl = null
                         )
                     ),
