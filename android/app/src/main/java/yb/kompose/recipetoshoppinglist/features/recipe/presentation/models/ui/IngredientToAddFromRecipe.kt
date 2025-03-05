@@ -5,7 +5,7 @@ import yb.kompose.recipetoshoppinglist.features.shopping.data.db.models.MeasureU
 data class IngredientToAddFromRecipe(
     val id: Long,
     val name: String,
-    val amount: Int,
+    val amount: Int?,
     val originalAmountDescription: String,
     val unit: MeasureUnit,
     val imgUrl: String?

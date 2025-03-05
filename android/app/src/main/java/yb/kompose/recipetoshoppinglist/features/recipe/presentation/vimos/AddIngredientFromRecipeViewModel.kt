@@ -83,22 +83,10 @@ class AddIngredientFromRecipeViewModel(
         _state.update { it.copy(refIngredients = ingredients) }
     }
 
-    private fun updateIngredient(
-        name: String? = null,
-        amount: Int? = null,
-        unit: MeasureUnit? = null
-    ) {
-        val ref = _state.value.ingredient
+    private fun updateIngredientAmount(amount: Int?) {
+        val ref = state.value.ingredient
             ?: throw java.lang.IllegalStateException("Ingredient is null.")
-        _state.update {
-            it.copy(
-                ingredient = ref.copy(
-                    name = name ?: ref.name,
-                    amount = amount ?: ref.amount,
-                    unit = unit ?: ref.unit
-                )
-            )
-        }
+        _state.update { it.copy(ingredient = ref.copy(amount = amount)) }
     }
 
     private fun isSubmitValid(): Boolean = state.value.ingredient != null
@@ -112,7 +100,7 @@ class AddIngredientFromRecipeViewModel(
     private fun UiIngredient.toIngredientToAdd() = IngredientToAddFromRecipe(
         id = 0,
         name = name,
-        amount = 0,
+        amount = null,
         originalAmountDescription = amount,
         unit = MeasureUnit.NONE,
         imgUrl = imgUrl
@@ -123,19 +111,21 @@ class AddIngredientFromRecipeViewModel(
     }
 
     fun updateAmount(amountStr: String) {
-        var amount: Int
+        var amount: Int?
         amount = try {
             amountStr.toInt()
         } catch (e: Exception) {
-            0
+            null
         }
-        if (amount < 0) amount = 0
-        updateIngredient(amount = amount)
+        if ((amount ?: -1) < 0) amount = null
+        updateIngredientAmount(amount)
     }
 
     fun updateUnit(unitStr: String) {
         val unit = MeasureUnit.entries.firstOrNull { it.displayName == unitStr } ?: MeasureUnit.NONE
-        updateIngredient(unit = unit)
+        val ref = state.value.ingredient
+            ?: throw IllegalStateException("Ingredient to add is null.")
+        _state.update { it.copy(ingredient = ref.copy(unit = unit)) }
     }
 
     fun submitIngredient() = viewModelScope.launch {
@@ -153,7 +143,8 @@ class AddIngredientFromRecipeViewModel(
                 id = 0,
                 shoppingListId = shoppingListId,
                 name = refIngredient.name,
-                amount = ingredientToAdd.amount,
+                amount = ingredientToAdd.amount
+                    ?: throw IllegalStateException("Amount is null."),
                 unit = ingredientToAdd.unit.displayName,
                 imageUrl = refIngredient.imgUrl
             )
